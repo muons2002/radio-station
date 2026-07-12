@@ -2,77 +2,110 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>مشغل جنود الخفاء</title>
     <style>
-        body { background: #0f172a; color: #fff; padding: 20px; font-family: Tahoma; }
-        .box { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 20px; border-radius: 15px; border: 1px solid #334155; }
-        .logo { width: 120px; height: 120px; margin: 0 auto 15px; display: block; border-radius: 50%; border: 2px solid #f43f5e; }
-        input, button { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; }
-        button { background: #f43f5e; font-weight: bold; cursor: pointer; }
-        #playerArea { display: none; }
-        .grid { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-        #list { flex: 1; height: 350px; background: #0f172a; color: #fff; border: 1px solid #334155; padding: 10px; }
-        #vid { flex: 2; background: #000; height: 350px; border-radius: 8px; border: 2px solid #f43f5e; }
+        body { background: #0f171e; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; color: white; font-family: sans-serif; }
+        .container { display: flex; flex-direction: column; align-items: center; gap: 35px; }
+        
+        .clock-wrapper { position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; }
+        
+        #halo { 
+            position: absolute; width: 150px; height: 150px; border-radius: 50%; 
+            background: radial-gradient(circle, rgba(79, 195, 247, 0.4), transparent); 
+            z-index: 0; pointer-events: none; transition: transform 0.08s ease-out; 
+        }
+        
+        .clock-container { width: 150px; height: 150px; background: #1a2936; border-radius: 50%; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .center-dot { position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%; z-index: 2; box-shadow: 0 0 5px #fff; }
+        
+        .neon-text { font-size: 1.2rem; font-weight: bold; color: #4fc3f7; text-shadow: 0 0 10px #4fc3f7; margin-top: 10px; letter-spacing: 2px; }
+        
+        .num { position: absolute; font-size: 0.9rem; font-weight: bold; color: #4fc3f7; }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: white; border-radius: 5px; }
+        #hour { height: 35px; width: 4px; margin-left: -2px; }
+        #min { height: 50px; width: 3px; margin-left: -1.5px; }
+        #sec { height: 55px; width: 2px; margin-left: -1px; background: #ff5252; }
+        
+        #btn { padding: 12px 24px; background: #4fc3f7; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: #0f171e; z-index: 3; }
     </style>
 </head>
 <body>
-<div class="box">
-    <img src="https://i.ibb.co/n8c2QzHf/logo.png" class="logo">
-    <div id="login">
-        <h3>📺 مشغل جنود الخفاء</h3>
-        <input type="text" id="host" value="http://markcode.online:8080">
-        <input type="text" id="user" value="6350661378">
-        <input type="text" id="pass" value="24848524267731dd74a135">
-        <button onclick="go()">دخول</button>
-    </div>
-    <div id="playerArea">
-        <input type="text" id="search" placeholder="🔍 ابحث عن قناة..." onkeyup="filter()">
-        <button onclick="location.reload()" style="background:#475569;">⬅ خروج</button>
-        <div class="grid">
-            <select id="list" size="10" onchange="play(this.value)"></select>
-            <video id="vid" controls autoplay></video>
+
+<div class="container">
+    <div class="clock-wrapper">
+        <div id="halo"></div>
+        <div class="clock-container">
+            <div class="center-dot"></div>
+            <script>
+                for(let i=1; i<=12; i++) {
+                    let angle = (i * 30) * (Math.PI / 180);
+                    let x = 60 * Math.sin(angle);
+                    let y = -60 * Math.cos(angle);
+                    document.write(`<div class="num" style="transform:translate(${x}px, ${y}px)">${i}</div>`);
+                }
+            </script>
+            <div class="hand" id="hour"></div>
+            <div class="hand" id="min"></div>
+            <div class="hand" id="sec"></div>
         </div>
     </div>
+    
+    <div class="neon-text">جنود الخفاء</div>
+    <button id="btn" onclick="toggleRadio()">تشغيل الإذاعة</button>
+    <audio id="audio" src="https://stream.radiojar.com/8s5u5tpdtwzuv" crossorigin="anonymous"></audio>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <script>
-    let allChannels = [];
-    async function go() {
-        const h = document.getElementById('host').value;
-        const u = document.getElementById('user').value;
-        const p = document.getElementById('pass').value;
-        try {
-            const res = await fetch(`${h}/player_api.php?username=${u}&password=${p}&action=get_live_streams`);
-            allChannels = await res.json();
-            render(allChannels);
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('playerArea').style.display = 'block';
-        } catch(e) { alert("تأكد من البيانات!"); }
+    let isPlaying = false;
+    const audio = document.getElementById('audio');
+    const btn = document.getElementById('btn');
+    const halo = document.getElementById('halo');
+    let audioCtx, analyser;
+
+    // تشغيل الساعة بشكل مستقل ومستمر
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('sec').style.transform = `rotate(${now.getSeconds() * 6}deg)`;
+        document.getElementById('min').style.transform = `rotate(${now.getMinutes() * 6}deg)`;
+        document.getElementById('hour').style.transform = `rotate(${(now.getHours() % 12) * 30 + now.getMinutes() * 0.5}deg)`;
+        requestAnimationFrame(updateClock);
     }
-    function render(data) {
-        const h = document.getElementById('host').value;
-        const u = document.getElementById('user').value;
-        const p = document.getElementById('pass').value;
-        const sel = document.getElementById('list');
-        sel.innerHTML = '';
-        data.forEach(s => {
-            let o = document.createElement('option');
-            o.value = `${h}/live/${u}/${p}/${s.stream_id}.m3u8`;
-            o.text = s.name;
-            sel.appendChild(o);
-        });
+    updateClock();
+
+    function toggleRadio() {
+        if (!isPlaying) {
+            audio.play();
+            btn.innerText = "إيقاف الإذاعة";
+            isPlaying = true;
+            startVisualizer();
+        } else {
+            audio.pause();
+            btn.innerText = "تشغيل الإذاعة";
+            isPlaying = false;
+            halo.style.transform = "scale(1)"; 
+        }
     }
-    function filter() {
-        const q = document.getElementById('search').value.toLowerCase();
-        render(allChannels.filter(c => c.name.toLowerCase().includes(q)));
-    }
-    function play(url) {
-        let v = document.getElementById('vid');
-        if(window.hls) window.hls.destroy();
-        window.hls = new Hls(); 
-        window.hls.loadSource(url); 
-        window.hls.attachMedia(v);
-        window.hls.on(Hls.Events.MANIFEST_PARSED, () => v.play());
+
+    function startVisualizer() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioCtx.createMediaElementSource(audio);
+            analyser = audioCtx.createAnalyser();
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            analyser.fftSize = 64;
+        }
+        
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        function updateHalo() {
+            if (!isPlaying) return;
+            analyser.getByteFrequencyData(dataArray);
+            let sum = dataArray.reduce((a, b) => a + b);
+            let scale = 1 + (sum / 12000); 
+            halo.style.transform = `scale(${scale})`;
+            requestAnimationFrame(updateHalo);
+        }
+        updateHalo();
     }
 </script>
 </body>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مشغل جنود الخفاء</title>
+    <style>
+        body { background: #0f172a; color: #fff; padding: 20px; font-family: Tahoma; }
+        .box { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 20px; border-radius: 15px; border: 1px solid #334155; }
+        .logo { width: 120px; height: 120px; margin: 0 auto 15px; display: block; border-radius: 50%; border: 2px solid #f43f5e; }
+        input, button { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; }
+        button { background: #f43f5e; font-weight: bold; cursor: pointer; }
+        #playerArea { display: none; }
+        .grid { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+        #list { flex: 1; height: 350px; background: #0f172a; color: #fff; border: 1px solid #334155; padding: 10px; }
+        #vid { flex: 2; background: #000; height: 350px; border-radius: 8px; border: 2px solid #f43f5e; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <img src="https://i.ibb.co/n8c2QzHf/logo.png" class="logo">
+    <div id="login">
+        <h3>📺 مشغل جنود الخفاء</h3>
+        <input type="text" id="host" value="http://markcode.online:8080">
+        <input type="text" id="user" value="6350661378">
+        <input type="text" id="pass" value="24848524267731dd74a135">
+        <button onclick="go()">دخول</button>
+    </div>
+    <div id="playerArea">
+        <input type="text" id="search" placeholder="🔍 ابحث عن قناة..." onkeyup="filter()">
+        <button onclick="location.reload()" style="background:#475569;">⬅ خروج</button>
+        <div class="grid">
+            <select id="list" size="10" onchange="play(this.value)"></select>
+            <video id="vid" controls autoplay></video>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+    let allChannels = [];
+    async function go() {
+        const h = document.getElementById('host').value;
+        const u = document.getElementById('user').value;
+        const p = document.getElementById('pass').value;
+        try {
+            const res = await fetch(`${h}/player_api.php?username=${u}&password=${p}&action=get_live_streams`);
+            allChannels = await res.json();
+            render(allChannels);
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('playerArea').style.display = 'block';
+        } catch(e) { alert("تأكد من البيانات!"); }
+    }
+    function render(data) {
+        const h = document.getElementById('host').value;
+        const u = document.getElementById('user').value;
+        const p = document.getElementById('pass').value;
+        const sel = document.getElementById('list');
+        sel.innerHTML = '';
+        data.forEach(s => {
+            let o = document.createElement('option');
+            o.value = `${h}/live/${u}/${p}/${s.stream_id}.m3u8`;
+            o.text = s.name;
+            sel.appendChild(o);
+        });
+    }
+    function filter() {
+        const q = document.getElementById('search').value.toLowerCase();
+        render(allChannels.filter(c => c.name.toLowerCase().includes(q)));
+    }
+    function play(url) {
+        let v = document.getElementById('vid');
+        if(window.hls) window.hls.destroy();
+        window.hls = new Hls(); 
+        window.hls.loadSource(url); 
+        window.hls.attachMedia(v);
+        window.hls.on(Hls.Events.MANIFEST_PARSED, () => v.play());
+    }
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <style>
         body { background: #0f171e; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; color: white; font-family: sans-serif; }
-        .container { display: flex; flex-direction: column; align-items: center; gap: 35px; }
+        .container { display: flex; flex-direction: column; align-items: center; gap: 30px; }
         
         .clock-wrapper { position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; }
         
@@ -18,7 +18,26 @@
         
         .center-dot { position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%; z-index: 2; box-shadow: 0 0 5px #fff; }
         
-        .neon-text { font-size: 1.2rem; font-weight: bold; color: #4fc3f7; text-shadow: 0 0 10px #4fc3f7; margin-top: 10px; letter-spacing: 2px; }
+        /* تصميم النص أسفل الساعة */
+        .info-box { 
+            display: flex; flex-direction: column; align-items: center; 
+            margin-top: 15px; background: rgba(26, 41, 54, 0.6); 
+            padding: 10px 20px; border-radius: 10px;
+        }
+        
+        /* اللون الأساسي الموحد */
+        .neon-text { font-size: 1.1rem; font-weight: bold; color: #4fc3f7; letter-spacing: 1px; }
+        
+        /* نفس اللون الموحد ولكن بوضوح أقل (Opacity) */
+        .sub-text { 
+            font-size: 0.9rem; 
+            font-weight: bold; 
+            color: #4fc3f7; /* نفس اللون */
+            opacity: 0.7;    /* درجة أقل من اللون الأساسي */
+            margin-top: 5px; 
+            letter-spacing: 0.5px; 
+            text-align: center;
+        }
         
         .num { position: absolute; font-size: 0.9rem; font-weight: bold; color: #4fc3f7; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: white; border-radius: 5px; }
@@ -26,7 +45,10 @@
         #min { height: 50px; width: 3px; margin-left: -1.5px; }
         #sec { height: 55px; width: 2px; margin-left: -1px; background: #ff5252; }
         
-        #btn { padding: 12px 24px; background: #4fc3f7; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: #0f171e; z-index: 3; }
+        #btn { 
+            padding: 10px 25px; background: #4fc3f7; border: none; border-radius: 5px; cursor: pointer; 
+            font-weight: bold; color: #0f171e; z-index: 3; transition: all 0.3s ease; 
+        }
     </style>
 </head>
 <body>
@@ -45,14 +67,18 @@
                 }
             </script>
             <div class="hand" id="hour"></div>
-            <div class="hand" id="min"></div>
-            <div class="hand" id="sec"></div>
+            <div class="hand" id="min" style="transition: transform 0.3s cubic-bezier(.4,2.08,.55,.44);"></div>
+            <div class="hand" id="sec" style="transition: transform 0.2s cubic-bezier(.4,2.08,.55,.44);"></div>
         </div>
     </div>
     
-    <div class="neon-text">جنود الخفاء</div>
+    <div class="info-box">
+        <div class="neon-text">إذاعة القرآن الكريم</div>
+        <div class="sub-text">اللهم اجعله في ميزان حسناتكم</div>
+        <div class="sub-text">محمد يونس</div>
+    </div>
     <button id="btn" onclick="toggleRadio()">تشغيل الإذاعة</button>
-    <audio id="audio" src="https://stream.radiojar.com/8s5u5tpdtwzuv" crossorigin="anonymous"></audio>
+    <audio id="audio" src="https://n04.radiojar.com/8s5u5tpdtwzuv?1719266736413" crossorigin="anonymous"></audio>
 </div>
 
 <script>
@@ -62,7 +88,6 @@
     const halo = document.getElementById('halo');
     let audioCtx, analyser;
 
-    // تشغيل الساعة بشكل مستقل ومستمر
     function updateClock() {
         const now = new Date();
         document.getElementById('sec').style.transform = `rotate(${now.getSeconds() * 6}deg)`;
@@ -76,11 +101,15 @@
         if (!isPlaying) {
             audio.play();
             btn.innerText = "إيقاف الإذاعة";
+            btn.style.backgroundColor = "#ff5252";
+            btn.style.color = "#ffffff";
             isPlaying = true;
             startVisualizer();
         } else {
             audio.pause();
             btn.innerText = "تشغيل الإذاعة";
+            btn.style.backgroundColor = "#4fc3f7";
+            btn.style.color = "#0f171e";
             isPlaying = false;
             halo.style.transform = "scale(1)"; 
         }

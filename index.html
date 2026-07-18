@@ -2,91 +2,72 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <title>ترسانة جنود الخفاء</title>
     <style>
-        body { background: #0f171e; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; color: white; font-family: sans-serif; }
-        .container { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+        body { background: #0a1128; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; color: white; font-family: sans-serif; }
+        .container { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 90%; max-width: 400px; padding: 20px; }
+        h2 { color: #4fc3f7; margin-bottom: 5px; }
         
-        .clock-wrapper { position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; }
-        
+        .clock-wrapper { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
         #halo { 
-            position: absolute; width: 150px; height: 150px; border-radius: 50%; 
-            background: radial-gradient(circle, rgba(79, 195, 247, 0.4), transparent); 
-            z-index: 0; pointer-events: none; transition: transform 0.08s ease-out; 
+            position: absolute; width: 200px; height: 200px; border-radius: 50%; 
+            background: conic-gradient(from 0deg, #ff5252, #ffeb3b, #4fc3f7, #76ff03, #ff5252);
+            filter: blur(20px); opacity: 0.7;
+            z-index: 0; transition: transform 0.08s ease-out; 
         }
+        .clock-container { width: 200px; height: 200px; background: #1a2936; border-radius: 50%; border: 4px solid #4fc3f7; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
         
-        .clock-container { width: 150px; height: 150px; background: #1a2936; border-radius: 50%; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
-        
-        .center-dot { position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%; z-index: 2; box-shadow: 0 0 5px #fff; }
-        
-        /* تصميم النص أسفل الساعة */
-        .info-box { 
-            display: flex; flex-direction: column; align-items: center; 
-            margin-top: 15px; background: rgba(26, 41, 54, 0.6); 
-            padding: 10px 20px; border-radius: 10px;
-        }
-        
-        /* اللون الأساسي الموحد */
-        .neon-text { font-size: 1.1rem; font-weight: bold; color: #4fc3f7; letter-spacing: 1px; }
-        
-        /* نفس اللون الموحد ولكن بوضوح أقل (Opacity) */
-        .sub-text { 
-            font-size: 0.9rem; 
-            font-weight: bold; 
-            color: #4fc3f7; /* نفس اللون */
-            opacity: 0.7;    /* درجة أقل من اللون الأساسي */
-            margin-top: 5px; 
-            letter-spacing: 0.5px; 
-            text-align: center;
-        }
-        
-        .num { position: absolute; font-size: 0.9rem; font-weight: bold; color: #4fc3f7; }
+        .num { position: absolute; font-size: 1.1rem; font-weight: bold; color: #4fc3f7; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: white; border-radius: 5px; }
-        #hour { height: 35px; width: 4px; margin-left: -2px; }
-        #min { height: 50px; width: 3px; margin-left: -1.5px; }
-        #sec { height: 55px; width: 2px; margin-left: -1px; background: #ff5252; }
+        #hour { height: 50px; width: 5px; margin-left: -2.5px; }
+        #min { height: 70px; width: 4px; margin-left: -2px; }
+        #sec { height: 80px; width: 2px; margin-left: -1px; background: #ff5252; }
         
-        #btn { 
-            padding: 10px 25px; background: #4fc3f7; border: none; border-radius: 5px; cursor: pointer; 
-            font-weight: bold; color: #0f171e; z-index: 3; transition: all 0.3s ease; 
-        }
+        select { width: 100%; padding: 12px; background: #1a2936; color: #4fc3f7; border: 1px solid #4fc3f7; border-radius: 5px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        button { padding: 12px; background: #4fc3f7; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: #0f171e; width: 100%; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <h2>إذاعه جنود الخفاء</h2>
     <div class="clock-wrapper">
         <div id="halo"></div>
         <div class="clock-container">
-            <div class="center-dot"></div>
             <script>
                 for(let i=1; i<=12; i++) {
                     let angle = (i * 30) * (Math.PI / 180);
-                    let x = 60 * Math.sin(angle);
-                    let y = -60 * Math.cos(angle);
+                    let x = 80 * Math.sin(angle);
+                    let y = -80 * Math.cos(angle);
                     document.write(`<div class="num" style="transform:translate(${x}px, ${y}px)">${i}</div>`);
                 }
             </script>
             <div class="hand" id="hour"></div>
-            <div class="hand" id="min" style="transition: transform 0.3s cubic-bezier(.4,2.08,.55,.44);"></div>
-            <div class="hand" id="sec" style="transition: transform 0.2s cubic-bezier(.4,2.08,.55,.44);"></div>
+            <div class="hand" id="min"></div>
+            <div class="hand" id="sec"></div>
         </div>
     </div>
+
+    <select id="stationSelect">
+        <option value="https://stream.radiojar.com/8s5u5tpdtwzuv">إذاعة القرآن الكريم من القاهرة</option>
+        <option value="https://qurango.net/radio/mix">إذاعة القرآن الكريم (منوعات)</option>
+        <option value="https://radiohits882.radioca.st/stream">راديو هيتس</option>
+        <option value="https://ahmsamir.radioca.st/stream">راديو نجوم FM</option>
+        <option value="https://carina.streamerr.co:2020/stream/OnSportFM">أون سبورت FM</option>
+        <option value="https://stream.live.vc.bbcmedia.co.uk/bbc_arabic_radio">BBC عربي</option>
+        <option value="http://curiosity.shoutca.st:6035/stream">إذاعة Curiosity</option>
+        <option value="https://stream-281.surfernetwork.com/zsgrfxg71s8uv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJ6c2dyZnhnNzFzOHV2IiwiaG9zdCI6InN0cmVhbS0yODEuc3VyZmVybmV0d29yay5jb20iLCJydHRsIjo1LCJqdGkiOiJIaEtsZTVCOFIyYUVBMWpwb01WS0pBIiwiaWF0IjoxNzg0MzE3NTAzLCJleHAiOjE3ODQzMTc1NjN9.aR6wchPE3_fi48xnBIySF2lh-j3MJYRbMSfF1jo-SHc">إذاعة أم كلثوم</option>
+        <option value="https://stream-282.surfernetwork.com/xda10sbtsg0uv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJ4ZGExMHNidHNnMHV2IiwiaG9zdCI6InN0cmVhbS0yODIuc3VyZmVybmV0d29yay5jb20iLCJydHRsIjo1LCJqdGkiOiJiUTJWc3lRelF6ZTM5TW4yMjdZdS1RIiwiaWF0IjoxNzg0MzE3NzYxLCJleHAiOjE3ODQzMTc4MjF9.BIfIAQtyw2SG_f7A-rAh1JKYt0HuWnbhxJU3fqpKRy0">إذاعة الشباب والرياضة</option>
+        <option value="https://stream-280.surfernetwork.com/xa4yhh4k838uv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJ4YTR5aGg0azgzOHV2IiwiaG9zdCI6InN0cmVhbS0yODAuc3VyZmVybmV0d29yay5jb20iLCJydHRsIjo1LCJqdGkiOiJpWkdVdnFqNVJoS3JqSi1UTkdJOTVRIiwiaWF0IjoxNzg0MzE3OTk2LCJleHAiOjE3ODQzMTgwNTZ9.79akP8Tv2eJRy2Ahb-VKeCvjoX0RkMblnA8PerI1GXc&adtonosListenerId=01H0QN7N0FWX24VBHTFRG8BQWH&amb-uid=3898065775428749197&an-uid=0&aw_0_req_lsid=a577bf4b67647738ae1c2364893d5cad&dot-uid=0ab2220300c5665293f3e767&triton-uid=cookie%3A26424d7d-26e2-4560-a3ef-c11d253ab62c">إذاعة البرنامج العام</option>
+    </select>
     
-    <div class="info-box">
-        <div class="neon-text">إذاعة القرآن الكريم</div>
-        <div class="sub-text">اللهم اجعله في ميزان حسناتكم</div>
-        <div class="sub-text">محمد يونس</div>
-    </div>
     <button id="btn" onclick="toggleRadio()">تشغيل الإذاعة</button>
-    <audio id="audio" src="https://n04.radiojar.com/8s5u5tpdtwzuv?1719266736413" crossorigin="anonymous"></audio>
+    <audio id="audio" crossorigin="anonymous" preload="auto"></audio>
 </div>
 
 <script>
-    let isPlaying = false;
-    const audio = document.getElementById('audio');
-    const btn = document.getElementById('btn');
-    const halo = document.getElementById('halo');
-    let audioCtx, analyser;
+    const audio = document.getElementById('audio'), btn = document.getElementById('btn'), halo = document.getElementById('halo');
+    let isPlaying = false, audioCtx, analyser;
 
     function updateClock() {
         const now = new Date();
@@ -98,20 +79,23 @@
     updateClock();
 
     function toggleRadio() {
+        let val = document.getElementById('stationSelect').value;
+
         if (!isPlaying) {
+            audio.src = val;
             audio.play();
             btn.innerText = "إيقاف الإذاعة";
             btn.style.backgroundColor = "#ff5252";
-            btn.style.color = "#ffffff";
+            btn.style.color = "white";
             isPlaying = true;
             startVisualizer();
         } else {
             audio.pause();
+            audio.src = "";
             btn.innerText = "تشغيل الإذاعة";
             btn.style.backgroundColor = "#4fc3f7";
             btn.style.color = "#0f171e";
             isPlaying = false;
-            halo.style.transform = "scale(1)"; 
         }
     }
 
@@ -124,17 +108,15 @@
             analyser.connect(audioCtx.destination);
             analyser.fftSize = 64;
         }
-        
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        function updateHalo() {
+        function draw() {
             if (!isPlaying) return;
             analyser.getByteFrequencyData(dataArray);
             let sum = dataArray.reduce((a, b) => a + b);
-            let scale = 1 + (sum / 12000); 
-            halo.style.transform = `scale(${scale})`;
-            requestAnimationFrame(updateHalo);
+            halo.style.transform = `scale(${1 + (sum / 12000)})`;
+            requestAnimationFrame(draw);
         }
-        updateHalo();
+        draw();
     }
 </script>
 </body>

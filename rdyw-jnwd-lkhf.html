@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>راديو جنود الخفاء</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0d0b08;
+    --bg2:#14110b;
+    --card:#1a1712;
+    --card2:#211c14;
+    --line:#3a3222;
+    --line-soft:#2a2519;
+    --gold:#d9a92c;
+    --gold-hi:#f0c94e;
+    --gold-dim:#9a7d2e;
+    --text:#f3ecd9;
+    --muted:#b3a888;
+    --faint:#7d735c;
+    --danger:#e0654f;
+    --ok:#7fc96b;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:
+      radial-gradient(900px 480px at 85% -120px, rgba(217,169,44,.10), transparent 60%),
+      radial-gradient(700px 420px at 8% 0, rgba(217,169,44,.05), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:"Cairo", system-ui, "Segoe UI", Tahoma, sans-serif;
+    min-height:100vh;
+    padding-bottom:118px;
+  }
+  .wrap{max-width:1060px;margin:0 auto;padding:0 16px}
+
+  /* ---------- Header ---------- */
+  header{padding:30px 0 8px;text-align:center}
+  .shield{width:58px;height:66px;margin:0 auto 8px;display:block}
+  h1{margin:0;font-size:clamp(30px,6vw,44px);font-weight:900;color:var(--gold-hi);letter-spacing:.2px;line-height:1.25}
+  .tagline{margin:4px 0 0;color:var(--muted);font-size:15px;font-weight:600}
+  .clockrow{margin-top:12px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;
+    border:1px solid var(--line);background:var(--card);
+    border-radius:999px;padding:5px 14px;font-size:13.5px;color:var(--muted);font-weight:700;
+  }
+  .chip b{color:var(--gold-hi);font-variant-numeric:tabular-nums}
+  .livedot{width:8px;height:8px;border-radius:50%;background:var(--danger);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+  /* ---------- Controls ---------- */
+  .controls{margin:22px 0 6px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .fbtn{
+    appearance:none;border:1px solid var(--line);background:var(--card);
+    color:var(--muted);font-family:inherit;font-size:15px;font-weight:800;
+    padding:9px 18px;border-radius:999px;cursor:pointer;transition:.18s;
+  }
+  .fbtn .cnt{font-size:12.5px;color:var(--faint);font-weight:700}
+  .fbtn:hover{border-color:var(--gold-dim);color:var(--text)}
+  .fbtn.active{background:var(--gold);border-color:var(--gold);color:#171204}
+  .fbtn.active .cnt{color:#5c4a10}
+  .search{margin:14px auto 0;max-width:460px;position:relative}
+  .search svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--faint);fill:none;stroke-width:2}
+  .search input{
+    width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    color:var(--text);font-family:inherit;font-size:15.5px;padding:11px 42px 11px 14px;outline:none;
+  }
+  .search input:focus{border-color:var(--gold-dim)}
+  .search input::placeholder{color:var(--faint)}
+
+  /* ---------- Sections & cards ---------- */
+  section{margin-top:26px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 2px 12px}
+  .sec-head h2{margin:0;font-size:20px;font-weight:900;color:var(--gold-hi)}
+  .sec-head span{color:var(--faint);font-size:13.5px;font-weight:700}
+  .sec-head::after{content:"";flex:1;height:1px;background:var(--line-soft);align-self:center}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+
+  .card{
+    background:linear-gradient(180deg,var(--card2),var(--card));
+    border:1px solid var(--line-soft);border-radius:var(--radius);
+    padding:14px 16px;display:flex;gap:13px;align-items:center;
+    transition:border-color .18s, background .18s;
+    scroll-margin-bottom:150px;
+  }
+  .card:hover{border-color:var(--line)}
+  .card.playing{border-color:var(--gold);background:linear-gradient(180deg,#2b2312,var(--card))}
+  .card.error{border-color:var(--danger)}
+  .pbtn{
+    flex:none;width:52px;height:52px;border-radius:50%;border:1.5px solid var(--gold-dim);
+    background:#100d07;color:var(--gold-hi);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:.18s;padding:0;
+    scroll-margin-bottom:190px;scroll-margin-top:20px;
+  }
+  .pbtn:hover{background:var(--gold);color:#171204;border-color:var(--gold)}
+  .card.playing .pbtn{background:var(--gold);color:#171204;border-color:var(--gold)}
+  .pbtn svg{width:22px;height:22px;fill:currentColor}
+  .pbtn .spin{
+    width:20px;height:20px;border-radius:50%;border:2.5px solid rgba(240,201,78,.35);
+    border-top-color:var(--gold-hi);animation:rot .7s linear infinite;display:none;
+  }
+  .pbtn.loading .spin{display:block}
+  .pbtn.loading svg{display:none}
+  @keyframes rot{to{transform:rotate(360deg)}}
+  .info{flex:1;min-width:0}
+  .name{font-size:16.5px;font-weight:800;line-height:1.4}
+  .meta{margin-top:2px;color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+  .tag{font-size:11.5px;font-weight:800;color:var(--gold-hi);border:1px solid var(--line);border-radius:6px;padding:1px 8px;background:rgba(217,169,44,.07)}
+  .tag.country{color:var(--muted)}
+  .eq{display:none;align-items:flex-end;gap:2.5px;height:18px;flex:none}
+  .card.playing .eq{display:flex}
+  .eq i{width:3.5px;background:var(--gold-hi);border-radius:2px;animation:eq 0.9s ease-in-out infinite}
+  .eq i:nth-child(1){height:60%;animation-delay:0s}
+  .eq i:nth-child(2){height:100%;animation-delay:.22s}
+  .eq i:nth-child(3){height:45%;animation-delay:.45s}
+  .eq i:nth-child(4){height:80%;animation-delay:.12s}
+  @keyframes eq{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+  .card.paused .eq i{animation-play-state:paused}
+  .card .err-msg{display:none;color:var(--danger);font-size:12.5px;font-weight:700;margin-top:5px;white-space:normal}
+  .card.error .err-msg{display:block}
+
+  /* Featured (جنود الخفاء) */
+  .card.featured{
+    grid-column:1/-1;padding:20px 22px;
+    border:1.5px solid var(--gold-dim);
+    background:
+      radial-gradient(500px 200px at 90% -40px, rgba(217,169,44,.16), transparent 60%),
+      linear-gradient(180deg,#2a2210,#1a160d);
+  }
+  .card.featured .pbtn{width:64px;height:64px}
+  .card.featured .pbtn svg{width:28px;height:28px}
+  .card.featured .name{font-size:clamp(20px,4vw,26px);font-weight:900;color:var(--gold-hi)}
+  .card.featured .meta{font-size:14.5px}
+  .badge-ours{background:var(--gold);color:#171204;border-color:var(--gold)}
+
+  .empty{display:none;text-align:center;color:var(--faint);font-weight:700;padding:34px 0;font-size:15.5px}
+  .empty.show{display:block}
+
+  footer{margin-top:38px;text-align:center;color:var(--faint);font-size:13px;font-weight:600}
+
+  /* ---------- Bottom player bar ---------- */
+  .player{
+    position:fixed;inset-inline:0;bottom:0;z-index:50;
+    background:rgba(16,13,8,.96);backdrop-filter:blur(8px);
+    border-top:1.5px solid var(--gold-dim);
+    padding:10px 0 calc(10px + env(safe-area-inset-bottom));
+  }
+  .player .wrap{display:flex;align-items:center;gap:14px}
+  .np{min-width:0;flex:1}
+  .np .np-label{font-size:11px;color:var(--faint);font-weight:800;letter-spacing:.4px}
+  .np .np-name{font-size:16.5px;font-weight:900;color:var(--gold-hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+  .np .np-status{font-size:12.5px;color:var(--muted);font-weight:700}
+  .np .np-status.err{color:var(--danger)}
+  .np .np-status.ok{color:var(--ok)}
+  .pcontrols{display:flex;align-items:center;gap:10px;flex:none}
+  .mainbtn{
+    width:56px;height:56px;border-radius:50%;border:none;background:var(--gold);color:#171204;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.18s;padding:0;
+  }
+  .mainbtn:hover{background:var(--gold-hi)}
+  .mainbtn:disabled{opacity:.45;cursor:default}
+  .mainbtn svg{width:26px;height:26px;fill:currentColor}
+  .mainbtn .spin{width:22px;height:22px;border-radius:50%;border:3px solid rgba(23,18,4,.3);border-top-color:#171204;animation:rot .7s linear infinite;display:none}
+  .mainbtn.loading .spin{display:block}
+  .mainbtn.loading svg{display:none}
+  .stopbtn{
+    width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+    color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;
+  }
+  .stopbtn:hover{color:var(--text);border-color:var(--gold-dim)}
+  .stopbtn svg{width:15px;height:15px;fill:currentColor}
+  .vol{display:flex;align-items:center;gap:8px;flex:none}
+  .vol button{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:flex}
+  .vol button svg{width:21px;height:21px;fill:currentColor}
+  .vol input[type=range]{
+    -webkit-appearance:none;appearance:none;width:110px;height:5px;border-radius:3px;
+    background:linear-gradient(to left,var(--gold) var(--fill,80%),#3a3222 var(--fill,80%));
+    outline:none;cursor:pointer;direction:ltr;
+  }
+  .vol input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold-hi);
+    border:2px solid #171204;box-shadow:0 0 0 1px var(--gold-dim);
+  }
+  .vol input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--gold-hi);border:2px solid #171204}
+
+  @media (max-width:640px){
+    body{padding-bottom:170px}
+    header{padding-top:16px}
+    .clockrow{margin-top:8px}
+    .controls{margin-top:12px}
+    .fbtn{padding:7px 16px}
+    .search{margin-top:10px}
+    section{margin-top:18px}
+    .card{scroll-margin-bottom:180px}
+    .grid{grid-template-columns:1fr}
+    .vol input[type=range]{width:74px}
+    .np .np-name{font-size:15px}
+    .mainbtn{width:50px;height:50px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .eq i,.livedot{animation:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <svg class="shield" viewBox="0 0 60 70" aria-hidden="true">
+    <path d="M30 2 L54 10 V34 C54 52 43 62 30 68 C17 62 6 52 6 34 V10 Z" fill="#171204" stroke="#d9a92c" stroke-width="2.5"/>
+    <path d="M30 9 L47 14.5 V34 C47 47.5 39 55.5 30 60.5 C21 55.5 13 47.5 13 34 V14.5 Z" fill="none" stroke="#d9a92c" stroke-width="1" opacity=".45"/>
+    <circle cx="30" cy="38" r="4.5" fill="#f0c94e"/>
+    <path d="M19.5 27.5 a15 15 0 0 1 21 0" fill="none" stroke="#f0c94e" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M23.8 32 a9.5 9.5 0 0 1 12.4 0" fill="none" stroke="#f0c94e" stroke-width="2.6" stroke-linecap="round"/>
+  </svg>
+  <h1>راديو جنود الخفاء</h1>
+  <p class="tagline">حب الخير للغير · ٤٧ إذاعة مباشرة — عربي ورياضة وهيتس ولاتيني من كل العالم</p>
+  <div class="clockrow">
+    <span class="chip"><span class="livedot"></span> بث مباشر</span>
+    <span class="chip">القاهرة الآن <b id="clock">--:--:--</b></span>
+    <span class="chip">الإذاعات <b>47</b></span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="controls">
+    <div class="filters" id="filters" role="tablist" aria-label="تصنيفات الإذاعات"></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="search" id="search" placeholder="ابحث عن إذاعة…" aria-label="ابحث عن إذاعة" />
+    </div>
+  </div>
+
+  <div id="sections"></div>
+  <div class="empty" id="empty">لا توجد إذاعة مطابقة لبحثك</div>
+
+  <footer>راديو جنود الخفاء — اضغط تشغيل واستمتع، وإذاعة واحدة بس بتشتغل في نفس الوقت</footer>
+</main>
+
+<div class="player" role="region" aria-label="مشغّل الراديو">
+  <div class="wrap">
+    <div class="np">
+      <div class="np-label">يُبث الآن</div>
+      <div class="np-name" id="npName">اختر إذاعة للبدء</div>
+      <div class="np-status" id="npStatus">جاهز للتشغيل</div>
+    </div>
+    <div class="pcontrols">
+      <button class="stopbtn" id="stopBtn" aria-label="إيقاف نهائي" title="إيقاف نهائي">
+        <svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+      </button>
+      <button class="mainbtn" id="mainBtn" aria-label="تشغيل أو إيقاف" disabled>
+        <svg viewBox="0 0 24 24" id="mainIcon"><path d="M7 4.5v15l13-7.5z"/></svg>
+        <span class="spin"></span>
+      </button>
+    </div>
+    <div class="vol">
+      <button id="muteBtn" aria-label="كتم الصوت">
+        <svg viewBox="0 0 24 24" id="volIcon"><path d="M3 9v6h4l5 4.5v-15L7 9H3z"/><path d="M16 8.6a4.4 4.4 0 0 1 0 6.8M18.4 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+      </button>
+      <input type="range" id="volRange" min="0" max="100" value="80" aria-label="مستوى الصوت" />
+    </div>
+  </div>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+var CATS = [
+  { id:"all",  label:"الكل" },
+  { id:"arab", label:"عربي" },
+  { id:"sport",label:"رياضة" },
+  { id:"hits", label:"هيتس وأجنبي" },
+  { id:"latin", label:"لاتيني" }
+];
+
+var STATIONS = [
+  { name:"إذاعة جنود الخفاء", country:"مصر", cat:"arab", note:"إذاعتنا الخاصة — بث مباشر", url:"https://n0c.radiojar.com/8s5u5tpdtwzuv", featured:true },
+  { name:"Radio Hits 88.2 Cairo", country:"مصر", cat:"arab", note:"هيتس القاهرة 88.2 FM", url:"https://radiohits882.radioca.st/stream" },
+  { name:"أم كلثوم — OM Kalthom", country:"مصر", cat:"arab", note:"طرب أصيل · كوكب الشرق", url:"https://stream.zeno.fm/zsgrfxg71s8uv" },
+  { name:"Radio Orient", country:"فرنسا", cat:"arab", note:"أغاني عربية من باريس", url:"https://stream.rcs.revma.com/7hnrkawf4p8uv.mp3" },
+  { name:"Aswat FM", country:"المغرب", cat:"arab", note:"إذاعة مغربية متنوعة", url:"https://broadcast.ice.infomaniak.ch/aswat-high.mp3" },
+  { name:"Sumer FM", country:"العراق", cat:"arab", note:"سومر إف إم — من العراق", url:"https://l3.itworkscdn.net/itwaudio/9012/stream" },
+  { name:"Al Rasheed FM", country:"العراق", cat:"arab", note:"الرشيد إف إم — بغداد", url:"https://streaming.shoutcast.com/alrasheed-fm" },
+  { name:"Radio Liban Libre", country:"لبنان", cat:"arab", note:"إذاعة لبنان الحر", url:"https://edge.mixlr.com/channel/qtqeb" },
+  { name:"Nogoum FM 100.6", country:"مصر", cat:"arab", note:"نجوم إف إم 100.6 — أغاني وبرامج مصرية", url:"https://stream-159.zeno.fm/qb1zvsykm98uv" },
+  { name:"Radio 9090", country:"مصر", cat:"arab", note:"الراديو 9090 — هواها مصري", url:"https://9090streaming.mobtada.com/9090FMEGYPT" },
+  { name:"Sha3by FM", country:"مصر", cat:"arab", note:"شعبي إف إم — أغاني شعبية ومهرجانات", url:"https://radio95.radioca.st/;" },
+  { name:"Amr Diab Radio", country:"مصر", cat:"arab", note:"راديو الهضبة — أغاني عمرو دياب", url:"https://stream-40.zeno.fm/xa4yhh4k838uv?zs=gojgaFRaRrK1wgGIwdv6xA" },
+  { name:"Diab FM", country:"مصر", cat:"arab", note:"دياب إف إم — عمرو دياب على مدار الساعة", url:"https://stream-34.zeno.fm/rf64mx02qa0uv?zs=-xjlLLwRS8uKrffFxK4vLA" },
+  { name:"Elissa FM", country:"مصر", cat:"arab", note:"إليسا إف إم — أغاني إليسا", url:"https://stream.zeno.fm/v7n499m8ckhvv" },
+  { name:"87.8 Mix FM", country:"مصر", cat:"arab", note:"ميكس إف إم 87.8 — ميكس عربي وأجنبي", url:"https://stream-29.zeno.fm/na3vpvn10qruv" },
+  { name:"Arab Mix 256", country:"مصر", cat:"arab", note:"أراب ميكس — أغاني عربية منوعة", url:"https://stream.zeno.fm/wvqgc9kb1d0uv" },
+  { name:"Arab Mix Drama", country:"مصر", cat:"arab", note:"أراب ميكس دراما — دراما ومسلسلات إذاعية", url:"https://stream.zeno.fm/egynebf171zuv.acc" },
+  { name:"راديو قرآن كريم القاهرة", country:"مصر", cat:"arab", note:"إذاعة القرآن الكريم من القاهرة — تلاوات على مدار الساعة", url:"https://radio.xecod.com/station/quran-cairo" },
+  { name:"Medi1 Tarab", country:"المغرب", cat:"arab", note:"ميدي 1 طرب — طرب عربي أصيل", url:"https://cdn.live.easybroadcast.io/medi1radio/Tarab" },
+  { name:"Medina FM Tarab", country:"المغرب", cat:"arab", note:"مدينة إف إم طرب — أغاني طربية", url:"https://medinatarab.ice.infomaniak.ch/medinatarab-128.mp3" },
+  { name:"Sawt El Ghad - Tarab", country:"فلسطين", cat:"arab", note:"صوت الغد طرب — طرب عربي أصيل", url:"https://sawtelghad.org:7007/;" },
+
+  { name:"On Sport FM 93.7", country:"مصر", cat:"sport", note:"أون سبورت إف إم 93.7 — رياضة مصرية", url:"https://carina.streamerr.co:2020/stream/OnSportFM" },
+  { name:"RMC Info Talk Sport", country:"فرنسا", cat:"sport", note:"أخبار ورياضة على مدار الساعة", url:"https://audio.bfmtv.com/rmcradio_128.mp3" },
+  { name:"Rádio Jovem Pan 100.9 FM", country:"البرازيل", cat:"sport", note:"أخبار ورياضة برازيلية", url:"https://stream.zeno.fm/c45wbq2us3buv" },
+  { name:"Cleveland Browns Radio Network", country:"أمريكا", cat:"sport", note:"شبكة رياضية أمريكية", url:"https://cbfc.streamguys1.com/cbdaily.mp3" },
+
+  { name:"NRJ Hits", country:"فرنسا", cat:"hits", note:"أحدث الهيتس العالمية", url:"https://streaming.nrjaudio.fm/ou7xugf3s5gi" },
+  { name:"CAPITAL", country:"بريطانيا", cat:"hits", note:"هيتس بريطانيا الأولى", url:"https://media-ssl.musicradio.com/CapitalUK" },
+  { name:"Heart 80s", country:"بريطانيا", cat:"hits", note:"أجمل أغاني الثمانينات", url:"https://media-ssl.musicradio.com/Heart80sMP3" },
+  { name:"SWR3", country:"ألمانيا", cat:"hits", note:"بوب ألماني وعالمي", url:"https://liveradio.swr.de/sw282p3/swr3/play.mp3" },
+  { name:"TOP 100 DJ CHARTS", country:"ألمانيا", cat:"hits", note:"أقوى 100 أغنية دي جي", url:"https://breakz-high.rautemusik.fm/" },
+  { name:"50s 60s RETRO HITS", country:"عالمية", cat:"hits", note:"هيتس الخمسينات والستينات", url:"https://stream.zeno.fm/pxzwykxbluitv" },
+  { name:"Bayern 3", country:"ألمانيا", cat:"hits", note:"بوب وروك من بافاريا", url:"https://dispatcher.rndfnk.com/br/br3/live/mp3/mid" },
+  { name:"90s90s Dance", country:"ألمانيا", cat:"hits", note:"دانس التسعينات", url:"https://streams.90s90s.de/danceradio/mp3-128/streams.90s90s.de/" },
+  { name:"90s90s Hits", country:"ألمانيا", cat:"hits", note:"هيتس التسعينات", url:"https://regiocast.streamabc.net/regc-90s90spop4760822-mp3-192-9403761" },
+  { name:"90s90s Rock", country:"ألمانيا", cat:"hits", note:"روك التسعينات", url:"https://regiocast.streamabc.net/regc-90s90srock1436287-mp3-192-2191420" },
+
+  { name:"No es fm", country:"فنزويلا", cat:"latin", note:"نو إس إف إم — موسيقى لاتينية منوعة", url:"https://noesfm.radioca.st/stream" },
+  { name:"Unica", country:"فنزويلا", cat:"latin", note:"أونيكا — أغاني لاتينية", url:"https://unica-zikoxweb.radioca.st/stream" },
+  { name:"Radio María Venezuela", country:"فنزويلا", cat:"latin", note:"راديو ماريا فنزويلا — إذاعة دينية", url:"https://dreamsiteradiocp2.com/proxy/rmvenezuela?mp=/stream" },
+  { name:"Dinámica 92.9 FM", country:"فنزويلا", cat:"latin", note:"ديناميكا 92.9 FM — موسيقى وبرامج", url:"https://guri.tepuyserver.net/8012/stream" },
+  { name:"Radiorama 103.3 FM", country:"فنزويلا", cat:"latin", note:"راديوراما 103.3 FM — أغاني لاتينية", url:"https://acp2.lorini.net:44002/stream" },
+  { name:"Rumba 98.1 FM", country:"فنزويلا", cat:"latin", note:"رومبا 98.1 FM — سالسا وموسيقى لاتينية", url:"https://cast20.plugstreaming.com:2020/stream/r981/;" },
+  { name:"WOAO! 88 UNO FM", country:"فنزويلا", cat:"latin", note:"واو 88 أونو FM — هيتس لاتينية", url:"https://stream.zeno.fm/361as28sbc9uv" },
+  { name:"RADIO RUMBOS 670 AM", country:"فنزويلا", cat:"latin", note:"راديو رومبوس 670 AM — أخبار وبرامج", url:"https://stream.zeno.fm/c3q3w8zfe18uv" },
+  { name:"Fiesta Latina 106.1 FM", country:"فنزويلا", cat:"latin", note:"فييستا لاتينا 106.1 FM — حفلة لاتينية على الهواء", url:"https://stream.zeno.fm/e2kzfpr34d0uv" },
+  { name:"Radio Minuto 790 AM", country:"فنزويلا", cat:"latin", note:"راديو مينوتو 790 AM — أخبار وبرامج", url:"https://stream.zeno.fm/rnafoozvpiitv" },
+  { name:"Super Trendy 101.9 FM", country:"فنزويلا", cat:"latin", note:"سوبر ترندي 101.9 FM — أحدث الأغاني اللاتينية", url:"https://live.ajfnetwork.com.ve/musikvalencia/stream" },
+  { name:"Hot Sports 94.1 FM", country:"فنزويلا", cat:"latin", note:"هوت سبورتس 94.1 FM — رياضة وموسيقى", url:"https://acp2.lorini.net:58300/stream" }
+];
+
+var ICON_PLAY  = '<svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>';
+var ICON_PAUSE = '<svg viewBox="0 0 24 24"><rect x="5.5" y="4.5" width="4.6" height="15" rx="1.4"/><rect x="13.9" y="4.5" width="4.6" height="15" rx="1.4"/></svg>';
+
+var audio    = document.getElementById('audio');
+var sectionsEl = document.getElementById('sections');
+var filtersEl  = document.getElementById('filters');
+var searchEl   = document.getElementById('search');
+var emptyEl    = document.getElementById('empty');
+var npName     = document.getElementById('npName');
+var npStatus   = document.getElementById('npStatus');
+var mainBtn    = document.getElementById('mainBtn');
+var stopBtn    = document.getElementById('stopBtn');
+var volRange   = document.getElementById('volRange');
+var muteBtn    = document.getElementById('muteBtn');
+
+var current = -1;          // index of selected station
+var state = 'idle';        // idle | loading | playing | paused | error
+var activeFilter = 'all';
+var cardEls = [];
+
+function catLabel(id){
+  for (var i=0;i<CATS.length;i++) if (CATS[i].id===id) return CATS[i].label;
+  return id;
+}
+function catCount(id){
+  if (id==='all') return STATIONS.length;
+  return STATIONS.filter(function(s){return s.cat===id;}).length;
+}
+
+/* ---------- Build filters ---------- */
+CATS.forEach(function(c){
+  var b = document.createElement('button');
+  b.className = 'fbtn' + (c.id==='all' ? ' active' : '');
+  b.setAttribute('role','tab');
+  b.dataset.cat = c.id;
+  b.innerHTML = c.label + ' <span class="cnt">' + catCount(c.id) + '</span>';
+  b.addEventListener('click', function(){
+    activeFilter = c.id;
+    document.querySelectorAll('.fbtn').forEach(function(x){ x.classList.toggle('active', x.dataset.cat===c.id); });
+    applyVisibility();
+  });
+  filtersEl.appendChild(b);
+});
+
+/* ---------- Build station cards, grouped by section ---------- */
+['arab','sport','hits','latin'].forEach(function(catId){
+  var sec = document.createElement('section');
+  sec.dataset.cat = catId;
+  var list = STATIONS.map(function(s,i){ return {s:s,i:i}; }).filter(function(x){ return x.s.cat===catId; });
+  sec.innerHTML = '<div class="sec-head"><h2>' + catLabel(catId) + '</h2><span>' + list.length + ' إذاعة</span></div>';
+  var grid = document.createElement('div');
+  grid.className = 'grid';
+  list.forEach(function(x){
+    var s = x.s, idx = x.i;
+    var card = document.createElement('article');
+    card.className = 'card' + (s.featured ? ' featured' : '');
+    card.dataset.idx = idx;
+    card.innerHTML =
+      '<button class="pbtn" aria-label="تشغيل ' + s.name + '">' + ICON_PLAY + '<span class="spin"></span></button>' +
+      '<div class="info">' +
+        '<div class="name">' + s.name + '</div>' +
+        '<div class="meta">' + s.note + '</div>' +
+        '<div class="tags">' +
+          (s.featured ? '<span class="tag badge-ours">إذاعتنا</span>' : '') +
+          '<span class="tag country">' + s.country + '</span>' +
+          '<span class="tag">' + catLabel(s.cat) + '</span>' +
+        '</div>' +
+        '<div class="err-msg">تعذر تشغيل هذه الإذاعة حالياً — قد تكون متوقفة مؤقتاً، جرّب إذاعة أخرى.</div>' +
+      '</div>' +
+      '<div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></div>';
+    card.querySelector('.pbtn').addEventListener('click', function(){ toggleStation(idx); });
+    grid.appendChild(card);
+    cardEls[idx] = card;
+  });
+  sec.appendChild(grid);
+  sectionsEl.appendChild(sec);
+});
+
+/* ---------- Filter + search visibility ---------- */
+function applyVisibility(){
+  var q = searchEl.value.trim();
+  var anyVisible = false;
+  document.querySelectorAll('section[data-cat]').forEach(function(sec){
+    var catOk = (activeFilter==='all' || sec.dataset.cat===activeFilter);
+    var secVisible = false;
+    sec.querySelectorAll('.card').forEach(function(card){
+      var s = STATIONS[+card.dataset.idx];
+      var show = catOk && (!q || s.name.indexOf(q) > -1 || s.country.indexOf(q) > -1 || s.note.indexOf(q) > -1);
+      card.style.display = show ? '' : 'none';
+      if (show) secVisible = true;
+    });
+    sec.style.display = secVisible ? '' : 'none';
+    if (secVisible) anyVisible = true;
+  });
+  emptyEl.classList.toggle('show', !anyVisible);
+}
+searchEl.addEventListener('input', applyVisibility);
+
+/* ---------- Playback ---------- */
+function setStatus(txt, cls){
+  npStatus.textContent = txt;
+  npStatus.className = 'np-status' + (cls ? ' ' + cls : '');
+}
+function refreshCard(idx){
+  var card = cardEls[idx];
+  if (!card) return;
+  var btn = card.querySelector('.pbtn');
+  card.classList.toggle('playing', idx===current && (state==='playing' || state==='loading' || state==='paused'));
+  card.classList.toggle('paused', idx===current && state==='paused');
+  card.classList.toggle('error', idx===current && state==='error');
+  btn.classList.toggle('loading', idx===current && state==='loading');
+  btn.innerHTML = ((idx===current && state==='playing') ? ICON_PAUSE : ICON_PLAY) + '<span class="spin"></span>';
+  btn.setAttribute('aria-label', (idx===current && state==='playing' ? 'إيقاف ' : 'تشغيل ') + STATIONS[idx].name);
+}
+function refreshAllCards(){ for (var i=0;i<STATIONS.length;i++) refreshCard(i); }
+function refreshMainBtn(){
+  mainBtn.disabled = (current < 0);
+  mainBtn.classList.toggle('loading', state==='loading');
+  document.getElementById('mainIcon').outerHTML =
+    '<svg viewBox="0 0 24 24" id="mainIcon">' +
+    (state==='playing' ? '<rect x="5.5" y="4.5" width="4.6" height="15" rx="1.4"/><rect x="13.9" y="4.5" width="4.6" height="15" rx="1.4"/>' : '<path d="M7 4.5v15l13-7.5z"/>') +
+    '</svg>';
+}
+
+function playStation(idx){
+  var s = STATIONS[idx];
+  if (current !== idx){
+    current = idx;
+    audio.src = s.url;
+    npName.textContent = s.name;
+  }
+  state = 'loading';
+  setStatus('جاري الاتصال بالإذاعة…');
+  refreshAllCards(); refreshMainBtn();
+  var p = audio.play();
+  if (p && p.catch) p.catch(function(){ onStreamError(); });
+}
+function pauseStream(){
+  audio.pause();
+  state = 'paused';
+  setStatus('متوقف مؤقتاً');
+  refreshAllCards(); refreshMainBtn();
+}
+function stopAll(){
+  audio.pause();
+  audio.removeAttribute('src');
+  audio.load();
+  current = -1; state = 'idle';
+  npName.textContent = 'اختر إذاعة للبدء';
+  setStatus('جاهز للتشغيل');
+  refreshAllCards(); refreshMainBtn();
+}
+function toggleStation(idx){
+  if (idx === current && state === 'playing'){ pauseStream(); return; }
+  if (idx === current && state === 'paused'){ playStation(idx); return; }
+  playStation(idx);
+}
+function onStreamError(){
+  if (current < 0) return;
+  state = 'error';
+  setStatus('تعذر تشغيل هذه الإذاعة حالياً — جرّب إذاعة أخرى', 'err');
+  refreshAllCards(); refreshMainBtn();
+}
+
+mainBtn.addEventListener('click', function(){
+  if (current < 0) return;
+  if (state === 'playing') pauseStream(); else playStation(current);
+});
+stopBtn.addEventListener('click', stopAll);
+
+audio.addEventListener('playing', function(){
+  state = 'playing';
+  setStatus('يبث الآن مباشرة · ' + STATIONS[current].country, 'ok');
+  refreshAllCards(); refreshMainBtn();
+});
+audio.addEventListener('waiting', function(){
+  if (state === 'playing' || state === 'loading'){
+    state = 'loading';
+    setStatus('جاري التحميل…');
+    refreshAllCards(); refreshMainBtn();
+  }
+});
+audio.addEventListener('pause', function(){
+  if (state === 'playing'){ state = 'paused'; setStatus('متوقف مؤقتاً'); refreshAllCards(); refreshMainBtn(); }
+});
+audio.addEventListener('error', function(){ if (current >= 0 && audio.getAttribute('src')) onStreamError(); });
+audio.addEventListener('stalled', function(){ if (state==='playing') setStatus('الاتصال بطيء… جاري إعادة المحاولة'); });
+
+/* ---------- Volume ---------- */
+function paintVol(){
+  volRange.style.setProperty('--fill', volRange.value + '%');
+}
+audio.volume = 0.8;
+paintVol();
+volRange.addEventListener('input', function(){
+  audio.volume = volRange.value / 100;
+  audio.muted = false;
+  paintVol();
+});
+muteBtn.addEventListener('click', function(){
+  audio.muted = !audio.muted;
+  muteBtn.style.color = audio.muted ? 'var(--danger)' : '';
+  if (audio.muted){ volRange.dataset.prev = volRange.value; }
+});
+
+/* ---------- Live clock (Cairo) ---------- */
+function tickClock(){
+  try {
+    document.getElementById('clock').textContent =
+      new Date().toLocaleTimeString('ar-EG', { timeZone:'Africa/Cairo', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  } catch(e){
+    document.getElementById('clock').textContent = new Date().toLocaleTimeString('ar-EG');
+  }
+}
+tickClock();
+setInterval(tickClock, 1000);
+</script>
+</body>
+</html>

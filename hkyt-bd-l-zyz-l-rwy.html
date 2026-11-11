@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>حكايات عبد العزيز العروي</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #081426;
+        --bg-2: #0c1d38;
+        --card: #10233f;
+        --card-hover: #16304f;
+        --line: #1e3a5f;
+        --gold: #d4af37;
+        --gold-soft: #e8c95c;
+        --gold-dim: rgba(212, 175, 55, 0.14);
+        --text: #f4f0e2;
+        --muted: #a7b8cf;
+        --player-h: 148px;
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; overflow-x: hidden; overflow-x: clip; }
+      body {
+        margin: 0;
+        overflow-x: hidden;
+        overflow-x: clip;
+        background:
+          radial-gradient(900px 420px at 50% -120px, rgba(212, 175, 55, 0.10), transparent 60%),
+          linear-gradient(180deg, var(--bg-2), var(--bg) 340px);
+        color: var(--text);
+        font-family: "Cairo", system-ui, sans-serif;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        height: 100dvh;
+      }
+      button, input { font-family: inherit; }
+      button { cursor: pointer; }
+
+      /* ---------- Header ---------- */
+      header {
+        flex: 0 0 auto;
+        text-align: center;
+        padding: 18px 16px 8px;
+      }
+
+      /* ---------- Header clock with glowing halo ---------- */
+      .clock-wrap {
+        position: relative;
+        width: 118px; height: 118px;
+        margin: 0 auto;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .clock-halo {
+        position: absolute;
+        left: 50%; top: 50%;
+        width: 168px; height: 168px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(232,201,92,.55) 0%, rgba(255,122,89,.30) 32%, rgba(94,200,255,.22) 50%, rgba(232,106,192,.14) 60%, rgba(212,175,55,0) 72%);
+        filter: blur(10px);
+        opacity: .3;
+        transform: translate(-50%, -50%) scale(.78);
+        pointer-events: none;
+        will-change: transform, opacity;
+      }
+      .clock-halo.css-pulse { animation: haloPulse 1.7s ease-in-out infinite; }
+      @keyframes haloPulse {
+        0%, 100% { transform: translate(-50%, -50%) scale(.82); opacity: .38; }
+        50% { transform: translate(-50%, -50%) scale(1.08); opacity: .8; }
+      }
+      .clock-ring {
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, #d4af37, #ff7a59, #e86ac0, #5ec8ff, #7be0a3, #d4af37);
+        animation: ringSpin 16s linear infinite;
+        pointer-events: none;
+      }
+      @keyframes ringSpin { to { transform: rotate(360deg); } }
+      .clock-face {
+        position: absolute;
+        inset: 10px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 50% 32%, #132c50, #0a1830 78%);
+        box-shadow: inset 0 0 0 1px rgba(212,175,55,.35), 0 6px 18px rgba(0,0,0,.45);
+        display: flex; align-items: center; justify-content: center;
+      }
+      .clock-read {
+        display: flex;
+        align-items: baseline;
+        direction: ltr;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      #clockTime { font-size: 27px; font-weight: 800; color: var(--text); letter-spacing: .5px; }
+      .clock-sec { font-size: 15px; font-weight: 700; color: var(--gold-soft); }
+      @media (prefers-reduced-motion: reduce) {
+        .clock-ring { animation: none; }
+        .clock-halo.css-pulse { animation: none; opacity: .3; }
+      }
+      header h1 {
+        font-family: "Amiri", serif;
+        font-size: clamp(30px, 7vw, 44px);
+        margin: 8px 0 4px;
+        color: var(--gold-soft);
+        font-weight: 700;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        font-weight: 600;
+      }
+      header p .brand { color: var(--gold); }
+
+      /* ---------- Sticky controls ---------- */
+      .controls {
+        flex: 0 0 auto;
+        background: rgba(8, 20, 38, 0.94);
+        padding: 12px 14px 10px;
+        border-bottom: 1px solid var(--line);
+      }
+      .wrap { max-width: 760px; margin: 0 auto; }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .tab {
+        flex: 1;
+        min-height: 48px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--muted);
+        font-size: 16px;
+        font-weight: 700;
+        padding: 8px 6px;
+        transition: background .15s, color .15s, border-color .15s;
+      }
+      .tab .count {
+        display: inline-block;
+        background: rgba(255,255,255,.08);
+        border-radius: 999px;
+        padding: 0 8px;
+        font-size: 13px;
+        margin-inline-start: 4px;
+      }
+      .tab.active {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: #1a1405;
+      }
+      .tab.active .count { background: rgba(0,0,0,.18); }
+      .search-box { position: relative; }
+      .search-box svg {
+        position: absolute;
+        inset-inline-start: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px; height: 20px;
+        stroke: var(--muted);
+        pointer-events: none;
+      }
+      #search {
+        width: 100%;
+        min-height: 48px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--text);
+        font-size: 16px;
+        padding: 10px 44px 10px 14px;
+        outline: none;
+      }
+      #search:focus { border-color: var(--gold); }
+      #search::placeholder { color: var(--muted); }
+      .result-line {
+        color: var(--muted);
+        font-size: 13.5px;
+        margin: 8px 2px 0;
+      }
+
+      /* ---------- List ---------- */
+      main {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 12px 14px 30px;
+      }
+      .list { display: flex; flex-direction: column; gap: 8px; }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        scroll-margin-top: 10px;
+        scroll-margin-bottom: 10px;
+        width: 100%;
+        min-height: 58px;
+        text-align: start;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 10px 14px;
+        color: var(--text);
+        transition: background .15s, border-color .15s;
+      }
+      .row:hover { background: var(--card-hover); }
+      .row .num {
+        flex: 0 0 auto;
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: var(--bg-2);
+        color: var(--muted);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 14.5px; font-weight: 700;
+      }
+      .row .title {
+        flex: 1 1 auto;
+        font-size: 16.5px;
+        font-weight: 600;
+        line-height: 1.5;
+        min-width: 0;
+      }
+      .row .dur {
+        flex: 0 0 auto;
+        color: var(--muted);
+        font-size: 13.5px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        direction: ltr;
+      }
+      .row .eq { display: none; flex: 0 0 auto; align-items: flex-end; gap: 2.5px; height: 16px; }
+      .row .eq i { width: 3.5px; background: var(--gold); border-radius: 2px; height: 6px; }
+      .row.current {
+        background: var(--gold-dim);
+        border-color: var(--gold);
+      }
+      .row.current .num { background: var(--gold); border-color: var(--gold); color: #1a1405; }
+      .row.current .title { color: var(--gold-soft); }
+      .row.current .eq { display: flex; }
+      .row.playing .eq i { animation: eq 0.9s ease-in-out infinite; }
+      .row.playing .eq i:nth-child(2) { animation-delay: .25s; }
+      .row.playing .eq i:nth-child(3) { animation-delay: .5s; }
+      @keyframes eq {
+        0%, 100% { height: 5px; }
+        50% { height: 16px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .row.playing .eq i { animation: none; height: 12px; }
+      }
+      .empty {
+        text-align: center;
+        color: var(--muted);
+        padding: 42px 16px;
+        font-size: 16px;
+      }
+
+      /* ---------- Player bar ---------- */
+      .player {
+        flex: 0 0 auto;
+        background: #0a1830;
+        border-top: 1px solid var(--gold);
+        padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+        box-shadow: 0 -8px 30px rgba(0,0,0,.45);
+      }
+      .player .inner { max-width: 760px; margin: 0 auto; }
+      .now-title {
+        font-size: 15.5px;
+        font-weight: 700;
+        color: var(--gold-soft);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 6px;
+        min-height: 24px;
+      }
+      .now-title.idle { color: var(--muted); font-weight: 600; }
+      .seek-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        direction: ltr;
+      }
+      .seek-row .time {
+        font-size: 12.5px;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+        min-width: 38px;
+        text-align: center;
+      }
+      #seek {
+        flex: 1;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 32px;
+        border: none;
+        background: transparent;
+        outline: none;
+        cursor: pointer;
+      }
+      #seek::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px; height: 18px;
+        border-radius: 50%;
+        background: var(--gold);
+        border: 2px solid #0a1830;
+        box-shadow: 0 0 0 1px var(--gold);
+      }
+      #seek::-moz-range-thumb {
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        background: var(--gold);
+        border: 2px solid #0a1830;
+      }
+      .btns {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        margin-top: 2px;
+      }
+      .ctl {
+        border: none;
+        background: transparent;
+        color: var(--text);
+        width: 48px; height: 48px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .ctl svg { width: 26px; height: 26px; fill: currentColor; }
+      .ctl:active { background: rgba(255,255,255,.08); }
+      .ctl:disabled { opacity: .35; cursor: default; }
+      #playBtn {
+        width: 58px; height: 58px;
+        background: var(--gold);
+        color: #1a1405;
+        box-shadow: 0 4px 18px rgba(212,175,55,.4);
+      }
+      #playBtn svg { width: 28px; height: 28px; }
+      #playBtn:active { background: var(--gold-soft); }
+      svg.icon-off { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="clock-wrap">
+        <div class="clock-halo" id="halo" aria-hidden="true"></div>
+        <div class="clock-ring" id="clockRing" aria-hidden="true"></div>
+        <div class="clock-face">
+          <div class="clock-read"><span id="clockTime">--:--</span><span class="clock-sec" id="clockSec">:--</span></div>
+        </div>
+      </div>
+      <h1>حكايات عبد العزيز العروي</h1>
+      <p>الحكواتي التونسي • <span class="brand">جنود الخفاء — حب الخير للغير</span></p>
+    </header>
+
+    <div class="controls">
+      <div class="wrap">
+        <div class="tabs" role="tablist" aria-label="المجموعات">
+          <button class="tab active" id="tab1" role="tab" aria-selected="true">المجموعة الأولى <span class="count">63</span></button>
+          <button class="tab" id="tab2" role="tab" aria-selected="false">المجموعة الثانية <span class="count">21</span></button>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
+          <input id="search" type="search" placeholder="ابحث عن حكاية…" aria-label="ابحث عن حكاية" />
+        </div>
+        <p class="result-line" id="resultLine"></p>
+      </div>
+    </div>
+
+    <main>
+      <div class="wrap">
+        <div class="list" id="list"></div>
+        <div class="empty" id="empty" hidden>لا توجد حكايات مطابقة لبحثك</div>
+      </div>
+    </main>
+
+    <div class="player">
+      <div class="inner">
+        <div class="now-title idle" id="nowTitle">اختر حكاية للاستماع</div>
+        <div class="seek-row">
+          <span class="time" id="elapsed">0:00</span>
+          <input id="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="موضع التشغيل" />
+          <span class="time" id="total">0:00</span>
+        </div>
+        <div class="btns">
+          <button class="ctl" id="prevBtn" aria-label="الحكاية السابقة">
+            <svg viewBox="0 0 24 24"><path d="M6 5h2.4v14H6zM19 5.8v12.4c0 .9-1 1.5-1.8 1L8.6 13a1.2 1.2 0 0 1 0-2L17.2 4.9c.8-.6 1.8 0 1.8.9z"/></svg>
+          </button>
+          <button class="ctl" id="playBtn" aria-label="تشغيل أو إيقاف مؤقت">
+            <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5.5v13c0 .8.9 1.3 1.6.9l10-6.5c.6-.4.6-1.4 0-1.8l-10-6.5C8.9 4.2 8 4.7 8 5.5z"/></svg>
+            <svg id="pauseIcon" class="icon-off" viewBox="0 0 24 24"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg>
+          </button>
+          <button class="ctl" id="nextBtn" aria-label="الحكاية التالية">
+            <svg viewBox="0 0 24 24"><path d="M15.6 5H18v14h-2.4zM5 5.8v12.4c0 .9 1 1.5 1.8 1L15.4 13a1.2 1.2 0 0 0 0-2L6.8 4.9C6 4.3 5 4.9 5 5.8z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <audio id="audio" preload="none" crossorigin="anonymous"></audio>
+
+    <script>
+      var TALES = [{"c":1,"f":"AamilFiEddenyaTaylaaFiEddenya.mp3","t":"Aamil Fi Eddenya Taylaa Fi Eddenya","s":679},{"c":1,"f":"AchekEdhabOr.mp3","t":"Achek Edhab Or","s":569},{"c":1,"f":"AdamThakafitErrjalFiEnnssa.mp3","t":"عدم ثقة الرجال في النساء","s":452},{"c":1,"f":"AlAarabiWelJamal.mp3","t":"الأعرابي والجمل","s":494},{"c":1,"f":"AlAmanaSawwditOuejhLighraab.mp3","t":"الأمانة سوّدت وجه الغراب","s":623},{"c":1,"f":"EjjnanOuCharitElKhoukh.mp3","t":"الجنان وشجرة الخوخ","s":528},{"c":1,"f":"ElAzouzaWelMallakh.mp3","t":"عزوزة والملاخ","s":658},{"c":1,"f":"ElHajj.mp3","t":"الحاج","s":435},{"c":1,"f":"ElHattabOuKassamLarzaak.mp3","t":"الحطاب وقسام الأرزاق","s":683},{"c":1,"f":"ElHmaWelKnayenEthalatha.mp3","t":"الحماة والكناين الثلاثة","s":594},{"c":1,"f":"ElJorhYabraaYaJabra.mp3","t":"الجرح يبرى يا جبرة","s":681},{"c":1,"f":"ElJoudWelKramAndElArab.mp3","t":"الجود والكرم عند العرب","s":438},{"c":1,"f":"ElKadhiWeErrajilIlliTallikMartou.mp3","t":"القاضي والرجل الذي طلق زوجته","s":859},{"c":1,"f":"ElKhammasssWelKinz.mp3","t":"الخماس والكنز","s":685},{"c":1,"f":"ElliAslouKnoud.mp3","t":"اللي أصله كنود","s":652},{"c":1,"f":"ElliYaakilArakJebine.mp3","t":"اللي ياكل عرق جبينه","s":742},{"c":1,"f":"ElMachnoukWelMayta.mp3","t":"المشنوق والميتة","s":548},{"c":1,"f":"ElMahboulElHaribMittkiyya.mp3","t":"El Mahboul El Harib Mittkiyya","s":492},{"c":1,"f":"ElMeddebElMozayyaf.mp3","t":"المدب المزيف","s":494},{"c":1,"f":"ElWaadaElBenArousse.mp3","t":"El Waada El Ben Arousse","s":457},{"c":1,"f":"ElWaliyyEddajjal.mp3","t":"الولي الدجال","s":697},{"c":1,"f":"ErrajilElBedwiWelOuzirHassoud.mp3","t":"الرجل البدوي والوزير الحسود","s":528},{"c":1,"f":"ErrajilIlliBadhAdhma.mp3","t":"الرجل الذي باع عظامه","s":614},{"c":1,"f":"ErrizkWelBarka.mp3","t":"الرزق والبركة","s":822},{"c":1,"f":"Essaad.mp3","t":"السعد","s":729},{"c":1,"f":"EssaadWelAkal.mp3","t":"السعد والعقل","s":672},{"c":1,"f":"EssoltaanIlliMoajabBnasfouOuWzirou1.mp3","t":"السلطان المعجب بنفسه ووزيره 1","s":608},{"c":1,"f":"EssoltaanIlliMoajabBnasfouOuWzirou2.mp3","t":"السلطان المعجب بنفسه ووزيره 2","s":796},{"c":1,"f":"EthlathaIkhwaWeSandouk.mp3","t":"الثلاثة إخوة والصندوق","s":670},{"c":1,"f":"EttajirIlliKtibRizkouFiHyatou.mp3","t":"التاجر الذي كتب رزقه في حياته","s":621},{"c":1,"f":"EttajirLakhalWeEttajirLabyadh.mp3","t":"التاجر الأكحل والتاجر الأبيض","s":1048},{"c":1,"f":"EttajirOuAwladouEthalatha3.mp3","t":"التاجر وأولاده الثلاثة","s":647},{"c":1,"f":"EttajirOuOueldouOuLashaab.mp3","t":"التاجر وولده والأصحاب","s":923},{"c":1,"f":"EttajirOuWeldou.mp3","t":"التاجر وولده","s":624},{"c":1,"f":"EttajirWelJammal.mp3","t":"التاجر والجمال","s":556},{"c":1,"f":"EttalibOuDaawitElKhir.mp3","t":"الطالب ودعوة الخير","s":680},{"c":1,"f":"EttarziIlliAbarouSabaa7.mp3","t":"Ettarzi Illi Abarou Sabaa7","s":761},{"c":1,"f":"EttiffahElliYfouh.mp3","t":"التفاح اللي يفوح","s":715},{"c":1,"f":"FiilElKhirMaYemchiFiDhayeii.mp3","t":"فعل الخير ما يمشي في ضياع","s":487},{"c":1,"f":"FtimaBintEnnajjar.mp3","t":"فاطمة بنت النجار","s":935},{"c":1,"f":"HarounErrachideEtJaafarElBarmaki1.mp3","t":"هارون الرشيد وجعفر البرمكي 1","s":730},{"c":1,"f":"HarounErrachideEtJaafarElBarmaki2.mp3","t":"هارون الرشيد وجعفر البرمكي 2","s":727},{"c":1,"f":"HarounErrachideEtJaafarElBarmaki3.mp3","t":"هارون الرشيد وجعفر البرمكي 3","s":677},{"c":1,"f":"IntiAlikBilHarkaWanaAlayyaBilBarka.mp3","t":"انت عليك بالحركة وأنا علي بالبركة","s":671},{"c":1,"f":"IttakiCharrManAhsantaIlayhi.mp3","t":"اتق شر من أحسنت إليه","s":607},{"c":1,"f":"IzzNafsakTsibha_2.mp3","t":"عز نفسك تصيبها","s":888},{"c":1,"f":"KhayenElAmana.mp3","t":"خائن الأمانة","s":587},{"c":1,"f":"KidEnnssaKidin.mp3","t":"كيد النساء","s":887},{"c":1,"f":"NaimaOuNaim1.mp3","t":"نعيمة ونعيم 1","s":550},{"c":1,"f":"NaimaOuNaimPart1.mp3","t":"نعيمة ونعيم — الجزء الأول","s":753},{"c":1,"f":"NaimaOuNaimPart2.mp3","t":"نعيمة ونعيم — الجزء الثاني","s":687},{"c":1,"f":"NwasiOuAtib.mp3","t":"Nwasi Ou Atib","s":654},{"c":1,"f":"OmmiAichaRajil.mp3","t":"أمي عائشة راجل","s":652},{"c":1,"f":"OuldChahbandarEttoujjarWeSabbat.mp3","t":"Ould Chahbandar Ettoujjar We Sabbat","s":686},{"c":1,"f":"WildLimraaLifkiraPart1.mp3","t":"ولد المرأة الفقيرة — الجزء الأول","s":1012},{"c":1,"f":"WildLimraaLifkiraPart2.mp3","t":"ولد المرأة الفقيرة — الجزء الثاني","s":1166},{"c":1,"f":"YaatikMaalElliLaSaiiit.mp3","t":"Yaatik Maal Elli La Saiiit","s":550},{"c":1,"f":"YaDhalimLikYoum.mp3","t":"يا ظالم ليك يوم","s":797},{"c":1,"f":"YaHafirHofrirEssaw.mp3","t":"يا حافر حفرة السوء","s":907},{"c":1,"f":"YaKatilErrouh.mp3","t":"يا قاتل الروح وين تروح","s":530},{"c":1,"f":"YoufaMalEjjeddine.mp3","t":"يوفى مال الجدين","s":955},{"c":1,"f":"ZouzFirsaanAbireen.mp3","t":"زوز فرسان عابرين","s":620},{"c":1,"f":"ZouzIkhwaWahidGhniOuLakherFkir.mp3","t":"زوز إخوة واحد غني والآخر فقير","s":749},{"c":2,"f":"Abdelaziz_El_3erou.mp3","t":"عبد العزيز العروي","s":1074},{"c":2,"f":"Brahim Ben Slimane Ben Abdelmalek.mp3","t":"إبراهيم بن سليمان بن عبد الملك","s":598},{"c":2,"f":"El jammel El mech 7a7.mp3","t":"El Jammel El Mech 7a7","s":962},{"c":2,"f":"El Jannene ouchejret el khoukhe.mp3","t":"الجنان وشجرة الخوخ","s":528},{"c":2,"f":"El Jarh yebra ya jabra.mp3","t":"الجرح يبرى يا جبرة","s":680},{"c":2,"f":"El mallekh.mp3","t":"الملاخ","s":698},{"c":2,"f":"El Metzakar.mp3","t":"El Metzakar","s":726},{"c":2,"f":"Elli Rma rouhou Messom3a.mp3","t":"Elli Rma Rouhou Messom3a","s":820},{"c":2,"f":"Enncib wencibtou.mp3","t":"النسيب ونسيبته","s":631},{"c":2,"f":"Ennemr wou sidi Bnadem.mp3","t":"النمر وسيدي بنادم","s":632},{"c":2,"f":"Errajel wou leilet el kadr.mp3","t":"الرجل وليلة القدر","s":715},{"c":2,"f":"Essayyed wel hout werrajel.mp3","t":"الصياد والحوت والرجل","s":620},{"c":2,"f":"Ettoffah elli yfouh.mp3","t":"التفاح اللي يفوح","s":714},{"c":2,"f":"Ettofla womm ha wenncib wenciba.mp3","t":"الطفلة وأمها والنسيب والنسيبة","s":740},{"c":2,"f":"Hbel bledi khir.mp3","t":"Hbel Bledi Khir","s":718},{"c":2,"f":"Jebtlek Bélek.mp3","t":"Jebtlek Belek","s":535},{"c":2,"f":"Le fonctionnaire.mp3","t":"الموظف","s":995},{"c":2,"f":"Le voleur et les mille dinars.mp3","t":"اللص والألف دينار","s":453},{"c":2,"f":"les 3 freres et la caisse.mp3","t":"الإخوة الثلاثة والصندوق","s":670},{"c":2,"f":"Mahkamet laamar.mp3","t":"محكمة الأعمار","s":614},{"c":2,"f":"men hafer hofret essaou.mp3","t":"من حفر حفرة السوء","s":584}];
+
+      var BASE = {
+        1: "https://archive.org/download/7ikeyetAl3eroui/",
+        2: "https://archive.org/download/abdelaziz-el-3erou/"
+      };
+      var LS_KEY = "hkyt-aroui-last";
+
+      var audio = document.getElementById("audio");
+      var listEl = document.getElementById("list");
+      var emptyEl = document.getElementById("empty");
+      var resultLine = document.getElementById("resultLine");
+      var searchEl = document.getElementById("search");
+      var nowTitle = document.getElementById("nowTitle");
+      var seekEl = document.getElementById("seek");
+      var elapsedEl = document.getElementById("elapsed");
+      var totalEl = document.getElementById("total");
+      var playBtn = document.getElementById("playBtn");
+      var playIcon = document.getElementById("playIcon");
+      var pauseIcon = document.getElementById("pauseIcon");
+      var prevBtn = document.getElementById("prevBtn");
+      var nextBtn = document.getElementById("nextBtn");
+      var tabBtns = { 1: document.getElementById("tab1"), 2: document.getElementById("tab2") };
+
+      // ---- Live clock in the header ----
+      var clockTimeEl = document.getElementById("clockTime");
+      var clockSecEl = document.getElementById("clockSec");
+      function pad2(n) { return (n < 10 ? "0" : "") + n; }
+      function tickClock() {
+        var d = new Date();
+        if (clockTimeEl) clockTimeEl.textContent = pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+        if (clockSecEl) clockSecEl.textContent = ":" + pad2(d.getSeconds());
+      }
+      tickClock();
+      setInterval(tickClock, 1000);
+
+      // ---- Audio-reactive halo state (halo now sits around the header clock) ----
+      var haloEl = document.getElementById("halo");
+      var ringEl = document.getElementById("clockRing");
+      var actx = null, srcNode = null, analyser = null, freqData = null;
+      var graphTried = false, graphOK = false, fallbackPulse = false;
+      var haloLevel = 0, zeroFrames = 0, haloRaf = null;
+      var reducedMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+      var cols = { 1: [], 2: [] };
+      TALES.forEach(function (tale) { cols[tale.c].push(tale); });
+
+      var tab = 1;
+      var current = null; // { c: 1|2, i: index within collection }
+      var seeking = false;
+      var lastSave = 0;
+
+      function fmt(sec) {
+        if (!isFinite(sec) || sec < 0) sec = 0;
+        sec = Math.floor(sec);
+        var m = Math.floor(sec / 60);
+        var s = sec % 60;
+        return m + ":" + (s < 10 ? "0" : "") + s;
+      }
+      function urlOf(tale) { return BASE[tale.c] + encodeURIComponent(tale.f); }
+      function currentTale() { return current ? cols[current.c][current.i] : null; }
+
+      function render() {
+        var q = searchEl.value.trim();
+        var items = cols[tab];
+        listEl.innerHTML = "";
+        var shown = 0;
+        items.forEach(function (tale, i) {
+          if (q && tale.t.indexOf(q) === -1) return;
+          shown++;
+          var btn = document.createElement("button");
+          btn.className = "row" + (current && current.c === tab && current.i === i ? " current" : "");
+          btn.setAttribute("data-i", i);
+          btn.innerHTML =
+            '<span class="num">' + (i + 1) + "</span>" +
+            '<span class="title" dir="auto"></span>' +
+            '<span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>' +
+            '<span class="dur">' + fmt(tale.s) + "</span>";
+          btn.querySelector(".title").textContent = tale.t;
+          btn.addEventListener("click", function () { play(tab, i, true); });
+          listEl.appendChild(btn);
+        });
+        emptyEl.hidden = shown !== 0;
+        resultLine.textContent = q
+          ? "نتائج البحث: " + shown + " من " + items.length + " حكاية"
+          : items.length + " حكاية في هذه المجموعة";
+        markPlaying();
+        updateNav();
+      }
+
+      function markPlaying() {
+        var rows = listEl.querySelectorAll(".row");
+        rows.forEach(function (r) { r.classList.remove("playing"); });
+        if (current && current.c === tab && !audio.paused) {
+          var el = listEl.querySelector('.row[data-i="' + current.i + '"]');
+          if (el) el.classList.add("playing");
+        }
+      }
+
+      function updateNav() {
+        var has = !!current;
+        prevBtn.disabled = !has || current.i <= 0;
+        nextBtn.disabled = !has || current.i >= cols[current.c].length - 1;
+      }
+
+      function setPlayIcon() {
+        var playing = !audio.paused && !audio.ended;
+        playIcon.classList.toggle("icon-off", playing);
+        pauseIcon.classList.toggle("icon-off", !playing);
+        markPlaying();
+      }
+
+      function loadTale(c, i, autoplay, startAt) {
+        current = { c: c, i: i };
+        var tale = cols[c][i];
+        audio.src = urlOf(tale);
+        nowTitle.textContent = tale.t;
+        nowTitle.classList.remove("idle");
+        document.title = tale.t + " — حكايات عبد العزيز العروي";
+        seekEl.max = tale.s;
+        seekEl.value = 0;
+        paintSeek();
+        elapsedEl.textContent = "0:00";
+        totalEl.textContent = fmt(tale.s);
+        if (tab !== c) { tab = c; syncTabs(); }
+        render();
+        if (startAt && startAt > 0) {
+          var seekOnce = function () {
+            try { audio.currentTime = startAt; } catch (e) {}
+            seekEl.value = startAt;
+            elapsedEl.textContent = fmt(startAt);
+            paintSeek();
+            audio.removeEventListener("loadedmetadata", seekOnce);
+          };
+          audio.addEventListener("loadedmetadata", seekOnce);
+          audio.load();
+        }
+        if (autoplay) {
+          var p = audio.play();
+          if (p && p.catch) p.catch(function () {});
+        }
+        saveState(startAt || 0);
+      }
+
+      function play(c, i, autoplay) { loadTale(c, i, autoplay, 0); }
+
+      function step(d) {
+        if (!current) { play(tab, 0, true); return; }
+        var n = current.i + d;
+        if (n < 0 || n >= cols[current.c].length) return;
+        loadTale(current.c, n, true, 0);
+        scrollToCurrent();
+      }
+
+      function scrollToCurrent() {
+        var el = listEl.querySelector('.row[data-i="' + current.i + '"]');
+        if (el) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+
+      function paintSeek() {
+        var max = parseFloat(seekEl.max) || 0;
+        var v = parseFloat(seekEl.value) || 0;
+        var pct = max > 0 ? (v / max) * 100 : 0;
+        seekEl.style.backgroundImage =
+          "linear-gradient(to right, #d4af37 " + pct + "%, #1e3a5f " + pct + "%)";
+        seekEl.style.backgroundSize = "100% 6px";
+        seekEl.style.backgroundRepeat = "no-repeat";
+        seekEl.style.backgroundPosition = "center";
+      }
+
+      function saveState(pos) {
+        if (!current) return;
+        try {
+          localStorage.setItem(LS_KEY, JSON.stringify({
+            c: current.c,
+            i: current.i,
+            pos: typeof pos === "number" ? pos : audio.currentTime || 0
+          }));
+        } catch (e) {}
+      }
+
+      function syncTabs() {
+        [1, 2].forEach(function (n) {
+          var active = tab === n;
+          tabBtns[n].classList.toggle("active", active);
+          tabBtns[n].setAttribute("aria-selected", active ? "true" : "false");
+        });
+      }
+
+      tabBtns[1].addEventListener("click", function () { tab = 1; syncTabs(); render(); });
+      tabBtns[2].addEventListener("click", function () { tab = 2; syncTabs(); render(); });
+      searchEl.addEventListener("input", render);
+
+      playBtn.addEventListener("click", function () {
+        if (!current) { play(tab, 0, true); return; }
+        if (audio.paused) {
+          var p = audio.play();
+          if (p && p.catch) p.catch(function () {});
+        } else {
+          audio.pause();
+        }
+      });
+      prevBtn.addEventListener("click", function () { step(-1); });
+      nextBtn.addEventListener("click", function () { step(1); });
+
+      seekEl.addEventListener("input", function () {
+        seeking = true;
+        elapsedEl.textContent = fmt(parseFloat(seekEl.value));
+        paintSeek();
+      });
+      seekEl.addEventListener("change", function () {
+        seeking = false;
+        if (current) {
+          try { audio.currentTime = parseFloat(seekEl.value); } catch (e) {}
+          saveState(parseFloat(seekEl.value));
+        }
+      });
+
+      audio.addEventListener("loadedmetadata", function () {
+        if (isFinite(audio.duration) && audio.duration > 0) {
+          seekEl.max = audio.duration;
+          totalEl.textContent = fmt(audio.duration);
+          paintSeek();
+        }
+      });
+      audio.addEventListener("timeupdate", function () {
+        if (!seeking) {
+          seekEl.value = audio.currentTime;
+          elapsedEl.textContent = fmt(audio.currentTime);
+          paintSeek();
+        }
+        var now = Date.now();
+        if (now - lastSave > 4000) { lastSave = now; saveState(); }
+      });
+      audio.addEventListener("play", setPlayIcon);
+      audio.addEventListener("pause", function () { setPlayIcon(); saveState(); });
+      audio.addEventListener("ended", function () {
+        setPlayIcon();
+        if (current && current.i < cols[current.c].length - 1) {
+          loadTale(current.c, current.i + 1, true, 0);
+        } else {
+          saveState(0);
+        }
+      });
+      window.addEventListener("beforeunload", function () { saveState(); });
+
+      // ---- Audio-reactive halo ----
+      // Lazily route the audio element through an AnalyserNode, once only.
+      // Any failure leaves normal direct playback untouched and switches the
+      // halo to a gentle CSS pulse instead.
+      function ensureGraph() {
+        if (graphTried) {
+          if (actx && actx.state === "suspended") { var r = actx.resume(); if (r && r.catch) r.catch(function () {}); }
+          return;
+        }
+        graphTried = true;
+        try {
+          var AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) throw new Error("AudioContext unavailable");
+          actx = new AC();
+          srcNode = actx.createMediaElementSource(audio);
+          analyser = actx.createAnalyser();
+          analyser.fftSize = 256;
+          analyser.smoothingTimeConstant = 0.55;
+          srcNode.connect(analyser);
+          analyser.connect(actx.destination);
+          freqData = new Uint8Array(analyser.frequencyBinCount);
+          graphOK = true;
+        } catch (e) {
+          actx = null; srcNode = null; analyser = null; freqData = null;
+          graphOK = false;
+          fallbackPulse = true;
+        }
+        if (actx && actx.state === "suspended") { var p = actx.resume(); if (p && p.catch) p.catch(function () {}); }
+      }
+
+      function enableFallbackPulse() {
+        if (fallbackPulse) return;
+        fallbackPulse = true;
+        // Bypass the analyser chain so playback is a plain direct path again.
+        try {
+          if (srcNode && actx) { srcNode.disconnect(); srcNode.connect(actx.destination); }
+        } catch (e) {}
+      }
+
+      function haloTick() {
+        haloRaf = requestAnimationFrame(haloTick);
+        var playing = !audio.paused && !audio.ended && !!current;
+        if (reducedMotion) {
+          haloEl.classList.remove("css-pulse");
+          haloEl.style.opacity = playing ? "0.42" : "0.3";
+          return;
+        }
+        if (fallbackPulse) {
+          // CSS animation drives the halo; just toggle it with play state.
+          haloEl.style.transform = "";
+          haloEl.style.opacity = "";
+          haloEl.classList.toggle("css-pulse", playing);
+          return;
+        }
+        haloEl.classList.remove("css-pulse");
+        var target = 0;
+        if (playing && graphOK && analyser && freqData) {
+          analyser.getByteFrequencyData(freqData);
+          var bass = 0, total = 0, i;
+          for (i = 1; i <= 7 && i < freqData.length; i++) bass += freqData[i];
+          bass /= 7;
+          for (i = 0; i < freqData.length; i++) total += freqData[i];
+          if (total === 0) {
+            zeroFrames++;
+            // Sustained silence from the analyser while audio plays means the
+            // source is tainted: fall back to the CSS pulse, keep playing.
+            if (zeroFrames > 90) enableFallbackPulse();
+          } else {
+            zeroFrames = 0;
+            target = Math.min(1, (bass / 255) * 1.35);
+          }
+        }
+        // Fast attack on beats, slower release so the halo breathes.
+        var rate = target > haloLevel ? 0.45 : 0.10;
+        haloLevel += (target - haloLevel) * rate;
+        if (haloLevel < 0.001 && target === 0) haloLevel = 0;
+        var scale = 0.78 + haloLevel * 0.5;
+        var opacity = 0.3 + haloLevel * 0.7;
+        haloEl.style.transform = "translate(-50%, -50%) scale(" + scale.toFixed(3) + ")";
+        haloEl.style.opacity = opacity.toFixed(3);
+        if (ringEl) ringEl.style.filter = "brightness(" + (1 + haloLevel * 0.8).toFixed(2) + ")";
+      }
+
+      function startHaloLoop() {
+        if (haloRaf === null) haloRaf = requestAnimationFrame(haloTick);
+      }
+
+      audio.addEventListener("play", function () { ensureGraph(); startHaloLoop(); });
+      startHaloLoop();
+
+      // Restore last played tale, paused at the saved position.
+      (function restore() {
+        var saved = null;
+        try { saved = JSON.parse(localStorage.getItem(LS_KEY) || "null"); } catch (e) {}
+        if (saved && cols[saved.c] && cols[saved.c][saved.i]) {
+          tab = saved.c;
+          syncTabs();
+          loadTale(saved.c, saved.i, false, saved.pos || 0);
+          setTimeout(scrollToCurrent, 60);
+        } else {
+          render();
+          paintSeek();
+        }
+      })();
+    </script>
+  </body>
+</html>

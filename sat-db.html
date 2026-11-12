@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>منصة جنود الخفاء للستالايت والسوفت وير</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#081120;
+    --bg2:#0a1730;
+    --panel:#0e1e3a;
+    --panel2:#122544;
+    --line:#1d3a5f;
+    --line-soft:#16294a;
+    --ink:#eef4fb;
+    --silver:#b9c7d9;
+    --muted:#8498b3;
+    --blue:#38bdf8;
+    --blue-deep:#0ea5e9;
+    --cyan:#22d3ee;
+    --gold:#f5b942;
+    --green:#34d399;
+    --red:#f87171;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:"Cairo",system-ui,sans-serif;
+    background:
+      radial-gradient(900px 420px at 85% -80px, rgba(56,189,248,.14), transparent 60%),
+      radial-gradient(700px 380px at 5% 0, rgba(34,211,238,.08), transparent 55%),
+      linear-gradient(180deg, var(--bg2), var(--bg) 340px);
+    color:var(--ink);
+    min-height:100vh;
+  }
+  button,[role="button"],input,select{font-family:inherit}
+  button,[role="button"],select,input:not([type="checkbox"]){min-height:2.25rem}
+  a{color:var(--blue)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 16px 64px}
+
+  /* ===== الشريط العلوي ===== */
+  .topbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(8,17,32,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand-badge{
+    width:44px;height:44px;flex:none;border-radius:12px;
+    background:linear-gradient(145deg,#12325e,#0b1e3c);
+    border:1px solid var(--line);
+    display:grid;place-items:center;color:var(--blue);
+  }
+  .brand h1{font-size:1.06rem;font-weight:900;margin:0;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand small{display:block;color:var(--muted);font-size:.74rem;font-weight:600}
+  .topbar .spacer{flex:1}
+  .motto{
+    flex:none;font-size:.78rem;font-weight:800;color:var(--gold);
+    border:1px solid rgba(245,185,66,.35);background:rgba(245,185,66,.08);
+    padding:6px 12px;border-radius:999px;
+  }
+  @media (max-width:640px){
+    .motto{display:none}
+    .brand h1{font-size:.95rem;white-space:normal}
+    .tabs{flex-wrap:wrap;overflow:visible}
+    .tab{font-size:.9rem;padding:10px 12px}
+  }
+  .demo-note{
+    display:flex;gap:9px;align-items:flex-start;background:rgba(245,185,66,.07);
+    border:1px solid rgba(245,185,66,.35);color:#fde68a;border-radius:12px;
+    padding:11px 14px;font-size:.86rem;line-height:1.8;margin-bottom:16px;
+  }
+  .demo-tag{
+    align-self:flex-start;font-size:.7rem;font-weight:800;color:var(--gold);
+    border:1px solid rgba(245,185,66,.45);background:rgba(245,185,66,.08);
+    border-radius:999px;padding:3px 10px;
+  }
+
+  /* ===== البحث الذكي ===== */
+  .search-zone{padding:30px 0 6px;text-align:center}
+  .search-zone h2{font-size:1.7rem;font-weight:900;margin:0 0 6px}
+  .search-zone h2 .hl{color:var(--blue)}
+  .search-zone p{color:var(--silver);margin:0 auto 20px;max-width:620px;font-size:.95rem;line-height:1.8}
+  .search-box{
+    max-width:680px;margin:0 auto;display:flex;align-items:center;gap:8px;
+    background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:6px;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .search-box:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px rgba(56,189,248,.15)}
+  .search-box svg{flex:none;margin-inline-start:8px;color:var(--muted)}
+  .search-box input{
+    flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--ink);
+    font-size:1.02rem;font-weight:600;padding:8px 2px;
+  }
+  .search-box input::placeholder{color:var(--muted);font-weight:600}
+  .clear-btn{
+    flex:none;border:0;background:var(--panel2);color:var(--silver);border-radius:10px;
+    padding:6px 14px;font-weight:800;cursor:pointer;display:none;
+  }
+  .clear-btn.show{display:block}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+  .chip{
+    border:1px solid var(--line);background:var(--panel);color:var(--silver);
+    border-radius:999px;padding:6px 14px;font-size:.82rem;font-weight:700;cursor:pointer;min-height:2.25rem;
+  }
+  .chip:hover{border-color:var(--blue);color:var(--ink)}
+  .chip b{color:var(--blue);font-weight:800}
+  .search-summary{margin-top:12px;color:var(--muted);font-size:.86rem;font-weight:700;min-height:1.4em}
+  .search-summary b{color:var(--cyan)}
+  .search-summary button{background:none;border:0;color:var(--blue);font-weight:800;cursor:pointer;padding:4px 6px;text-decoration:underline}
+
+  /* ===== إحصائيات ===== */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:680px;margin:22px auto 0}
+  .stat{background:var(--panel);border:1px solid var(--line-soft);border-radius:var(--radius);padding:12px 8px;text-align:center}
+  .stat b{display:block;font-size:1.45rem;font-weight:900;color:var(--ink)}
+  .stat span{font-size:.78rem;color:var(--muted);font-weight:700}
+
+  /* ===== التبويبات ===== */
+  .tabs{display:flex;gap:8px;margin:34px 0 20px;border-bottom:2px solid var(--line-soft);overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex:none;border:0;background:transparent;color:var(--silver);cursor:pointer;
+    font-size:1rem;font-weight:800;padding:12px 18px;border-radius:10px 10px 0 0;position:relative;min-height:3rem;
+  }
+  .tab .cnt{background:var(--panel2);border:1px solid var(--line);color:var(--cyan);border-radius:999px;font-size:.72rem;padding:1px 8px;margin-inline-start:6px;font-weight:800}
+  .tab:hover{color:var(--ink)}
+  .tab.active{color:var(--ink)}
+  .tab.active::after{content:"";position:absolute;inset-inline:10px;bottom:-2px;height:3px;border-radius:3px;background:var(--blue)}
+  .pane{display:none}
+  .pane.active{display:block}
+
+  /* ===== فلاتر الأجهزة ===== */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px}
+  .fbtn{
+    border:1px solid var(--line);background:var(--panel);color:var(--silver);border-radius:10px;
+    padding:7px 16px;font-weight:800;font-size:.88rem;cursor:pointer;
+  }
+  .fbtn.active{background:var(--blue-deep);border-color:var(--blue-deep);color:#fff}
+  .filters select{
+    margin-inline-start:auto;background:var(--panel);color:var(--ink);border:1px solid var(--line);
+    border-radius:10px;padding:7px 12px;font-weight:700;font-size:.88rem;max-width:100%;
+  }
+  @media (max-width:640px){ .filters select{margin-inline-start:0;width:100%} }
+
+  /* ===== بطاقات الأجهزة ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  @media (max-width:400px){ .grid{grid-template-columns:1fr} }
+  .card{
+    background:linear-gradient(180deg,var(--panel2),var(--panel));
+    border:1px solid var(--line-soft);border-radius:var(--radius);padding:18px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .card-top{display:flex;align-items:flex-start;gap:12px}
+  .dev-ico{
+    width:56px;height:56px;flex:none;border-radius:14px;display:grid;place-items:center;
+    font-size:1.9rem;line-height:1;
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 8px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.28);
+    text-shadow:0 2px 6px rgba(0,0,0,.25);
+  }
+  .dev-ico.ico-blue{background:linear-gradient(145deg,#38bdf8,#2563eb)}
+  .dev-ico.ico-teal{background:linear-gradient(145deg,#2dd4bf,#0f766e)}
+  .dev-ico.ico-amber{background:linear-gradient(145deg,#fbbf24,#d97706)}
+  .dev-ico.ico-green{background:linear-gradient(145deg,#4ade80,#15803d)}
+  .dev-ico.ico-rose{background:linear-gradient(145deg,#fb7185,#be123c)}
+  .dev-ico.ico-orange{background:linear-gradient(145deg,#fb923c,#c2410c)}
+  .dev-ico.ico-cyan{background:linear-gradient(145deg,#22d3ee,#0369a1)}
+  .dev-ico.ico-slate{background:linear-gradient(145deg,#94a3b8,#475569)}
+  .card h3{margin:0;font-size:1.12rem;font-weight:900;line-height:1.35}
+  .card .brand-name{color:var(--muted);font-size:.8rem;font-weight:700}
+  .type-badge{
+    flex:none;font-size:.72rem;font-weight:800;border-radius:999px;padding:4px 10px;
+    border:1px solid rgba(56,189,248,.4);color:var(--blue);background:rgba(56,189,248,.08);
+  }
+  .type-badge.sw{border-color:rgba(245,185,66,.45);color:var(--gold);background:rgba(245,185,66,.08)}
+  .type-badge.both{border-color:rgba(52,211,153,.4);color:var(--green);background:rgba(52,211,153,.08)}
+  .chip-line{
+    display:flex;align-items:center;gap:8px;background:#0a1a33;border:1px dashed var(--line);
+    border-radius:10px;padding:8px 12px;font-size:.9rem;
+  }
+  .chip-line span{color:var(--muted);font-weight:700;font-size:.78rem}
+  .chip-line b{color:var(--cyan);direction:ltr;font-weight:800;letter-spacing:.2px}
+  .meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .meta div{background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:9px;padding:7px 6px;text-align:center}
+  .meta span{display:block;color:var(--muted);font-size:.68rem;font-weight:700}
+  .meta b{font-size:.85rem;font-weight:800}
+  .card .desc{color:var(--silver);font-size:.86rem;line-height:1.75;margin:0}
+  .card-actions{display:flex;gap:8px;margin-top:auto}
+  .btn{
+    flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    border-radius:10px;padding:10px 12px;font-weight:800;font-size:.9rem;cursor:pointer;
+    border:1px solid var(--line);background:var(--panel2);color:var(--ink);text-decoration:none;min-height:2.75rem;
+  }
+  .btn.primary{background:var(--blue-deep);border-color:var(--blue-deep);color:#fff}
+  .btn.primary:hover{background:#0284c7}
+  .btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
+  .empty{
+    border:1.5px dashed var(--line);border-radius:var(--radius);padding:38px 18px;text-align:center;color:var(--muted);
+  }
+  .empty b{display:block;color:var(--silver);font-size:1.05rem;margin-bottom:6px}
+  .hidden{display:none !important}
+
+  /* ===== الترددات ===== */
+  .sat-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .sat-tab{
+    border:1px solid var(--line);background:var(--panel);color:var(--silver);border-radius:12px;
+    padding:9px 16px;font-weight:800;font-size:.92rem;cursor:pointer;text-align:right;
+  }
+  .sat-tab small{display:block;font-size:.7rem;color:var(--muted);font-weight:700;direction:ltr;text-align:right}
+  .sat-tab.active{border-color:var(--blue);color:var(--ink);background:var(--panel2)}
+  .sat-tab.active small{color:var(--blue)}
+  .freq-list{display:flex;flex-direction:column;gap:10px}
+  .freq-row{
+    background:var(--panel);border:1px solid var(--line-soft);border-radius:12px;
+    padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .freq-main{flex:1;min-width:200px}
+  .freq-main .ch{font-weight:800;font-size:1rem}
+  .freq-main .note{color:var(--muted);font-size:.78rem;font-weight:600;margin-top:2px}
+  .freq-nums{display:flex;gap:8px;flex-wrap:wrap;direction:ltr}
+  .fnum{background:#0a1a33;border:1px solid var(--line);border-radius:9px;padding:6px 12px;text-align:center;min-width:86px}
+  .fnum span{display:block;font-size:.62rem;color:var(--muted);font-weight:700;letter-spacing:.4px}
+  .fnum b{font-size:1rem;font-weight:900;color:var(--ink)}
+  .fnum.pol b{color:var(--gold)}
+  .copy-btn{
+    flex:none;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--ink);border-radius:10px;padding:9px 16px;font-weight:800;cursor:pointer;font-size:.88rem;
+  }
+  .copy-btn:hover{border-color:var(--blue);color:var(--blue)}
+  .copy-btn.done{border-color:var(--green);color:var(--green)}
+
+  /* ===== تطبيقات الشاشات ===== */
+  .platform-note{color:var(--silver);line-height:1.85;font-size:.93rem;margin:0 0 18px;max-width:760px}
+  .app-card .platforms{display:flex;flex-wrap:wrap;gap:6px}
+  .plat{font-size:.72rem;font-weight:800;border-radius:999px;padding:4px 11px;border:1px solid var(--line);color:var(--silver);background:rgba(255,255,255,.03)}
+  .plat.webos{color:#f0abfc;border-color:rgba(240,171,252,.35)}
+  .plat.tizen{color:#7dd3fc;border-color:rgba(125,211,252,.35)}
+  .plat.android{color:#86efac;border-color:rgba(134,239,172,.35)}
+  .code-box{
+    display:flex;align-items:center;gap:10px;background:#0a1a33;border:1px dashed var(--line);
+    border-radius:10px;padding:10px 14px;
+  }
+  .code-box .lbl{color:var(--muted);font-size:.75rem;font-weight:700;flex:none}
+  .code-box .val{font-weight:900;font-size:1.15rem;letter-spacing:2px;direction:ltr;color:var(--gold)}
+  .code-box .val.none{letter-spacing:0;font-size:.85rem;color:var(--silver);direction:rtl;font-weight:700}
+  .code-box button{margin-inline-start:auto;flex:none}
+  .steps-mini{margin:0;padding:0;list-style:none;counter-reset:st;display:flex;flex-direction:column;gap:6px}
+  .steps-mini li{color:var(--silver);font-size:.86rem;line-height:1.7;padding-inline-start:30px;position:relative}
+  .steps-mini li::before{
+    counter-increment:st;content:counter(st);position:absolute;inset-inline-start:0;top:2px;
+    width:21px;height:21px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);
+    color:var(--blue);font-size:.72rem;font-weight:900;display:grid;place-items:center;
+  }
+
+  /* ===== النافذة المنبثقة ===== */
+  .modal-bk{
+    position:fixed;inset:0;background:rgba(3,8,18,.78);z-index:80;display:none;
+    align-items:flex-end;justify-content:center;padding:0;
+  }
+  .modal-bk.open{display:flex}
+  .modal{
+    background:var(--panel);border:1px solid var(--line);border-radius:18px 18px 0 0;
+    width:100%;max-width:640px;max-height:88vh;overflow:auto;padding:22px 20px 28px;
+  }
+  @media (min-width:700px){ .modal-bk{align-items:center;padding:20px} .modal{border-radius:18px} }
+  .modal-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+  .modal-head h3{margin:0;font-size:1.2rem;font-weight:900;flex:1}
+  .modal-head .sub{color:var(--muted);font-size:.85rem;font-weight:600}
+  .x-btn{flex:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-size:1.1rem;cursor:pointer}
+  .warn{
+    display:flex;gap:10px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.35);
+    color:#fecaca;border-radius:10px;padding:11px 14px;font-size:.87rem;line-height:1.75;margin:14px 0;
+  }
+  .ustep{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+  .ustep:last-of-type{border-bottom:0}
+  .ustep .ill{
+    width:64px;height:64px;flex:none;border-radius:12px;background:#0a1a33;border:1px solid var(--line);
+    display:grid;place-items:center;color:var(--blue);
+  }
+  .ustep h4{margin:0 0 4px;font-size:.98rem;font-weight:800}
+  .ustep h4 .n{color:var(--blue);font-weight:900}
+  .ustep p{margin:0;color:var(--silver);font-size:.87rem;line-height:1.8}
+
+  /* ===== التنبيه العائم ===== */
+  .toast{
+    position:fixed;bottom:22px;inset-inline-start:50%;transform:translateX(50%) translateY(80px);
+    background:#065f46;border:1px solid var(--green);color:#ecfdf5;font-weight:800;font-size:.92rem;
+    padding:12px 22px;border-radius:12px;z-index:120;opacity:0;transition:.3s;pointer-events:none;
+    display:flex;align-items:center;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.45);max-width:92vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(50%) translateY(0)}
+  html[dir="rtl"] .toast{transform:translateX(50%) translateY(80px)}
+  html[dir="rtl"] .toast.show{transform:translateX(50%) translateY(0)}
+
+  footer{margin-top:48px;border-top:1px solid var(--line-soft);padding-top:20px;color:var(--muted);font-size:.84rem;line-height:1.9;text-align:center}
+  footer b{color:var(--silver)}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="brand-badge" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20 13.5 10.5"/><path d="M13.5 10.5a5.5 5.5 0 1 1 7.8-7.8L13.5 10.5z"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/><path d="M6 22h9"/></svg>
+      </div>
+      <h1>منصة جنود الخفاء <small>للستالايت والسوفت وير — ملفات قنوات • ترددات • تطبيقات شاشات</small></h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="motto">🛡️ حب الخير للغير</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== البحث الذكي ===== -->
+  <section class="search-zone">
+    <h2>ابحث باسم <span class="hl">الريسيفر</span> أو <span class="hl">المعالج</span></h2>
+    <p>اكتب اسم الجهاز مثل Hyper X7، أو اسم المعالج مثل Sunplus 1506HV أو GX6605S أو Ali، وستظهر النتائج فوراً أثناء الكتابة في كل أقسام المنصة.</p>
+    <div class="search-box" role="search">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+      <input id="searchInput" type="search" placeholder="ابحث هنا… مثال: Hyper X7 أو 1506TV أو GX6605S" aria-label="بحث ذكي باسم الريسيفر أو المعالج" autocomplete="off" />
+      <button class="clear-btn" id="clearSearch" type="button">مسح ✕</button>
+    </div>
+    <div class="chips" id="quickChips" aria-label="بحث سريع بالمعالجات الشهيرة"></div>
+    <div class="search-summary" id="searchSummary" aria-live="polite"></div>
+
+    <div class="stats">
+      <div class="stat"><b id="statDevices">0</b><span>جهاز وملف تحديث</span></div>
+      <div class="stat"><b id="statFreqs">0</b><span>تردد محدّث</span></div>
+      <div class="stat"><b id="statApps">0</b><span>تطبيق شاشات ذكية</span></div>
+    </div>
+  </section>
+
+  <!-- ===== التبويبات ===== -->
+  <nav class="tabs" role="tablist" aria-label="أقسام المنصة">
+    <button class="tab active" role="tab" data-tab="devices" type="button">📁 ملفات القنوات والسوفت وير <span class="cnt" id="cntDevices"></span></button>
+    <button class="tab" role="tab" data-tab="freqs" type="button">📡 جدول الترددات <span class="cnt" id="cntFreqs"></span></button>
+    <button class="tab" role="tab" data-tab="tv" type="button">📺 تطبيقات الشاشات الذكية <span class="cnt" id="cntApps"></span></button>
+  </nav>
+
+  <!-- ===== تبويب الأجهزة ===== -->
+  <section class="pane active" id="pane-devices" role="tabpanel">
+    <div class="demo-note"><span aria-hidden="true">📌</span><span>البطاقات المعروضة حالياً <b>أمثلة تجريبية للعرض</b> بأسماء أجهزة ومعالجات حقيقية لتوضيح شكل المنصة — بيانات الإصدار والحجم والتاريخ وروابط التحميل تُستبدل بملفاتك الحقيقية من مصفوفة <b>DEVICES</b> في أول السكريبت قبل النشر للأعضاء.</span></div>
+    <div class="filters" id="typeFilters">
+      <button class="fbtn active" data-type="all" type="button">الكل</button>
+      <button class="fbtn" data-type="channels" type="button">ملفات قنوات</button>
+      <button class="fbtn" data-type="software" type="button">سوفت وير</button>
+      <button class="fbtn" data-type="both" type="button">ملف + سوفت</button>
+      <select id="chipFilter" aria-label="تصفية حسب المعالج">
+        <option value="all">كل المعالجات</option>
+      </select>
+    </div>
+    <div class="grid" id="devicesGrid"></div>
+    <div class="empty hidden" id="devicesEmpty">
+      <b>لا توجد أجهزة مطابقة لبحثك</b>
+      جرّب اسماً آخر للجهاز أو المعالج، أو امسح البحث لعرض كل الأجهزة.
+    </div>
+  </section>
+
+  <!-- ===== تبويب الترددات ===== -->
+  <section class="pane" id="pane-freqs" role="tabpanel">
+    <div class="sat-tabs" id="satTabs"></div>
+    <div class="freq-list" id="freqList"></div>
+    <div class="empty hidden" id="freqEmpty">
+      <b>لا توجد ترددات مطابقة لبحثك في هذا القمر</b>
+      جرّب اسم قناة آخر، أو بدّل القمر الصناعي.
+    </div>
+  </section>
+
+  <!-- ===== تبويب الشاشات الذكية ===== -->
+  <section class="pane" id="pane-tv" role="tabpanel">
+    <p class="platform-note">قسم خاص بتطبيقات الشاشات الذكية بأنظمتها الثلاثة: <b>webOS</b> لشاشات LG و<b>Tizen</b> لشاشات Samsung و<b>Android TV</b> لشاشات سوني وشاومي وأجهزة TV Box. كل بطاقة توضح طريقة التحميل أو التفعيل خطوة بخطوة.</p>
+    <div class="grid" id="appsGrid"></div>
+    <div class="empty hidden" id="appsEmpty">
+      <b>لا توجد تطبيقات مطابقة لبحثك</b>
+      جرّب اسم تطبيق آخر أو نظام تشغيل الشاشة.
+    </div>
+  </section>
+
+  <footer>
+    <b>🛡️ جنود الخفاء — حب الخير للغير</b><br />
+    ملفات القنوات والسوفت وير والترددات تُراجع وتُحدّث أولاً بأول. لإضافة جهاز أو تردد جديد: عدّل مصفوفات البيانات المعلّقة في أول السكريبت (DEVICES / SATELLITES / TV_APPS) دون لمس التصميم.
+  </footer>
+</div>
+
+<!-- ===== نافذة شرح التحديث بالفلاشة ===== -->
+<div class="modal-bk" id="usbModal" role="dialog" aria-modal="true" aria-labelledby="usbModalTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3 id="usbModalTitle">شرح التحديث بالفلاشة USB</h3>
+        <div class="sub" id="usbModalSub"></div>
+      </div>
+      <button class="x-btn" id="closeModal" type="button" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="warn">
+      <span aria-hidden="true">⚠️</span>
+      <span>قبل أن تبدأ: تأكد أن السوفت وير يطابق <b>نوع معالج جهازك بالضبط</b>، ولا تفصل الكهرباء أو الفلاشة أثناء التحديث مهما حدث — فصل التيار في المنتصف قد يعطّل الجهاز.</span>
+    </div>
+    <div id="usbSteps"></div>
+    <button class="btn primary" id="closeModal2" type="button" style="width:100%;margin-top:16px">فهمت — إغلاق الشرح</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =====================================================================
+   ██████████████████████  منطقة البيانات  ██████████████████████
+   كل محتوى المنصة موجود هنا في ٣ مصفوفات منظمة.
+   لإضافة جهاز أو تردد أو تطبيق جديد: انسخ أي عنصر وعدّل قيمه فقط،
+   ولن تحتاج لمس أي كود آخر في الصفحة.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   ١) الأجهزة وملفات القنوات والسوفت وير  —  DEVICES
+   الحقول:
+     name       : اسم الريسيفر كما يعرفه الأعضاء
+     brand      : الشركة أو الفئة
+     processor  : نوع المعالج (يُبحث به في محرك البحث الذكي)
+     type       : channels = ملف قنوات | software = سوفت وير | both = الاثنان
+     updated    : تاريخ آخر تحديث
+     size       : حجم الملف
+     version    : رقم إصدار السوفت (اختياري)
+     desc       : وصف مختصر لمحتوى الملف
+     downloadUrl: رابط التحميل المباشر — ضع هنا رابط ملفك الحقيقي عند الرفع
+   --------------------------------------------------------------------- */
+const DEVICES = [
+  { name:"Hyper X7", brand:"فئة هايبر", processor:"Sunplus 1506HV", type:"both",
+    updated:"2026-11-10", size:"8.4 MB", version:"V3.2",
+    desc:"ملف قنوات مرتب (رياضة – أفلام – أطفال – إخباري) مع أحدث سوفت يدعم الشيرنج والترجمة الفورية.",
+    downloadUrl:"#" },
+  { name:"Hyper X9", brand:"فئة هايبر", processor:"Sunplus 1506TV", type:"channels",
+    updated:"2026-11-08", size:"3.1 MB", version:"",
+    desc:"ملف قنوات نايل سات كامل بأحدث الترددات، القنوات الرياضية في أول القائمة وترتيب مخصص للمباريات.",
+    downloadUrl:"#" },
+  { name:"Nova Air", brand:"نوفا", processor:"Sunplus 1506TV", type:"software",
+    updated:"2026-10-28", size:"9.7 MB", version:"V2.8",
+    desc:"سوفت وير رسمي يحسّن ثبات الإشارة وسرعة التنقل بين القنوات ويصلح مشكلة توقف اليوتيوب.",
+    downloadUrl:"#" },
+  { name:"Spider T888 Ultra", brand:"سبايدر", processor:"Sunplus 1506HV", type:"both",
+    updated:"2026-11-05", size:"8.9 MB", version:"V4.0",
+    desc:"باقة كاملة: سوفت حديث + ملف قنوات مرتب للأقمار الأربعة (نايل سات – آموس – هوت بيرد – يوتلسات).",
+    downloadUrl:"#" },
+  { name:"Koqit K1 Mini", brand:"كوكيت — أجهزة ميني", processor:"GX6605S", type:"channels",
+    updated:"2026-11-02", size:"2.6 MB", version:"",
+    desc:"ملف قنوات خفيف مخصص لمعالجات GX6605S، مرتب حسب الباقات مع حذف القنوات المكررة والمشفرة غير العاملة.",
+    downloadUrl:"#" },
+  { name:"Samsat Mini HD 4040", brand:"سامسات — أجهزة ميني", processor:"GX6605S", type:"software",
+    updated:"2026-10-20", size:"6.2 MB", version:"V1.9",
+    desc:"سوفت وير يعالج بطء الريموت ومشكلة إعادة التشغيل العشوائي، مع واجهة أسرع للأجهزة الصغيرة.",
+    downloadUrl:"#" },
+  { name:"Starsat SR-2000 Hyper", brand:"ستار سات", processor:"Ali 3510", type:"both",
+    updated:"2026-11-06", size:"7.5 MB", version:"V2.4",
+    desc:"ملف قنوات + سوفت لأجهزة علي Ali: ترتيب مصري كامل، قنوات الأطفال والأفلام في مجموعات منفصلة.",
+    downloadUrl:"#" },
+  { name:"Qmax H2 Mini", brand:"كيوماكس", processor:"Ali 3510", type:"channels",
+    updated:"2026-10-25", size:"2.9 MB", version:"",
+    desc:"ملف قنوات نايل سات وهوت بيرد محدّث، مع تثبيت ترددات القنوات الرياضية المفتوحة في أول ٥٠ قناة.",
+    downloadUrl:"#" },
+  { name:"Tiger T8 HD", brand:"تايجر", processor:"Sunplus 1506HV", type:"software",
+    updated:"2026-11-01", size:"9.1 MB", version:"V5.1",
+    desc:"سوفت وير جديد بدعم كامل لبروتوكولات الشيرنج الحديثة وتحسين ملحوظ في جودة الصورة على القنوات HD.",
+    downloadUrl:"#" },
+];
+
+/* ---------------------------------------------------------------------
+   ٢) جدول الترددات مقسماً حسب القمر  —  SATELLITES
+   الحقول:
+     freq : التردد | pol : الاستقطاب H أفقي / V عمودي
+     sr   : معدل الترميز | fec : معامل التصحيح
+     زر النسخ في الصفحة ينسخ: التردد + الاستقطاب + الترميز دفعة واحدة
+   --------------------------------------------------------------------- */
+const SATELLITES = [
+  { id:"nile", name:"نايل سات", pos:"7.0°W", freqs:[
+    { channels:"ON Time Sports 1 + 2 — أون تايم سبورتس", freq:"11862", pol:"V", sr:"27500", fec:"5/6", note:"القناة الرياضية المصرية الأولى — مباريات الدوري المصري" },
+    { channels:"MBC مصر + MBC مصر 2", freq:"12015", pol:"V", sr:"27500", fec:"5/6", note:"مسلسلات وبرامج MBC بنسختها المصرية" },
+    { channels:"DMC + DMC Drama", freq:"12092", pol:"V", sr:"27500", fec:"5/6", note:"باقة دي إم سي العامة والدراما" },
+    { channels:"CBC + CBC Drama + النهار + النهار دراما", freq:"11785", pol:"V", sr:"27500", fec:"5/6", note:"باقة القنوات المصرية العامة والدراما" },
+    { channels:"روتانا خليجية + روتانا دراما + روتانا سينما", freq:"11296", pol:"H", sr:"27500", fec:"3/4", note:"باقة روتانا الكاملة" },
+    { channels:"صدى البلد + صدى البلد 2", freq:"11823", pol:"V", sr:"27500", fec:"5/6", note:"إخباري وبرامج مصرية" },
+    { channels:"الحياة + الحياة مسلسلات + TEN", freq:"11430", pol:"V", sr:"27500", fec:"5/6", note:"قنوات منوعات ودراما مصرية" },
+  ]},
+  { id:"amos", name:"آموس", pos:"4.0°W", freqs:[
+    { channels:"Sport 1 HD + Sport 2 HD — قنوات الشيرنج", freq:"10842", pol:"V", sr:"30000", fec:"2/3", note:"أهم تردد رياضي على آموس — يعمل بالشيرنج" },
+    { channels:"Sport 3 HD + Sport 4 HD — قنوات الشيرنج", freq:"10806", pol:"V", sr:"27500", fec:"2/3", note:"تكملة باقة سبورت الرياضية — يعمل بالشيرنج" },
+    { channels:"5 Sport + 5 Plus HD", freq:"11065", pol:"V", sr:"30000", fec:"2/3", note:"قنوات رياضية إضافية من باقة Yes" },
+    { channels:"Yes Action + Yes Drama + قنوات Yes العامة", freq:"10722", pol:"V", sr:"27500", fec:"3/4", note:"باقة Yes الأساسية — أفلام ومسلسلات أجنبية مترجمة" },
+    { channels:"Keshet 12 + Reshet 13", freq:"11095", pol:"V", sr:"11480", fec:"2/3", note:"قنوات عامة — تردد ضعيف نسبياً يحتاج طبقاً مضبوطاً" },
+  ]},
+  { id:"hotbird", name:"هوت بيرد", pos:"13.0°E", freqs:[
+    { channels:"beIN Sports 1-3 HD (النسخة الفرنسية)", freq:"11096", pol:"H", sr:"29900", fec:"2/3", note:"بي إن سبورتس على الهوت بيرد — يعمل بالشيرنج" },
+    { channels:"Eurosport 1 HD + Eurosport 2 HD", freq:"11258", pol:"H", sr:"27500", fec:"3/4", note:"يوروسبورت — بطولات أوروبية متنوعة" },
+    { channels:"Rai 1 HD + Rai 2 HD + Rai Sport", freq:"11013", pol:"H", sr:"29900", fec:"3/4", note:"باقة راي الإيطالية — بعض القنوات مفتوحة" },
+    { channels:"Sky Sport Football + قنوات Sky Italia", freq:"11958", pol:"V", sr:"27500", fec:"3/4", note:"سكاي إيطاليا الرياضية — يعمل بالشيرنج" },
+    { channels:"Polsat Sport HD + TVP Sport", freq:"11449", pol:"H", sr:"27500", fec:"3/4", note:"رياضة بولندية — مباريات أوروبية مهمة أحياناً" },
+  ]},
+  { id:"eutelsat", name:"يوتلسات 8 غرب", pos:"8.0°W", freqs:[
+    { channels:"beIN Sports 1-6 HD", freq:"11013", pol:"H", sr:"27500", fec:"2/3", note:"التردد الأساسي لبي إن سبورتس بجانب النايل سات" },
+    { channels:"beIN Sports 7-10 HD + beIN XTRA", freq:"11054", pol:"H", sr:"27500", fec:"2/3", note:"تكملة باقة بي إن + قنوات إكسترا" },
+    { channels:"الجزيرة الإخبارية + الجزيرة مباشر", freq:"10971", pol:"H", sr:"27500", fec:"3/4", note:"قنوات الجزيرة على يوتلسات 8" },
+    { channels:"beIN Sports الإخبارية المفتوحة", freq:"12604", pol:"H", sr:"27500", fec:"2/3", note:"قناة بي إن الإخبارية — مفتوحة بدون تشفير" },
+  ]},
+];
+
+/* ---------------------------------------------------------------------
+   ٣) تطبيقات الشاشات الذكية  —  TV_APPS  (Smart TV Hub)
+   الحقول:
+     platforms : أنظمة التشغيل المدعومة
+        webos = LG | tizen = Samsung | android = Android TV / TV Box
+     code      : كود التحميل (Downloader) إن وُجد — اتركه "" إن لم يوجد
+     codeLabel : وصف خانة الكود (مثال: يتم التفعيل برقم الماك)
+     steps     : طريقة التحميل أو التفعيل خطوة بخطوة
+   --------------------------------------------------------------------- */
+const TV_APPS = [
+  { name:"FoxApp", tag:"تطبيق مشاهدة شامل", platforms:["android","tizen","webos"],
+    code:"", codeLabel:"التفعيل بكود خاص بكل شاشة يُسلَّم من إدارة الجروب بعد إرسال رقم الماك (MAC) الظاهر داخل التطبيق.",
+    steps:[
+      "على Android TV: نزّل التطبيق من متجر Google Play أو عبر Downloader.",
+      "على Samsung و LG: ابحث عن اسم التطبيق داخل متجر الشاشة وثبّته.",
+      "افتح التطبيق واكتب رقم الماك MAC الظاهر على الشاشة.",
+      "أرسل الرقم لإدارة الجروب لاستلام كود التفعيل الخاص بجهازك."
+    ]},
+  { name:"NJO Play", tag:"مشغل IPTV للشاشات", platforms:["android","webos","tizen"],
+    code:"", codeLabel:"يُفعَّل ببيانات الاشتراك (الهوست + اليوزر + الباسورد) أو برابط M3U — لا يوجد كود موحّد.",
+    steps:[
+      "ثبّت NJO Play من متجر شاشتك (LG Content Store / Samsung Apps / Google Play).",
+      "افتح التطبيق واختر «إضافة قائمة تشغيل».",
+      "أدخل بيانات اشتراكك Xtream (الهوست واليوزر والباسورد) ثم اضغط اتصال.",
+      "انتظر تحميل القنوات والأفلام ثم رتّب المفضلة من الإعدادات."
+    ]},
+  { name:"Downloader", tag:"أداة تحميل التطبيقات — AFTVnews", platforms:["android"],
+    code:"", codeLabel:"التطبيق نفسه مجاني من المتجر — وهو البوابة لتثبيت أي تطبيق آخر بالكود.",
+    steps:[
+      "افتح متجر Google Play على الشاشة أو الـ TV Box وابحث عن Downloader وثبّته.",
+      "من إعدادات الجهاز فعّل «التثبيت من مصادر غير معروفة» لتطبيق Downloader.",
+      "افتح Downloader واكتب كود التطبيق المطلوب ثم اضغط Go.",
+      "انتظر اكتمال التحميل واضغط Install ثم Open."
+    ]},
+  { name:"IBO Player", tag:"مشغل IPTV احترافي", platforms:["tizen","webos","android"],
+    code:"", codeLabel:"التفعيل من موقع التطبيق الرسمي برقم الماك MAC + مفتاح الجهاز Device Key الظاهرين عند أول فتح.",
+    steps:[
+      "ثبّت IBO Player من متجر الشاشة وافتحه مرة واحدة.",
+      "صوّر رقم الماك ومفتاح الجهاز الظاهرين على الشاشة.",
+      "ادخل على موقع تفعيل IBO من الموبايل وأدخل الرقمين.",
+      "أضف بيانات قائمة التشغيل (M3U أو Xtream) ثم أعد تشغيل التطبيق على الشاشة."
+    ]},
+  { name:"XCIPTV Player", tag:"مشغل Xtream شهير", platforms:["android"],
+    code:"", codeLabel:"لا يحتاج كوداً — يعمل مباشرة ببيانات اشتراك Xtream الخاصة بك.",
+    steps:[
+      "ثبّت التطبيق عبر Downloader أو من متجر Google Play إن توفر.",
+      "اختر تسجيل الدخول بواجهة Xtream Codes API.",
+      "أدخل الهوست واليوزر والباسورد كما وصلوك من إدارة الاشتراك.",
+      "اضغط تسجيل الدخول وانتظر تحميل الباقات والأفلام والمسلسلات."
+    ]},
+  { name:"Smart IPTV (SIPTV)", tag:"من أقدم مشغلات الشاشات", platforms:["tizen","webos"],
+    code:"", codeLabel:"التفعيل من موقع siptv.app برقم ماك الشاشة، ثم رفع قائمة M3U من نفس الموقع.",
+    steps:[
+      "ثبّت التطبيق من متجر الشاشة وافتحه لعرض رقم الماك.",
+      "من الموبايل ادخل على siptv.app واختر My List.",
+      "أدخل رقم الماك ورابط ملف M3U الخاص باشتراكك واضغط إضافة.",
+      "أعد تشغيل التطبيق على الشاشة وستظهر قنواتك مباشرة."
+    ]},
+];
+
+/* ---------------------------------------------------------------------
+   خطوات شرح التحديث بالفلاشة — تظهر داخل النافذة المنبثقة (Modal)
+   مع أيقونة مصورة لكل خطوة
+   --------------------------------------------------------------------- */
+const USB_STEPS = [
+  { icon:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="m8 9 4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>',
+    title:"حمّل الملف على الكمبيوتر أو الموبايل",
+    text:"اضغط زر «تحميل مباشر» في بطاقة جهازك، وإذا كان الملف مضغوطاً (ZIP) فكّ ضغطه أولاً حتى تحصل على ملف السوفت نفسه." },
+  { icon:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10.5 6h3"/></svg>',
+    title:"انسخ الملف إلى فلاشة USB",
+    text:"فرمّت الفلاشة بنظام FAT32، ثم انسخ ملف السوفت في أول الفلاشة مباشرة (ليس داخل أي مجلد) وتأكد أن الاسم لم يتغير." },
+  { icon:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2.5" y="7" width="19" height="11" rx="2"/><path d="M6 12h.01M18 12h.01M9 21h6"/></svg>',
+    title:"ركّب الفلاشة في الريسيفر",
+    text:"أطفئ الريسيفر من زر الباور، ركّب الفلاشة في منفذ USB، ثم شغّل الجهاز وانتظر حتى يتعرف عليها." },
+  { icon:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+    title:"افتح قائمة التحديث من الإعدادات",
+    text:"من الريموت: Menu ← الإعدادات أو الأدوات ← «التحديث عن طريق USB» (Upgrade by USB)، ثم اختر ملف السوفت من الفلاشة." },
+  { icon:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 16.5h.01"/><path d="M10.3 3.6 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0z"/></svg>',
+    title:"ابدأ التحديث ولا تلمس الجهاز",
+    text:"اضغط OK لبدء التحديث وانتظر حتى يكتمل ويعيد الجهاز تشغيل نفسه تلقائياً (من ٢ إلى ٥ دقائق). إياك وفصل الكهرباء أو الفلاشة أثناء هذه الخطوة." },
+  { icon:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    title:"حمّل ملف القنوات وابدأ المشاهدة",
+    text:"بعد إعادة التشغيل، حمّل أحدث ملف قنوات بنفس الطريقة (اختر نوع التحديث «قنوات» إن سألك الجهاز)، ثم اعمل بحثاً سريعاً للتأكد من عمل القنوات." },
+];
+
+/* =====================================================================
+   نهاية منطقة البيانات — الكود التالي يبني الواجهة تلقائياً منها
+   ===================================================================== */
+
+const TYPE_LABEL = { channels:"ملف قنوات", software:"سوفت وير", both:"ملف + سوفت" };
+const PLAT_LABEL = { webos:"webOS — LG", tizen:"Tizen — Samsung", android:"Android TV" };
+
+const $ = (s, r) => (r||document).querySelector(s);
+const state = { query:"", tab:"devices", type:"all", chip:"all", sat:"nile" };
+
+let toastTimer = null;
+function toast(msg){
+  const t = $("#toast");
+  t.innerHTML = "✅ " + msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove("show"), 2600);
+}
+
+function copyText(text, msg){
+  const done = ()=> toast(msg || ("تم نسخ: " + text));
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=> fallbackCopy(text, done));
+  } else fallbackCopy(text, done);
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); done(); } catch(e){ toast("انسخ يدوياً: " + text); }
+  document.body.removeChild(ta);
+}
+
+const norm = s => (s||"").toLowerCase().replace(/[\s\-_\/]+/g," ").trim();
+function matches(q, fields){
+  if (!q) return true;
+  const nq = norm(q);
+  return fields.some(f => norm(f).includes(nq));
+}
+
+/* ---------- بناء بطاقات الأجهزة ---------- */
+/* أيقونة رمزية لكل جهاز: تُختار من اسمه أولاً، ثم من نوع ملفه،
+   ولون المربع المتدرج يتبع نوع الكارت */
+function deviceIcon(d){
+  const n = (d.name || "").toLowerCase();
+  if (n.includes("tiger")) return { emoji:"🐅", cls:"ico-orange" };
+  if (n.includes("spider")) return { emoji:"🕷️", cls:"ico-slate" };
+  if (n.includes("star")) return { emoji:"⭐", cls:"ico-amber" };
+  if (n.includes("nova")) return { emoji:"🌟", cls:"ico-cyan" };
+  if (d.type === "channels") return { emoji:"📋", cls:"ico-teal" };
+  if (d.type === "software") return { emoji:"🔄", cls:"ico-amber" };
+  return { emoji:"📡", cls:"ico-blue" };
+}
+
+function deviceCard(d){
+  const el = document.createElement("article");
+  el.className = "card";
+  const badgeCls = d.type === "software" ? "sw" : (d.type === "both" ? "both" : "");
+  const ic = deviceIcon(d);
+  el.innerHTML =
+    '<div class="card-top">' +
+      '<div class="dev-ico ' + ic.cls + '" aria-hidden="true">' + ic.emoji + '</div>' +
+      '<div style="flex:1;min-width:0"><h3></h3><div class="brand-name"></div></div>' +
+      '<span class="type-badge ' + badgeCls + '">' + TYPE_LABEL[d.type] + '</span>' +
+    '</div>' +
+    '<div class="chip-line"><span>المعالج</span><b></b></div>' +
+    '<div class="meta">' +
+      '<div><span>آخر تحديث</span><b>' + d.updated + '</b></div>' +
+      '<div><span>حجم الملف</span><b>' + d.size + '</b></div>' +
+      '<div><span>الإصدار</span><b>' + (d.version || "—") + '</b></div>' +
+    '</div>' +
+    '<p class="desc"></p>' +
+    '<span class="demo-tag">بيانات تجريبية للعرض</span>' +
+    '<div class="card-actions">' +
+      '<a class="btn primary" href="' + d.downloadUrl + '" ' + (d.downloadUrl === "#" ? "" : 'target="_blank" rel="noopener"') + '>⬇ تحميل مباشر</a>' +
+      '<button class="btn ghost" type="button">🔧 شرح التحديث بالفلاشة</button>' +
+    '</div>';
+  el.querySelector("h3").textContent = d.name;
+  el.querySelector(".brand-name").textContent = d.brand;
+  el.querySelector(".chip-line b").textContent = d.processor;
+  el.querySelector(".desc").textContent = d.desc;
+  const dl = el.querySelector(".btn.primary");
+  if (d.downloadUrl === "#"){
+    dl.addEventListener("click", e => {
+      e.preventDefault();
+      toast("رابط تحميل «" + d.name + "» سيُفعَّل عند رفع الملف — حدّث downloadUrl من مصفوفة DEVICES");
+    });
+  }
+  el.querySelector(".btn.ghost").addEventListener("click", ()=> openUsbModal(d));
+  return el;
+}
+
+function renderDevices(){
+  const grid = $("#devicesGrid");
+  grid.innerHTML = "";
+  const list = DEVICES.filter(d =>
+    (state.type === "all" || d.type === state.type) &&
+    (state.chip === "all" || d.processor === state.chip) &&
+    matches(state.query, [d.name, d.brand, d.processor, TYPE_LABEL[d.type], d.desc])
+  );
+  list.forEach(d => grid.appendChild(deviceCard(d)));
+  $("#devicesEmpty").classList.toggle("hidden", list.length > 0);
+  return list.length;
+}
+
+/* ---------- بناء الترددات ---------- */
+function renderSatTabs(){
+  const box = $("#satTabs");
+  box.innerHTML = "";
+  SATELLITES.forEach(s => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "sat-tab" + (s.id === state.sat ? " active" : "");
+    b.innerHTML = s.name + "<small>" + s.pos + " • " + s.freqs.length + " ترددات</small>";
+    b.addEventListener("click", ()=>{
+      state.sat = s.id;
+      renderSatTabs(); renderFreqs();
+    });
+    box.appendChild(b);
+  });
+}
+
+function renderFreqs(){
+  const list = $("#freqList");
+  list.innerHTML = "";
+  const sat = SATELLITES.find(s => s.id === state.sat);
+  const rows = sat.freqs.filter(f => matches(state.query, [f.channels, f.freq, f.note, sat.name]));
+  rows.forEach(f => {
+    const row = document.createElement("div");
+    row.className = "freq-row";
+    const polLabel = f.pol === "H" ? "H أفقي" : "V عمودي";
+    row.innerHTML =
+      '<div class="freq-main"><div class="ch"></div><div class="note"></div></div>' +
+      '<div class="freq-nums">' +
+        '<div class="fnum"><span>FREQ التردد</span><b>' + f.freq + '</b></div>' +
+        '<div class="fnum pol"><span>POL الاستقطاب</span><b>' + polLabel + '</b></div>' +
+        '<div class="fnum"><span>SR الترميز</span><b>' + f.sr + '</b></div>' +
+        '<div class="fnum"><span>FEC</span><b>' + f.fec + '</b></div>' +
+      '</div>';
+    row.querySelector(".ch").textContent = f.channels;
+    row.querySelector(".note").textContent = f.note || "";
+    const cb = document.createElement("button");
+    cb.type = "button"; cb.className = "copy-btn";
+    cb.innerHTML = "📋 نسخ التردد";
+    cb.setAttribute("aria-label", "نسخ تردد " + f.channels);
+    cb.addEventListener("click", ()=>{
+      copyText(f.freq + " " + f.pol + " " + f.sr, "تم نسخ التردد بنجاح! " + f.freq + " " + f.pol + " " + f.sr);
+      cb.classList.add("done"); cb.innerHTML = "✔ تم النسخ";
+      setTimeout(()=>{ cb.classList.remove("done"); cb.innerHTML = "📋 نسخ التردد"; }, 2000);
+    });
+    row.appendChild(cb);
+    list.appendChild(row);
+  });
+  $("#freqEmpty").classList.toggle("hidden", rows.length > 0);
+  return rows.length;
+}
+
+/* ---------- بناء تطبيقات الشاشات ---------- */
+/* أيقونة رمزية لكل تطبيق: تُختار من اسمه أو وظيفته،
+   ولون المربع المتدرج يدور على لوحة ألوان ثابتة */
+const APP_GRADS = ["ico-blue","ico-rose","ico-amber","ico-teal","ico-orange","ico-cyan"];
+function appIcon(a, i){
+  const n = (a.name || "").toLowerCase();
+  let emoji = "▶️";
+  if (n.includes("fox")) emoji = "🦊";
+  else if (n.includes("downloader")) emoji = "⬇️";
+  else if (n.includes("ibo")) emoji = "🎬";
+  else if (n.includes("xciptv")) emoji = "📺";
+  else if (n.includes("smart")) emoji = "📡";
+  else if (n.includes("njo")) emoji = "▶️";
+  return { emoji: emoji, cls: APP_GRADS[i % APP_GRADS.length] };
+}
+
+function appCard(a, idx){
+  const el = document.createElement("article");
+  el.className = "card app-card";
+  const plats = a.platforms.map(p => '<span class="plat ' + p + '">' + PLAT_LABEL[p] + '</span>').join("");
+  const steps = a.steps.map(s => "<li>" + s + "</li>").join("");
+  const ic = appIcon(a, idx || 0);
+  el.innerHTML =
+    '<div class="card-top">' +
+      '<div class="dev-ico ' + ic.cls + '" aria-hidden="true">' + ic.emoji + '</div>' +
+      '<div style="flex:1;min-width:0"><h3></h3><div class="brand-name"></div></div>' +
+    '</div>' +
+    '<div class="platforms">' + plats + '</div>' +
+    '<div class="code-box"><span class="lbl">التفعيل</span><span class="val none"></span></div>' +
+    '<ol class="steps-mini">' + steps + '</ol>';
+  el.querySelector("h3").textContent = a.name;
+  el.querySelector(".brand-name").textContent = a.tag;
+  const val = el.querySelector(".code-box .val");
+  if (a.code){
+    val.classList.remove("none");
+    val.textContent = a.code;
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "copy-btn"; b.textContent = "📋 نسخ الكود";
+    b.addEventListener("click", ()=> copyText(a.code, "تم نسخ كود " + a.name + " بنجاح!"));
+    el.querySelector(".code-box").appendChild(b);
+  } else {
+    val.textContent = a.codeLabel;
+  }
+  return el;
+}
+
+function renderApps(){
+  const grid = $("#appsGrid");
+  grid.innerHTML = "";
+  const list = TV_APPS.filter(a => matches(state.query, [
+    a.name, a.tag, a.codeLabel,
+    a.platforms.map(p => PLAT_LABEL[p] + " " + p).join(" ")
+  ]));
+  list.forEach((a, i) => grid.appendChild(appCard(a, i)));
+  $("#appsEmpty").classList.toggle("hidden", list.length > 0);
+  return list.length;
+}
+
+/* ---------- البحث والملخص ---------- */
+function countAll(){
+  const d = DEVICES.filter(x => matches(state.query, [x.name, x.brand, x.processor, TYPE_LABEL[x.type], x.desc])).length;
+  let f = 0;
+  SATELLITES.forEach(s => { f += s.freqs.filter(x => matches(state.query, [x.channels, x.freq, x.note, s.name])).length; });
+  const a = TV_APPS.filter(x => matches(state.query, [x.name, x.tag, x.codeLabel, x.platforms.join(" ")])).length;
+  return { d, f, a };
+}
+
+function updateSummary(){
+  const el = $("#searchSummary");
+  $("#clearSearch").classList.toggle("show", !!state.query);
+  if (!state.query){ el.textContent = ""; return; }
+  const c = countAll();
+  el.innerHTML = "";
+  const mk = (txt, tab) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = txt;
+    b.addEventListener("click", ()=> switchTab(tab));
+    return b;
+  };
+  el.appendChild(document.createTextNode("نتائج «" + state.query + "»: "));
+  el.appendChild(mk(c.d + " جهاز", "devices"));
+  el.appendChild(document.createTextNode(" • "));
+  el.appendChild(mk(c.f + " تردد", "freqs"));
+  el.appendChild(document.createTextNode(" • "));
+  el.appendChild(mk(c.a + " تطبيق", "tv"));
+}
+
+function renderAll(){
+  renderDevices(); renderFreqs(); renderApps(); updateSummary();
+}
+
+/* ---------- التبويبات ---------- */
+function switchTab(id){
+  state.tab = id;
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === id));
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("active", p.id === "pane-" + id));
+}
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", ()=> switchTab(t.dataset.tab)));
+
+/* ---------- نافذة شرح التحديث بالفلاشة ---------- */
+function openUsbModal(d){
+  $("#usbModalSub").textContent = "خاص بجهاز " + d.name + " — معالج " + d.processor;
+  const box = $("#usbSteps");
+  box.innerHTML = "";
+  USB_STEPS.forEach((s, i) => {
+    const row = document.createElement("div");
+    row.className = "ustep";
+    row.innerHTML = '<div class="ill">' + s.icon + '</div><div><h4><span class="n">الخطوة ' + (i+1) + ':</span> ' + s.title + '</h4><p>' + s.text + '</p></div>';
+    box.appendChild(row);
+  });
+  $("#usbModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeUsbModal(){
+  $("#usbModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+$("#closeModal").addEventListener("click", closeUsbModal);
+$("#closeModal2").addEventListener("click", closeUsbModal);
+$("#usbModal").addEventListener("click", e => { if (e.target === e.currentTarget) closeUsbModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeUsbModal(); });
+
+/* ---------- التهيئة ---------- */
+(function init(){
+  /* شرائح البحث السريع بأشهر المعالجات */
+  const chipsData = ["Hyper X7", "Sunplus 1506HV", "Sunplus 1506TV", "GX6605S", "Ali", "beIN Sports", "Android TV"];
+  const chipsBox = $("#quickChips");
+  chipsData.forEach(c => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip";
+    b.innerHTML = "جرّب: <b></b>";
+    b.querySelector("b").textContent = c;
+    b.addEventListener("click", ()=>{
+      $("#searchInput").value = c;
+      state.query = c;
+      renderAll();
+      $("#searchInput").focus();
+    });
+    chipsBox.appendChild(b);
+  });
+
+  /* قائمة المعالجات في الفلتر — تُبنى تلقائياً من البيانات */
+  const chipSel = $("#chipFilter");
+  [...new Set(DEVICES.map(d => d.processor))].forEach(p => {
+    const o = document.createElement("option");
+    o.value = p; o.textContent = "معالج: " + p;
+    chipSel.appendChild(o);
+  });
+  chipSel.addEventListener("change", ()=>{ state.chip = chipSel.value; renderDevices(); });
+
+  /* فلاتر نوع الملف */
+  document.querySelectorAll("#typeFilters .fbtn").forEach(b => {
+    b.addEventListener("click", ()=>{
+      document.querySelectorAll("#typeFilters .fbtn").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      state.type = b.dataset.type;
+      renderDevices();
+    });
+  });
+
+  /* البحث الفوري */
+  const input = $("#searchInput");
+  input.addEventListener("input", ()=>{ state.query = input.value.trim(); renderAll(); });
+  $("#clearSearch").addEventListener("click", ()=>{
+    input.value = ""; state.query = ""; renderAll(); input.focus();
+  });
+
+  /* الأعداد والإحصائيات */
+  const totalFreqs = SATELLITES.reduce((n, s) => n + s.freqs.length, 0);
+  $("#statDevices").textContent = DEVICES.length;
+  $("#statFreqs").textContent = totalFreqs;
+  $("#statApps").textContent = TV_APPS.length;
+  $("#cntDevices").textContent = DEVICES.length;
+  $("#cntFreqs").textContent = totalFreqs;
+  $("#cntApps").textContent = TV_APPS.length;
+
+  renderSatTabs();
+  renderAll();
+})();
+</script>
+</body>
+</html>

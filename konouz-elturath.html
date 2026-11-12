@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>كنوز التراث المصري الأصيل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#0a0906; --bg2:#12100a; --panel:#171410; --panel2:#1e1a13;
+    --gold:#c9a227; --gold2:#e8cc6d; --gold-dim:#8a7226;
+    --ink:#f2ead6; --muted:#b8ab8d; --faint:#7d735c;
+    --line:#2e2718; --line2:#453a20;
+    --ok:#7fb069; --danger:#d1603d;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; scroll-padding-bottom:230px}
+  @media (max-width:560px){ html{scroll-padding-bottom:164px} }
+  body{
+    margin:0; background:
+      radial-gradient(1100px 480px at 85% -120px, rgba(201,162,39,.10), transparent 60%),
+      radial-gradient(800px 400px at 5% 0, rgba(201,162,39,.05), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Tajawal", system-ui, sans-serif;
+    padding-bottom:212px;
+  }
+  @media (max-width:560px){
+    body{padding-bottom:156px}
+    .brand .sub{display:none}
+    .brand h1{font-size:1.22rem}
+    .top-inner{padding-top:.35rem; padding-bottom:.4rem}
+    nav.cats{margin-top:.4rem; gap:.35rem}
+    nav.cats button{font-size:.82rem; padding:.22rem .55rem}
+    nav.cats button .cnt{font-size:.66rem; padding:0 .4rem}
+    .tools{margin-top:.4rem}
+    .tools input[type="search"]{padding:.35rem .7rem}
+    .intro{padding:.6rem .8rem; margin-bottom:.65rem}
+    .intro h2{font-size:1.08rem}
+    .intro p{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-size:.9rem; line-height:1.8}
+    .sec-head{margin:.15rem 0 .5rem}
+    .card{padding:.7rem .8rem}
+    .card h3{font-size:1.05rem}
+    main{padding-top:.55rem}
+  }
+  button, [role="button"], select, input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
+  button{font-family:inherit; cursor:pointer}
+  a{color:var(--gold2)}
+  ::selection{background:var(--gold); color:#171106}
+
+  /* ===== Header / nav ===== */
+  header.top{
+    position:sticky; top:0; z-index:40;
+    background:rgba(10,9,6,.92); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line2);
+  }
+  .top-inner{max-width:1240px; margin:0 auto; padding:.65rem 1rem .55rem}
+  .brand{display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap}
+  .brand h1{
+    font-family:"Amiri", serif; font-weight:700; font-size:1.55rem; margin:0;
+    color:var(--gold2); letter-spacing:.2px; line-height:1.2;
+  }
+  .brand .sub{color:var(--muted); font-size:.85rem}
+  .brand .orn{color:var(--gold); font-family:"Amiri",serif}
+  nav.cats{display:flex; gap:.45rem; flex-wrap:wrap; margin-top:.6rem}
+  nav.cats button{
+    background:var(--panel); color:var(--muted);
+    border:1px solid var(--line); border-radius:999px;
+    padding:.35rem .85rem; font-size:.92rem; font-weight:700;
+    display:inline-flex; align-items:center; gap:.45rem;
+  }
+  nav.cats button .cnt{
+    background:#262014; color:var(--gold2); border:1px solid var(--line2);
+    font-size:.72rem; border-radius:999px; padding:.02rem .5rem; font-weight:800;
+  }
+  nav.cats button.active{background:linear-gradient(180deg,#2b2311,#1d1809); color:var(--gold2); border-color:var(--gold-dim)}
+  nav.cats button.active .cnt{background:var(--gold); color:#1a1405; border-color:var(--gold)}
+  .tools{display:flex; gap:.5rem; margin-top:.55rem; flex-wrap:wrap}
+  .tools input[type="search"]{
+    flex:1 1 220px; background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; color:var(--ink); padding:.45rem .8rem; font-family:inherit; font-size:.95rem;
+  }
+  .tools input[type="search"]:focus{outline:2px solid var(--gold-dim); border-color:var(--gold-dim)}
+
+  main{max-width:1240px; margin:0 auto; padding:1.1rem 1rem 2rem}
+  .layout{display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:1.1rem; align-items:start}
+  @media (max-width:920px){ .layout{grid-template-columns:1fr} }
+
+  .intro{
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:linear-gradient(180deg, var(--panel2), var(--panel));
+    padding:1rem 1.1rem; margin-bottom:1rem;
+  }
+  .intro h2{font-family:"Amiri",serif; color:var(--gold2); margin:.1rem 0 .35rem; font-size:1.35rem}
+  .intro p{margin:0; color:var(--muted); line-height:1.9; font-size:.97rem}
+  .resume-bar{
+    display:none; align-items:center; gap:.7rem; flex-wrap:wrap;
+    border:1px solid var(--gold-dim); background:#221b0d; color:var(--gold2);
+    border-radius:var(--radius); padding:.6rem .9rem; margin-bottom:1rem; font-size:.93rem;
+  }
+  .resume-bar.show{display:flex}
+  .resume-bar button{background:var(--gold); color:#1a1405; border:0; border-radius:9px; padding:.35rem .9rem; font-weight:800}
+  .resume-bar button.ghost{background:transparent; color:var(--muted); border:1px solid var(--line2)}
+
+  .sec-head{display:flex; align-items:baseline; gap:.6rem; margin:.4rem 0 .7rem}
+  .sec-head h2{font-family:"Amiri",serif; font-size:1.3rem; color:var(--ink); margin:0}
+  .sec-head .n{color:var(--faint); font-size:.88rem}
+  .sec-head .rule{flex:1; height:1px; background:linear-gradient(90deg, var(--line2), transparent)}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:.8rem}
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:.9rem; display:flex; flex-direction:column; gap:.45rem;
+  }
+  .card.playing{border-color:var(--gold-dim); background:linear-gradient(180deg,#1d180c,var(--panel))}
+  .card .cat{font-size:.74rem; color:var(--gold); font-weight:800}
+  .card h3{font-family:"Amiri",serif; font-size:1.12rem; line-height:1.55; margin:0; color:var(--ink)}
+  .card .credit{color:var(--muted); font-size:.86rem; line-height:1.7}
+  .card .row{display:flex; gap:.45rem; margin-top:auto; padding-top:.35rem}
+  .card .row button, .card .row a{
+    flex:1; text-align:center; text-decoration:none;
+    border-radius:9px; padding:.42rem .4rem; font-size:.88rem; font-weight:800;
+    display:inline-flex; align-items:center; justify-content:center; gap:.35rem; min-height:2.25rem;
+  }
+  .play-btn{background:var(--gold); color:#1a1405; border:0}
+  .play-btn:hover{background:var(--gold2)}
+  .dl-btn{background:transparent; color:var(--muted); border:1px solid var(--line2)}
+  .empty{
+    border:1px dashed var(--line2); border-radius:var(--radius); color:var(--muted);
+    padding:1.4rem; text-align:center; line-height:1.9;
+  }
+
+  /* ===== Story / lyrics side panel ===== */
+  aside.story{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:1rem; position:sticky; top:132px;
+  }
+  @media (max-width:920px){ aside.story{position:static} }
+  aside.story .kicker{color:var(--gold); font-size:.78rem; font-weight:800}
+  aside.story h3{font-family:"Amiri",serif; font-size:1.25rem; margin:.3rem 0 .2rem; line-height:1.6}
+  aside.story .credit{color:var(--muted); font-size:.88rem; margin-bottom:.6rem}
+  aside.story .body{
+    color:#ddd2b4; line-height:2.05; font-size:.96rem; white-space:pre-line;
+    border-top:1px solid var(--line); padding-top:.7rem;
+    max-height:46vh; overflow:auto;
+  }
+  aside.story .hint{color:var(--faint); line-height:1.9; font-size:.93rem}
+
+  /* ===== EQ / timer panel ===== */
+  .dock{
+    margin-top:1.1rem; background:var(--panel); border:1px solid var(--line);
+    border-radius:var(--radius); padding:1rem;
+  }
+  .dock h3{font-family:"Amiri",serif; margin:0 0 .2rem; color:var(--gold2); font-size:1.15rem}
+  .dock p.note{color:var(--faint); font-size:.85rem; margin:0 0 .7rem; line-height:1.8}
+  .presets{display:flex; gap:.45rem; flex-wrap:wrap; margin-bottom:.9rem}
+  .presets button{
+    background:var(--panel2); color:var(--muted); border:1px solid var(--line2);
+    border-radius:999px; padding:.35rem .85rem; font-weight:700; font-size:.9rem;
+  }
+  .presets button.active{background:var(--gold); color:#1a1405; border-color:var(--gold)}
+  .presets button.save{border-style:dashed; color:var(--gold2)}
+  .bands{display:grid; grid-template-columns:repeat(5,1fr); gap:.6rem}
+  @media (max-width:560px){ .bands{grid-template-columns:repeat(5,1fr); gap:.3rem} }
+  .band{text-align:center; background:var(--bg2); border:1px solid var(--line); border-radius:10px; padding:.55rem .2rem}
+  .band label{display:block; font-size:.8rem; color:var(--muted); font-weight:700}
+  .band .val{display:block; font-size:.8rem; color:var(--gold2); font-weight:800; margin:.15rem 0 .3rem}
+  .band input[type="range"]{writing-mode:vertical-lr; direction:rtl; width:26px; height:110px; accent-color:var(--gold)}
+  .timer-row{display:flex; gap:.45rem; flex-wrap:wrap; align-items:center; margin-top:1rem; border-top:1px solid var(--line); padding-top:.9rem}
+  .timer-row .lbl{font-weight:800; color:var(--ink); font-size:.95rem}
+  .timer-row select{
+    background:var(--panel2); color:var(--ink); border:1px solid var(--line2);
+    border-radius:9px; padding:.4rem .6rem; font-family:inherit; font-size:.92rem;
+  }
+  .timer-row .cd{color:var(--gold2); font-weight:800; font-size:.92rem}
+  footer.site{color:var(--faint); font-size:.85rem; text-align:center; margin-top:1.6rem; line-height:1.9}
+
+  /* ===== Fixed player ===== */
+  .player{
+    position:fixed; inset-inline:0; bottom:0; z-index:50;
+    background:rgba(14,12,8,.97); border-top:1px solid var(--gold-dim);
+    box-shadow:0 -12px 34px rgba(0,0,0,.55);
+  }
+  .player-inner{max-width:1240px; margin:0 auto; padding:.55rem 1rem calc(.6rem + env(safe-area-inset-bottom))}
+  .p-top{display:flex; gap:.8rem; align-items:center}
+  .p-meta{min-width:0; flex:1}
+  .p-title{font-family:"Amiri",serif; font-size:1.08rem; color:var(--gold2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .p-credit{color:var(--muted); font-size:.82rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  canvas#viz{width:150px; height:44px; flex:0 0 auto; background:#0d0b07; border:1px solid var(--line); border-radius:8px}
+  @media (max-width:560px){ canvas#viz{width:92px; height:38px} }
+  .p-seek{display:flex; align-items:center; gap:.6rem; margin-top:.45rem}
+  .p-seek .t{font-size:.8rem; color:var(--muted); min-width:44px; text-align:center; font-variant-numeric:tabular-nums}
+  .p-seek input[type="range"]{flex:1; accent-color:var(--gold); height:28px}
+  .p-controls{display:flex; align-items:center; gap:.45rem; margin-top:.2rem; flex-wrap:wrap}
+  .p-controls button{
+    background:var(--panel2); color:var(--ink); border:1px solid var(--line2);
+    border-radius:10px; min-width:44px; padding:.35rem .6rem; font-size:1rem;
+    display:inline-flex; align-items:center; justify-content:center; gap:.3rem;
+  }
+  .p-controls button.main{background:var(--gold); color:#1a1405; border-color:var(--gold); min-width:58px; font-size:1.15rem}
+  .p-controls button.on{border-color:var(--gold); color:var(--gold2)}
+  .p-controls .vol{display:inline-flex; align-items:center; gap:.35rem; color:var(--muted); font-size:.85rem}
+  .p-controls .vol input{width:72px; accent-color:var(--gold)}
+  @media (max-width:560px){
+    .player-inner{padding-top:.35rem; padding-bottom:calc(.4rem + env(safe-area-inset-bottom))}
+    .p-top{gap:.5rem}
+    .p-credit{display:none}
+    .p-seek{margin-top:0}
+    .p-seek input[type="range"]{height:16px}
+    .p-controls{gap:.28rem; margin-top:0; flex-wrap:nowrap}
+    .p-controls button{min-width:38px; padding:.24rem .4rem; font-size:.92rem}
+    .p-controls button.main{min-width:48px}
+    .p-controls .mini{font-size:.76rem; padding:.24rem .3rem}
+    .p-controls .vol{font-size:0; gap:.2rem}
+    .p-controls .vol input{width:44px}
+    .p-title{font-size:1rem}
+    nav.cats{display:grid; grid-template-columns:1fr 1fr}
+    nav.cats button{justify-content:center}
+    .sec-head h2{font-size:1.15rem}
+    .grid{gap:.6rem}
+  }
+  .p-controls .spacer{flex:1}
+  .p-controls .mini{font-size:.82rem; font-weight:700}
+  .toast{
+    position:fixed; bottom:250px; inset-inline-start:50%; transform:translateX(50%);
+    background:#22301a; color:#cfe8bd; border:1px solid #476b32; padding:.55rem 1rem;
+    border-radius:10px; font-weight:700; font-size:.92rem; opacity:0; pointer-events:none; transition:opacity .25s; z-index:60;
+  }
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="orn">۞</span>
+      <h1>كنوز التراث المصري الأصيل</h1>
+      <span class="sub">مكتبة صوتية من أرشيف الإذاعة والطرب والتلاوة — كل الروابط مباشرة من Internet Archive</span>
+    </div>
+    <nav class="cats" id="cats" aria-label="أقسام المكتبة"></nav>
+    <div class="tools">
+      <input type="search" id="search" placeholder="ابحث باسم العمل أو المؤلف أو الملحن أو القارئ…" aria-label="بحث في المكتبة" />
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="resume-bar" id="resumeBar">
+    <span id="resumeText">عندك جلسة استماع لم تكتمل.</span>
+    <button id="resumeBtn" type="button">استكمال الاستماع</button>
+    <button id="resumeDismiss" type="button" class="ghost">تجاهل</button>
+  </div>
+
+  <div class="layout">
+    <section>
+      <div class="intro">
+        <h2>من زمن الإذاعة الذهبي… إلى أذنك</h2>
+        <p>حفلات كوكب الشرق كما سُجّلت على مسارح القاهرة، ومسلسلات إذاعية شكّلت وجدان أجيال، وقضايا من أرشيف المحاكم، وملحمة بني هلال برواية شعرائها، وتلاوات مجوّدة ومرتّلة لكبار القرّاء. اختر عملاً، وافتح لوحة الكلمات والنبذة بجانبه، وظبّط الصوت بالمعادل الخماسي كما يليق بالتراث.</p>
+      </div>
+      <div class="sec-head">
+        <h2 id="secTitle">كل المكتبة</h2>
+        <span class="n" id="secCount"></span>
+        <span class="rule"></span>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty" style="display:none">لا توجد نتائج مطابقة لبحثك في هذا القسم.<br />جرّب كلمة أخرى أو انتقل إلى قسم «الكل».</div>
+
+      <div class="dock" id="eqDock">
+        <h3>المعادل الصوتي — ٥ نطاقات</h3>
+        <p class="note">يعمل فعلياً على الصوت عبر Web Audio API. حرّك أي منزلق وسيتحول الوضع إلى «مخصص»، واحفظه بزر الحفظ ليعود إليك في زيارتك القادمة.</p>
+        <div class="presets" id="presets">
+          <button type="button" data-preset="flat" class="active">طبيعي</button>
+          <button type="button" data-preset="voice">وضوح الصوت البشري للإذاعة</button>
+          <button type="button" data-preset="treble">تعزيز الترددات العالية · Crisp Treble</button>
+          <button type="button" data-preset="deep">صوت عميق</button>
+          <button type="button" data-preset="custom" id="customBtn" style="display:none">إعدادي المحفوظ</button>
+          <button type="button" class="save" id="saveEqBtn">حفظ إعدادي المخصص</button>
+        </div>
+        <div class="bands" id="bands"></div>
+        <div class="timer-row">
+          <span class="lbl">مؤقت النوم 🌙</span>
+          <select id="sleepSel" aria-label="مؤقت النوم">
+            <option value="0">إيقاف</option>
+            <option value="15">بعد ١٥ دقيقة</option>
+            <option value="30">بعد ٣٠ دقيقة</option>
+            <option value="45">بعد ٤٥ دقيقة</option>
+            <option value="60">بعد ٦٠ دقيقة</option>
+            <option value="track">عند انتهاء العمل الحالي</option>
+          </select>
+          <span class="cd" id="sleepCd"></span>
+        </div>
+      </div>
+
+      <footer class="site">جميع المقاطع مستضافة على Internet Archive وتُشغَّل من روابطها المباشرة · تُحفظ نقطة توقفك وإعدادك الصوتي على جهازك فقط لتكمل من حيث توقفت</footer>
+    </section>
+
+    <aside class="story" id="storyPanel" aria-label="كلمات العمل أو نبذته">
+      <div class="kicker">الكلمات · نبذة العمل</div>
+      <div id="storyContent">
+        <p class="hint">اختر أي عمل من المكتبة وشغّله، وستظهر هنا كلماته إن كان غنائياً، أو نبذة حلقته وقصتها إن كان مسلسلاً إذاعياً أو تلاوة — لتقرأ وأنت تستمع.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div class="player" role="region" aria-label="المشغل الصوتي">
+  <div class="player-inner">
+    <div class="p-top">
+      <div class="p-meta">
+        <div class="p-title" id="pTitle">لم يتم اختيار عمل بعد</div>
+        <div class="p-credit" id="pCredit">اختر عملاً من المكتبة لبدء الاستماع</div>
+      </div>
+      <canvas id="viz" width="300" height="88" aria-hidden="true"></canvas>
+    </div>
+    <div class="p-seek">
+      <span class="t" id="tCur">0:00</span>
+      <input type="range" id="seek" min="0" max="1000" value="0" aria-label="شريط التقدم" />
+      <span class="t" id="tDur">0:00</span>
+    </div>
+    <div class="p-controls">
+      <button type="button" id="prevBtn" title="السابق" aria-label="السابق">⏮</button>
+      <button type="button" id="playBtn" class="main" title="تشغيل / إيقاف" aria-label="تشغيل أو إيقاف">▶</button>
+      <button type="button" id="nextBtn" title="التالي" aria-label="التالي">⏭</button>
+      <button type="button" id="repeatBtn" class="mini" title="تكرار العمل الحالي" aria-label="تكرار">🔁</button>
+      <button type="button" id="eqBtn" class="mini">المعادل</button>
+      <button type="button" id="storyBtn" class="mini">الكلمات</button>
+      <span class="spacer"></span>
+      <label class="vol">الصوت <input type="range" id="vol" min="0" max="100" value="90" aria-label="مستوى الصوت" /></label>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<audio id="audio" crossorigin="anonymous" preload="metadata"></audio>
+
+<script>
+/* =====================================================================
+   هيكلة البيانات — مصفوفة المكتبة
+   كل عنصر: title (اسم العمل) · credit (المؤلف/الملحن/القارئ)
+   cat (القسم) · src (رابط MP3 مباشر من Internet Archive)
+   about (الكلمات أو نبذة العمل — تظهر في اللوحة الجانبية)
+   لإضافة عمل جديد: انسخ أي عنصر وعدّل بياناته فقط.
+   ===================================================================== */
+const CATEGORIES = [
+  { id: "all",       name: "الكل" },
+  { id: "umm",       name: "روائع أم كلثوم" },
+  { id: "drama",     name: "المسلسلات الإذاعية النادرة" },
+  { id: "aghrab",    name: "أغرب القضايا" },
+  { id: "hilaliyya", name: "السيرة الهلالية" },
+  { id: "tilawat",   name: "تلاوات نادرة" }
+];
+
+const LIBRARY = [
+  /* ---------- روائع أم كلثوم ---------- */
+  { title: "أنت عمري — حفل ٢ أبريل ١٩٦٤", credit: "كلمات: أحمد شفيق كامل · ألحان: محمد عبد الوهاب", cat: "umm",
+    src: "https://archive.org/download/enta3omri1964-tessgilette-zemene_201512/%D8%A3%D9%86%D8%AA%20%D8%B9%D9%85%D8%B1%D9%8A%202%20%D8%A7%D9%81%D8%B1%D9%8A%D9%84%201964.mp3",
+    about: "«لقاء السحاب» الشهير بين كوكب الشرق وموسيقار الأجيال، وأول تعاون بينهما بعد سنوات من الترقّب.\n\nمن الكلمات:\nرجّعوني عنيك لأيامي اللي راحوا\nعلّموني أندم على الماضي وجراحه\nاللي شُفته قبل ما تشوفك عينيا\nعمر ضايع… يحسبوه إزاي عليّا\nأنت عمري اللي ابتدا بنورك صباحه" },
+  { title: "الأطلال — حفل ٥ يناير ١٩٦٧", credit: "كلمات: إبراهيم ناجي · ألحان: رياض السنباطي", cat: "umm",
+    src: "https://archive.org/download/atlal1967-tessgilette-zemene/%D8%A7%D9%84%D8%A3%D8%B7%D9%84%D8%A7%D9%84%205%20%D8%AC%D8%A7%D9%86%D9%81%D9%8A%201967.mp3",
+    about: "من قصيدة الطبيب الشاعر إبراهيم ناجي، وتُعدّ من أعظم ما غنّت أم كلثوم في سنواتها الأخيرة.\n\nمن الكلمات:\nيا فؤادي لا تسل أين الهوى\nكان صرحاً من خيالٍ فهوى\nاسقني واشرب على أطلاله\nواروِ عني طالما الدمع روى" },
+  { title: "أمل حياتي — سينما قصر النيل، ٣ مارس ١٩٦٦", credit: "كلمات: أحمد شفيق كامل · ألحان: محمد عبد الوهاب", cat: "umm",
+    src: "https://archive.org/download/amal7ayati1966-tessgilette-zemene/%D8%A3%D9%85%D9%84%20%D8%AD%D9%8A%D8%A7%D8%AA%D9%8A%20-%20%D8%B3%D9%8A%D9%86%D9%85%D8%A7%20%D9%82%D8%B5%D8%B1%20%D8%A7%D9%84%D9%86%D9%8A%D9%84%20-%203%20%D9%85%D8%A7%D8%B1%D8%B3%201966.mp3",
+    about: "ثاني لقاءات السحاب بين أم كلثوم وعبد الوهاب، من حفل سينما قصر النيل الشهير.\n\nمن الكلمات:\nأمل حياتي يا حب غالي ما ينتهيش\nيا أحلى غنوة سمعها قلبي ولا تتنسيش\nخد عمري كله… بس النهاردة خلّيني أعيش" },
+  { title: "فكروني — حفل ٤ مايو ١٩٦٧", credit: "كلمات: عبد الوهاب محمد · ألحان: محمد عبد الوهاب", cat: "umm",
+    src: "https://archive.org/download/fakkarouni-tessgilette-zemene/%D9%81%D9%83%D8%B1%D9%88%D9%86%D9%8A%204%20%D9%85%D8%A7%D9%8A%201967.mp3",
+    about: "من الكلمات:\nفكروني إزاي؟ هو أنا نسيتك؟\nفكروني إزاي؟ هو أنا نسيتك؟\nده كلام… ولا أنا أقدر أنسى قلبك؟\n\nأغنية عن حبٍّ لا يمحوه الزمن مهما حاول الأصدقاء أن يُنسوه لصاحبته." },
+  { title: "الحب كله — حفل ٤ فبراير ١٩٧١", credit: "كلمات: أحمد شفيق كامل · ألحان: بليغ حمدي", cat: "umm",
+    src: "https://archive.org/download/el7obkollou1971-tessgilette-zemene/%D8%A7%D9%84%D8%AD%D8%A8%20%D9%83%D9%84%D9%87%204%20%D9%81%D8%A8%D8%B1%D8%A7%D9%8A%D8%B1%201971.mp3",
+    about: "من آخر حفلات كوكب الشرق الكبيرة، بلحنٍ متدفّق لبليغ حمدي.\n\nمن الكلمات:\nالحب كله حبيته فيك… الحب كله\nوزماني كله أنا عشته ليك… زماني كله" },
+  { title: "دليلي احتار — حفل الأزبكية، ٥ يناير ١٩٥٦", credit: "كلمات: أحمد رامي · ألحان: رياض السنباطي", cat: "umm",
+    src: "https://archive.org/download/dalili7tar-tessgilette-zemene/%D8%AF%D9%84%D9%8A%D9%84%D9%8A%20%D8%A7%D8%AD%D8%AA%D8%A7%D8%B15-1-1956.mp3",
+    about: "من روائع مرحلة رامي والسنباطي، سُجّلت على مسرح الأزبكية.\n\nمن الكلمات:\nدليلي احتار وحيرني… وتاه بيّا الزمان\nوأنا اللي كنت أظن إن الهوى سهل وأمان" },
+  { title: "جددت حبك ليه — مسرح الأزبكية، ٦ مايو ١٩٥٤", credit: "كلمات: أحمد رامي · ألحان: رياض السنباطي", cat: "umm",
+    src: "https://archive.org/download/gaddet7obek1954-tessgilette-zemene/%D8%AC%D8%AF%D8%AF%D8%AA%20%D8%AD%D8%A8%D9%83%20%D9%84%D9%8A%D9%87%20%D9%85%D9%86%20%D9%85%D8%B3%D8%B1%D8%AD%20%D8%A7%D9%84%D8%A7%D8%B2%D8%A8%D9%83%D9%8A%D8%A9%206%20%D9%85%D8%A7%D9%8A%201954.mp3",
+    about: "من الكلمات:\nجددت حبك ليه؟ بعد الفؤاد ما ارتاح\nحرام عليك خليه… غلطة وقلبي سماح\n\nتسجيل حي من مسرح الأزبكية في ذروة سنوات الحفلات الشهرية." },
+  { title: "الحب كده — حفل الأزبكية، ٤ فبراير ١٩٦٠", credit: "كلمات: بيرم التونسي · ألحان: رياض السنباطي", cat: "umm",
+    src: "https://archive.org/download/el7obkeda1960-tessgilette-zemene/%D8%A7%D9%84%D8%AD%D8%A8%20%D9%83%D8%AF%D9%87%20-%20%D8%A7%D9%84%D8%A3%D8%B2%D8%A8%D9%83%D9%8A%D8%A9%20-%204%20%D9%81%D9%8A%D9%81%D8%B1%D9%8A%201960%20-%20%D8%A7%D9%84%D9%85%D8%B0%D9%8A%D8%B9%20%D8%B5%D9%84%D8%A7%D8%AD%20%D8%B2%D9%83%D9%8A.mp3",
+    about: "من الكلمات:\nالحب كده… مش عايز كلام\nالحب كده… حيّرت قلبي معاك\n\nتسجيل يقدّمه المذيع صلاح زكي، من حفلات الأزبكية التي كانت تُبثّ على الهواء مباشرة." },
+
+  /* ---------- المسلسلات الإذاعية النادرة: ألف ليلة وليلة ---------- */
+  { title: "ألف ليلة وليلة — الليلة الأولى: حكاية شهريار ولقائه الأول مع شهرزاد", credit: "المسلسل الإذاعي «ألف ليلة وليلة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/007.....069/001.%20%D8%A3%D9%84%D9%81%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%88%D9%84%D9%8A%D9%84%D8%A9%20..%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%89%20%D8%AD%D9%83%D8%A7%D9%8A%D8%A9%20%D8%B4%D9%87%D8%B1%D9%8A%D8%A7%D8%B1%20%D9%88%D9%84%D9%82%D8%A7%D8%A6%D9%87%20%D8%A7%D9%84%D8%A3%D9%88%D9%84%20%D9%85%D8%B9%20%D8%B4%D9%87%D8%B1%D8%B2%D8%A7%D8%AF.mp3",
+    about: "نبذة الحلقة:\nتبدأ الحكاية الكبرى: الملك شهريار الجريح من الخيانة يقسم أن يتزوج كل ليلة عروساً ثم يقتلها مع الفجر، حتى تتطوّع شهرزاد ابنة الوزير بخطة جريئة — أن تروي له كل ليلة حكاية لا تُكملها إلا في الليلة التالية، فيُبقي على حياتها شوقاً لسماع البقية." },
+  { title: "ألف ليلة وليلة — الليلة الثانية: الملك لقمان ووزيره حسان وصاحب الدكان (١ من ٩)", credit: "المسلسل الإذاعي «ألف ليلة وليلة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/007.....069/002.%20%D8%A3%D9%84%D9%81%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%88%D9%84%D9%8A%D9%84%D8%A9%20..%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A%D8%A9%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%84%D9%82%D9%85%D8%A7%D9%86%20%D9%88%D9%88%D8%B2%D9%8A%D8%B1%D9%87%20%D8%AD%D8%B3%D8%A7%D9%86%20%D9%88%D8%B5%D8%A7%D8%AD%D8%A8%20%D8%A7%D9%84%D8%AF%D9%83%D8%A7%D9%86%20..%2001%20%D9%85%D9%86%209.mp3",
+    about: "نبذة الحلقة:\nتنسج شهرزاد أولى حكاياتها الممتدة: الملك لقمان ووزيره حسان، وصاحب دكان تقوده الأقدار إلى أسرار لم يكن يحلم بها. حكاية في تسع ليالٍ عن الدهاء والحظ وتقلّب الزمان بأهله." },
+  { title: "ألف ليلة وليلة — الليلة الثالثة: الملك لقمان ووزيره حسان وصاحب الدكان (٢ من ٩)", credit: "المسلسل الإذاعي «ألف ليلة وليلة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/007.....069/003.%20%D8%A3%D9%84%D9%81%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%88%D9%84%D9%8A%D9%84%D8%A9%20..%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%AB%D8%A7%D9%84%D8%AB%D8%A9%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%84%D9%82%D9%85%D8%A7%D9%86%20%D9%88%D9%88%D8%B2%D9%8A%D8%B1%D9%87%20%D8%AD%D8%B3%D8%A7%D9%86%20%D9%88%D8%B5%D8%A7%D8%AD%D8%A8%20%D8%A7%D9%84%D8%AF%D9%83%D8%A7%D9%86%20..%2002%20%D9%85%D9%86%209.mp3",
+    about: "نبذة الحلقة:\nتتوالى خيوط حكاية لقمان وحسان وصاحب الدكان، وتتشابك المصالح والمكائد داخل القصر والسوق، بينما يترقّب شهريار — ونحن معه — ما تخبئه الليلة التالية." },
+  { title: "ألف ليلة وليلة — الليلة الرابعة: الملك لقمان ووزيره حسان وصاحب الدكان (٣ من ٩)", credit: "المسلسل الإذاعي «ألف ليلة وليلة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/007.....069/004.%20%D8%A3%D9%84%D9%81%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%88%D9%84%D9%8A%D9%84%D8%A9%20..%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%B1%D8%A7%D8%A8%D8%B9%D8%A9%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%84%D9%82%D9%85%D8%A7%D9%86%20%D9%88%D9%88%D8%B2%D9%8A%D8%B1%D9%87%20%D8%AD%D8%B3%D8%A7%D9%86%20%D9%88%D8%B5%D8%A7%D8%AD%D8%A8%20%D8%A7%D9%84%D8%AF%D9%83%D8%A7%D9%86%20..%2003%20%D9%85%D9%86%209.mp3",
+    about: "نبذة الحلقة:\nالحلقة الثالثة من حكاية صاحب الدكان: قرارات مصيرية في بلاط الملك لقمان، وسرٌّ قديم يطفو على السطح يقلب موازين الحكاية رأساً على عقب." },
+  { title: "ألف ليلة وليلة — الليلة الخامسة: الملك لقمان ووزيره حسان وصاحب الدكان (٤ من ٩)", credit: "المسلسل الإذاعي «ألف ليلة وليلة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/007.....069/005.%20%D8%A3%D9%84%D9%81%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%88%D9%84%D9%8A%D9%84%D8%A9%20..%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%AE%D8%A7%D9%85%D8%B3%D8%A9%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%84%D9%82%D9%85%D8%A7%D9%86%20%D9%88%D9%88%D8%B2%D9%8A%D8%B1%D9%87%20%D8%AD%D8%B3%D8%A7%D9%86%20%D9%88%D8%B5%D8%A7%D8%AD%D8%A8%20%D8%A7%D9%84%D8%AF%D9%83%D8%A7%D9%86%20..%2004%20%D9%85%D9%86%209.mp3",
+    about: "نبذة الحلقة:\nمنتصف الحكاية: تتعقّد المؤامرات حول الوزير حسان، ويجد صاحب الدكان نفسه في قلب عاصفة لم يخترها، بين ولاءٍ للملك وخوفٍ على نفسه." },
+  { title: "ألف ليلة وليلة — الليلة السادسة: الملك لقمان ووزيره حسان وصاحب الدكان (٥ من ٩)", credit: "المسلسل الإذاعي «ألف ليلة وليلة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/007.....069/006.%20%D8%A3%D9%84%D9%81%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%88%D9%84%D9%8A%D9%84%D8%A9%20..%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3%D8%A9%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%84%D9%82%D9%85%D8%A7%D9%86%20%D9%88%D9%88%D8%B2%D9%8A%D8%B1%D9%87%20%D8%AD%D8%B3%D8%A7%D9%86%20%D9%88%D8%B5%D8%A7%D8%AD%D8%A8%20%D8%A7%D9%84%D8%AF%D9%83%D8%A7%D9%86%20..%2005%20%D9%85%D9%86%209.mp3",
+    about: "نبذة الحلقة:\nتتكشّف أوراق جديدة في لعبة القصر، وتقترب الحكاية من ذروتها بينما تواصل شهرزاد نسجها بمهارة تُبقي السيف بعيداً عن عنقها ليلةً أخرى." },
+  { title: "ألف ليلة وليلة — الليلة السابعة: الملك لقمان ووزيره حسان وصاحب الدكان (٦ من ٩)", credit: "المسلسل الإذاعي «ألف ليلة وليلة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/007.....069/007.%20%D8%A3%D9%84%D9%81%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%88%D9%84%D9%8A%D9%84%D8%A9%20..%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%B3%D8%A7%D8%A8%D8%B9%D8%A9%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%84%D9%82%D9%85%D8%A7%D9%86%20%D9%88%D9%88%D8%B2%D9%8A%D8%B1%D9%87%20%D8%AD%D8%B3%D8%A7%D9%86%20%D9%88%D8%B5%D8%A7%D8%AD%D8%A8%20%D8%A7%D9%84%D8%AF%D9%83%D8%A7%D9%86%20..%2006%20%D9%85%D9%86%209.mp3",
+    about: "نبذة الحلقة:\nالحلقة السادسة من الحكاية: انكشافٌ يغيّر مصائر الأبطال، وبداية انفراج العقدة الكبرى التي حيّرت الملك ووزيره." },
+  { title: "ألف ليلة وليلة — الليلة الثامنة: الملك لقمان ووزيره حسان وصاحب الدكان (٧ من ٩)", credit: "المسلسل الإذاعي «ألف ليلة وليلة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/007.....069/008.%20%D8%A3%D9%84%D9%81%20%D9%84%D9%8A%D9%84%D8%A9%20%D9%88%D9%84%D9%8A%D9%84%D8%A9%20..%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%D8%A9%20%D8%A7%D9%84%D8%AB%D8%A7%D9%85%D9%86%D8%A9%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%84%D9%82%D9%85%D8%A7%D9%86%20%D9%88%D9%88%D8%B2%D9%8A%D8%B1%D9%87%20%D8%AD%D8%B3%D8%A7%D9%86%20%D9%88%D8%B5%D8%A7%D8%AD%D8%A8%20%D8%A7%D9%84%D8%AF%D9%83%D8%A7%D9%86%20..%2007%20%D9%85%D9%86%209.mp3",
+    about: "نبذة الحلقة:\nتقترب حكاية لقمان وحسان من خواتيمها: حسابٌ عسير، ومفاجأة أخيرة تُعيد ترتيب كل ما ظننّاه معلوماً عن صاحب الدكان." },
+  { title: "من كنوز الإذاعة — حلقة ٢٩ سبتمبر ٢٠١٨", credit: "برنامج «من كنوز الإذاعة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/29-9-2018/%D9%85%D9%86%20%D9%83%D9%86%D9%88%D8%B2%20%D8%A7%D9%84%D8%A7%D8%B0%D8%A7%D8%B9%D8%A9%2029-9-2018.mp3",
+    about: "نبذة الحلقة:\nمن أرشيف الإذاعة المصرية العريق: مقتطفات نادرة من برامج ومسلسلات وحفلات الزمن الجميل، تُذاع كما حفظتها شرائط الأرشيف عبر العقود." },
+  { title: "من كنوز الإذاعة — حلقة ٢٢ يونيو ٢٠٢٣", credit: "برنامج «من كنوز الإذاعة» — الإذاعة المصرية", cat: "drama",
+    src: "https://archive.org/download/22-2023_20230813/%D9%85%D9%86%20%D9%83%D9%86%D9%88%D8%B2%20%D8%A7%D9%84%D8%A7%D8%B0%D8%A7%D8%B9%D8%A9%2022%20%D9%8A%D9%88%D9%86%D9%8A%D9%88%202023.mp3",
+    about: "نبذة الحلقة:\nرحلة جديدة داخل خزائن الإذاعة: تسجيلات نادرة وأصوات خالدة من تراث البرامج المصرية التي رافقت المستمعين منذ ثلاثينيات القرن الماضي." },
+  { title: "من كنوز الإذاعة — حلقة ٢٩ مايو ٢٠٢٤", credit: "برنامج «من كنوز الإذاعة» — تقديم سامح الشرقاوي", cat: "drama",
+    src: "https://archive.org/download/29-2024_20240531/%D9%85%D9%86%20%D9%83%D9%86%D9%88%D8%B2%20%D8%A7%D9%84%D8%A5%D8%B0%D8%A7%D8%B9%D8%A9%20%20..%20%20%D8%AD%D9%84%D9%82%D8%A9%2029%20%D9%85%D8%A7%D9%8A%D9%88%202024.mp3",
+    about: "نبذة الحلقة:\nحلقة من تقديم سامح الشرقاوي، تستخرج من أرشيف الإذاعة المصرية لآلئ صوتية نادرة: لقاءات وتمثيليات وأغنيات لم تُذع منذ عقود." },
+
+  /* ---------- أغرب القضايا ---------- */
+  { title: "أغرب القضايا — قضية الشك", credit: "المسلسل الإذاعي «أغرب القضايا» — من أرشيف المحاكم المصرية", cat: "aghrab",
+    src: "https://archive.org/download/001._20190629/001.%20%D8%A3%D8%BA%D8%B1%D8%A8%20%D8%A7%D9%84%D9%82%D8%B6%D8%A7%D9%8A%D8%A7%D7%83%20%D9%82%D8%B6%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B4%D9%83.mp3",
+    about: "نبذة الحلقة:\nمن أشهر برامج الإذاعة المصرية المستوحاة من قضايا حقيقية: شرارة شكٍّ صغيرة تشتعل حتى تلتهم كل شيء حولها، وتحقيقات تكشف كيف يتحوّل الظن إلى جريمة. استمع كيف انتهت القضية أمام المحكمة." },
+  { title: "أغرب القضايا — قضية شلبي", credit: "المسلسل الإذاعي «أغرب القضايا» — من أرشيف المحاكم المصرية", cat: "aghrab",
+    src: "https://archive.org/download/001._20190629/002.%20%D8%A3%D8%BA%D8%B1%D8%A8%20%D8%A7%D9%84%D9%82%D8%B6%D8%A7%D9%8A%D8%A7%D7%83%20%D9%82%D8%B6%D9%8A%D8%A9%20%D8%B4%D9%84%D8%A8%D9%8A.mp3",
+    about: "نبذة الحلقة:\nقضية «شلبي» من القضايا التي حيّرت المحققين: خيوط متشابكة وشهادات متضاربة، حتى يظهر الدليل الذي لم ينتبه إليه أحد." },
+  { title: "أغرب القضايا — قضية سرقة البنك", credit: "المسلسل الإذاعي «أغرب القضايا» — من أرشيف المحاكم المصرية", cat: "aghrab",
+    src: "https://archive.org/download/001._20190629/003.%20%D8%A3%D8%BA%D8%B1%D8%A8%20%D8%A7%D9%84%D9%82%D8%B6%D8%A7%D9%8A%D8%A7%D7%83%20%D9%82%D8%B6%D9%8A%D8%A9%20%D8%B3%D8%B1%D9%82%D8%A9%20%D8%A7%D9%84%D8%A8%D9%86%D9%83.mp3",
+    about: "نبذة الحلقة:\nسرقة بنك مُحكمة التنفيذ لا تترك وراءها أثراً واحداً… إلا تفصيلة صغيرة في توقيتٍ ما. رحلة التحقيق من لحظة البلاغ حتى سقوط الجناة." },
+  { title: "أغرب القضايا — قضية كاميليا", credit: "المسلسل الإذاعي «أغرب القضايا» — من أرشيف المحاكم المصرية", cat: "aghrab",
+    src: "https://archive.org/download/001._20190629/004.%20%D8%A3%D8%BA%D8%B1%D8%A8%20%D8%A7%D9%84%D9%82%D8%B6%D8%A7%D9%8A%D8%A7%D7%83%20%D9%82%D8%B6%D9%8A%D8%A9%20%D9%83%D8%A7%D9%85%D9%8A%D9%84%D9%8A%D8%A7.mp3",
+    about: "نبذة الحلقة:\nقضية «كاميليا»: أسماء لامعة وخفايا ثقيلة، وجريمة غامضة تتشابك فيها الشهادات حتى تنكشف الحقيقة في قاعة المحكمة." },
+  { title: "أغرب القضايا — قضية الندم", credit: "المسلسل الإذاعي «أغرب القضايا» — من أرشيف المحاكم المصرية", cat: "aghrab",
+    src: "https://archive.org/download/001._20190629/005.%20%D8%A3%D8%BA%D8%B1%D8%A8%20%D8%A7%D9%84%D9%82%D8%B6%D8%A7%D9%8A%D8%A7%D7%83%20%D9%82%D8%B6%D9%8A%D8%A9%20%D8%A7%D9%84%D9%86%D8%AF%D9%85.mp3",
+    about: "نبذة الحلقة:\nلحظة طيش واحدة تقلب حياة صاحبها رأساً على عقب، ويأتي الندم متأخراً بعد فوات الأوان. من أقسى قضايا البرنامج وأكثرها تأثيراً في المستمعين." },
+  { title: "أغرب القضايا — قضية جثة على قضبان السكة الحديد", credit: "المسلسل الإذاعي «أغرب القضايا» — من أرشيف المحاكم المصرية", cat: "aghrab",
+    src: "https://archive.org/download/001._20190629/006.%20%D8%A3%D8%BA%D8%B1%D8%A8%20%D8%A7%D9%84%D9%82%D8%B6%D8%A7%D9%8A%D8%A7%D7%83%20%D9%82%D8%B6%D9%8A%D8%A9%20%D8%AC%D8%AB%D8%A9%20%D8%B9%D9%84%D9%89%20%D9%82%D8%B6%D8%A8%D8%A7%D9%86%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D8%AF.mp3",
+    about: "نبذة الحلقة:\nجثة مجهولة على قضبان القطار: حادث قضاء وقدر أم جريمة مُتقنة أراد صاحبها أن يمحو آثارها الحديد؟ تحقيق يبدأ من مكان العثور وينتهي بمفاجأة." },
+  { title: "أغرب القضايا — قضية فتحي", credit: "المسلسل الإذاعي «أغرب القضايا» — من أرشيف المحاكم المصرية", cat: "aghrab",
+    src: "https://archive.org/download/001._20190629/007.%20%D8%A3%D8%BA%D8%B1%D8%A8%20%D8%A7%D9%84%D9%82%D8%B6%D8%A7%D9%8A%D8%A7%D7%83%20%D9%82%D8%B6%D9%8A%D8%A9%20%D9%81%D8%AA%D8%AD%D9%8A.mp3",
+    about: "نبذة الحلقة:\nقضية «فتحي»: شاب تقوده الظروف إلى قفص الاتهام، وبين أوراق القضية وشهادات الشهود تتجلّى الحقيقة قطعةً قطعة." },
+  { title: "أغرب القضايا — قضية مقتل سليمان", credit: "المسلسل الإذاعي «أغرب القضايا» — من أرشيف المحاكم المصرية", cat: "aghrab",
+    src: "https://archive.org/download/001._20190629/008.%20%D8%A3%D8%BA%D8%B1%D8%A8%20%D8%A7%D9%84%D9%82%D8%B6%D8%A7%D9%8A%D8%A7%D7%83%20%D9%82%D8%B6%D9%8A%D8%A9%20%D9%85%D9%82%D8%AA%D9%84%20%D8%B3%D9%84%D9%8A%D9%85%D8%A7%D9%86.mp3",
+    about: "نبذة الحلقة:\nمن قتل سليمان؟ دوافع متعددة ومشتبه بهم أكثر، ومرافعة ختامية من أشهر ما قدّمه البرنامج في تاريخه الطويل على أثير الإذاعة المصرية." },
+
+  /* ---------- السيرة الهلالية ---------- */
+  { title: "السيرة الهلالية — علي جرمون: الشريط الأول، بني هلال في بني عقيل (١)", credit: "السيرة الهلالية — رواية الشاعر علي جرمون", cat: "hilaliyya",
+    src: "https://archive.org/download/1_20230613_20230613_1924/%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%87%D9%84%D8%A7%D9%84%D9%8A%D8%A9%20%D8%B9%D9%84%D9%89%20%D8%AC%D8%B1%D9%85%D9%88%D9%86-%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%B7%20%D8%A7%D9%84%D8%A7%D9%88%D9%84-%20%D8%A8%D9%86%D9%89%20%D9%87%D9%84%D8%A7%D9%84%20%D9%81%D9%89%20%D8%A8%D9%86%D9%89%20%D8%B9%D9%82%D9%8A%D9%84%201%20-%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%89%20%D8%A7%D9%84%D8%A7%D8%B5%D9%8A%D9%84.mp3",
+    about: "نبذة العمل:\nيفتتح الشاعر علي جرمون — أحد أشهر رواة السيرة في صعيد مصر — ملحمة بني هلال من ديار بني عقيل، على أنغام الربابة: بدايات القبيلة، وأبطالها الذين سيعبرون بها الصحراء إلى الغرب في «التغريبة» الشهيرة." },
+  { title: "السيرة الهلالية — علي جرمون: الشريط الثالث عشر، الجزء الثاني", credit: "السيرة الهلالية — رواية الشاعر علي جرمون", cat: "hilaliyya",
+    src: "https://archive.org/download/20230618_20230618_1453/%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%87%D9%84%D8%A7%D9%84%D9%8A%D8%A9%20%D8%B9%D9%84%D9%89%20%D8%AC%D8%B1%D9%85%D9%88%D9%86-%D8%A7%D9%84%D8%AB%D8%A7%D9%84%D8%AB%20%D8%B9%D8%B4%D8%B1%20%D8%A7%D9%84%D8%AC%D8%B2%D8%A1%20%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%89-%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%89%20%D8%A7%D9%84%D8%A7%D8%B5%D9%8A%D9%84.mp3",
+    about: "نبذة العمل:\nمن قلب الملحمة: أبو زيد الهلالي ورفاقه في مواجهاتهم الممتدة، وحكايات الفروسية والدهاء التي تناقلتها المجالس العربية قروناً حتى صارت مرآةً لقيم الصحراء وأهلها." },
+  { title: "السيرة الهلالية — علي جرمون: الشريط الرابع عشر، الجزء الأول", credit: "السيرة الهلالية — رواية الشاعر علي جرمون", cat: "hilaliyya",
+    src: "https://archive.org/download/20230618_20230618_1511/%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%87%D9%84%D8%A7%D9%84%D9%8A%D8%A9%20%D8%B9%D9%84%D9%89%20%D8%AC%D8%B1%D9%85%D9%88%D9%86-%D8%A7%D9%84%D8%B1%D8%A7%D8%A8%D8%B9%20%D8%B9%D8%B4%D8%B1%20%D8%A7%D9%84%D8%AC%D8%B2%D8%A1%20%D8%A7%D9%84%D8%A3%D9%88%D9%84-%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%89%20%D8%A7%D9%84%D8%A7%D8%B5%D9%8A%D9%84.mp3",
+    about: "نبذة العمل:\nيواصل جرمون الغناء للهلالية في رحلتهم الكبرى: صراعات القبائل، وبطولات دياب بن غانم وأبي زيد، في أسلوب الرواية الشعبية التي تجمع الشعر والحكاية والموسيقى." },
+  { title: "السيرة الهلالية — علي جرمون: الشريط العشرون، الجزء الأول", credit: "السيرة الهلالية — رواية الشاعر علي جرمون", cat: "hilaliyya",
+    src: "https://archive.org/download/20230619_20230619_0149/%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%87%D9%84%D8%A7%D9%84%D9%8A%D8%A9%20%D8%B9%D9%84%D9%89%20%D8%AC%D8%B1%D9%85%D9%88%D9%86-%D8%A7%D9%84%D8%B9%D8%B4%D8%B1%D9%88%D9%86%20%D8%A7%D9%84%D8%AC%D8%B2%D8%A1%20%D8%A7%D9%84%D8%A3%D9%88%D9%84-%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%89%20%D8%A7%D9%84%D8%A7%D8%B5%D9%8A%D9%84.mp3",
+    about: "نبذة العمل:\nفصول متقدمة من السيرة بصوت جرمون وربابته: حيث تبلغ التغريبة ذروتها، وتُروى وقائع الأبطال الذين خلّدهم الوجدان الشعبي العربي من نجد إلى تونس." },
+  { title: "السيرة الهلالية — محمد اليمني: الشريط الأول، الوجه الثاني", credit: "السيرة الهلالية — رواية الشاعر محمد اليمني", cat: "hilaliyya",
+    src: "https://archive.org/download/2_20230531_20230531_2154/%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%87%D9%84%D8%A7%D9%84%D9%8A%D8%A9%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%A7%D9%84%D9%8A%D9%85%D9%86%D9%89%20%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%B7%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20%D8%A7%D9%84%D9%88%D8%AC%D9%872%20-%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%89%20%D8%A7%D9%84%D8%A7%D8%B5%D9%8A%D9%84.mp3",
+    about: "نبذة العمل:\nرواية أخرى للسيرة بصوت الشاعر محمد اليمني، تُظهر كيف تعدّدت روايات الملحمة الواحدة بين الشعراء — فلكل راوٍ نَفَسه وزياداته وحكمته." },
+  { title: "السيرة الهلالية — محمد اليمني: الشريط الثامن، الوجه الأول", credit: "السيرة الهلالية — رواية الشاعر محمد اليمني", cat: "hilaliyya",
+    src: "https://archive.org/download/1_20230610_20230610_2114/%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%87%D9%84%D8%A7%D9%84%D9%8A%D8%A9%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%A7%D9%84%D9%8A%D9%85%D9%86%D9%89%20%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%B7%20%D8%A7%D9%84%D8%AB%D8%A7%D9%85%D9%86%20%D8%A7%D9%84%D9%88%D8%AC%D9%871%20-%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%89%20%D8%A7%D9%84%D8%A7%D8%B5%D9%8A%D9%84.mp3",
+    about: "نبذة العمل:\nمن أشرطة اليمني المحفوظة في أرشيف التراث العربي الأصيل: مواقف من بطولات بني هلال ومفاخرهم، بأداءٍ حماسي يليق بمجالس السمر القديمة." },
+  { title: "السيرة الهلالية — محمد اليمني: الشريط الثامن، الوجه الثاني", credit: "السيرة الهلالية — رواية الشاعر محمد اليمني", cat: "hilaliyya",
+    src: "https://archive.org/download/2_20230610_20230610_2125/%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%87%D9%84%D8%A7%D9%84%D9%8A%D8%A9%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%A7%D9%84%D9%8A%D9%85%D9%86%D9%89%20%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%B7%20%D8%A7%D9%84%D8%AB%D8%A7%D9%85%D9%86%20%D8%A7%D9%84%D9%88%D8%AC%D9%872%20-%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%89%20%D8%A7%D9%84%D8%A7%D8%B5%D9%8A%D9%84.mp3",
+    about: "نبذة العمل:\nتتمة الشريط الثامن برواية اليمني: خاتمة المواقف التي بدأها الوجه الأول، ومواعظ السيرة الخالدة في الوفاء والشجاعة وثمن الغرور." },
+
+  /* ---------- تلاوات نادرة ---------- */
+  { title: "سورة الفاتحة — تلاوة مرتّلة", credit: "القارئ: الشيخ محمد صديق المنشاوي", cat: "tilawat",
+    src: "https://archive.org/download/quran-minshawi-murattal/001.mp3",
+    about: "نبذة التلاوة:\nأمّ الكتاب بصوت الشيخ محمد صديق المنشاوي (١٩٢٠–١٩٦٩)، صاحب الصوت الخاشع الذي لقّبته الإذاعة المصرية بـ«الصوت الباكي»، ومن أعلام التلاوة في العالم الإسلامي." },
+  { title: "سورة الكهف — تلاوة مرتّلة", credit: "القارئ: الشيخ محمد صديق المنشاوي", cat: "tilawat",
+    src: "https://archive.org/download/quran-minshawi-murattal/018.mp3",
+    about: "نبذة التلاوة:\nسورة الكهف كاملة بترتيل المنشاوي الهادئ المتدبّر — من التلاوات التي تُقرأ يوم الجمعة وتُسمَع بخشوع في كل بيت." },
+  { title: "سورة يس — تلاوة مرتّلة", credit: "القارئ: الشيخ محمد صديق المنشاوي", cat: "tilawat",
+    src: "https://archive.org/download/quran-minshawi-murattal/036.mp3",
+    about: "نبذة التلاوة:\n«قلب القرآن» بصوت المنشاوي: تلاوة تجمع بين إتقان الأحكام وصدق الأداء الذي ميّز مدرسة التلاوة المصرية في عصرها الذهبي." },
+  { title: "سورة الفاتحة — تلاوة مجوّدة", credit: "القارئ: الشيخ عبد الباسط عبد الصمد", cat: "tilawat",
+    src: "https://archive.org/download/quranpro-abdul-basit-mujawwad/001.mp3",
+    about: "نبذة التلاوة:\nبصوت الشيخ عبد الباسط عبد الصمد (١٩٢٧–١٩٨٨)، «صوت مكة» وصاحب الحنجرة الذهبية وأحد أشهر قرّاء العالم الإسلامي قاطبة، بأسلوبه المُجوَّد المهيب." },
+  { title: "سورة الرحمن — تلاوة مجوّدة", credit: "القارئ: الشيخ عبد الباسط عبد الصمد", cat: "tilawat",
+    src: "https://archive.org/download/quranpro-abdul-basit-mujawwad/055.mp3",
+    about: "نبذة التلاوة:\n«عروس القرآن» بمقامات عبد الباسط الآسرة وتكراره المؤثر لقوله تعالى: «فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ» — من التلاوات التي لا تُنسى." },
+  { title: "سورة الفاتحة — المصحف المعلّم", credit: "القارئ: الشيخ محمود خليل الحصري", cat: "tilawat",
+    src: "https://archive.org/download/quran_Husary_Muallim_128kbps_035/001.mp3",
+    about: "نبذة التلاوة:\nبصوت الشيخ محمود خليل الحصري (١٩١٧–١٩٨٠)، شيخ عموم المقارئ المصرية وأول من سجّل المصحف مرتّلاً كاملاً، وبطل «المصحف المعلّم» الذي تعلّم على صوته أجيال." },
+  { title: "سورة الكهف — المصحف المعلّم", credit: "القارئ: الشيخ محمود خليل الحصري", cat: "tilawat",
+    src: "https://archive.org/download/quran_Husary_Muallim_128kbps_035/018.mp3",
+    about: "نبذة التلاوة:\nسورة الكهف بأداء الحصري التعليمي المتقن: مخارج حروف مضبوطة ووقفات مدروسة، كما أرادها المصحف المعلّم مرجعاً للحفظ والتجويد." }
+];
+</script>
+
+<script>
+/* ================= منطق التطبيق ================= */
+const $ = (s) => document.querySelector(s);
+const audio = $("#audio");
+const LS_RESUME = "kunouz_resume_v1";
+const LS_EQ = "kunouz_eq_custom_v1";
+
+let activeCat = "all";
+let currentIndex = -1;      // index in LIBRARY
+let repeatOne = false;
+
+/* ---------- التنقل بين الأقسام ---------- */
+const catName = (id) => (CATEGORIES.find(c => c.id === id) || {}).name || "";
+function renderCats() {
+  const nav = $("#cats");
+  nav.innerHTML = "";
+  CATEGORIES.forEach(c => {
+    const n = c.id === "all" ? LIBRARY.length : LIBRARY.filter(t => t.cat === c.id).length;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = c.id === activeCat ? "active" : "";
+    b.innerHTML = "";
+    b.appendChild(document.createTextNode(c.name));
+    const cnt = document.createElement("span");
+    cnt.className = "cnt"; cnt.textContent = n;
+    b.appendChild(cnt);
+    b.addEventListener("click", () => { activeCat = c.id; renderCats(); renderGrid(); });
+    nav.appendChild(b);
+  });
+}
+
+/* ---------- شبكة الأعمال ---------- */
+function visibleTracks() {
+  const q = $("#search").value.trim();
+  return LIBRARY.map((t, i) => ({ t, i }))
+    .filter(({ t }) => activeCat === "all" || t.cat === activeCat)
+    .filter(({ t }) => !q || (t.title + " " + t.credit).includes(q));
+}
+function renderGrid() {
+  const grid = $("#grid");
+  const list = visibleTracks();
+  $("#secTitle").textContent = catName(activeCat) === "الكل" ? "كل المكتبة" : catName(activeCat);
+  $("#secCount").textContent = list.length + " عملاً";
+  $("#empty").style.display = list.length ? "none" : "block";
+  grid.innerHTML = "";
+  list.forEach(({ t, i }) => {
+    const card = document.createElement("article");
+    card.className = "card" + (i === currentIndex ? " playing" : "");
+    const cat = document.createElement("div"); cat.className = "cat"; cat.textContent = catName(t.cat);
+    const h = document.createElement("h3"); h.textContent = t.title;
+    const cr = document.createElement("div"); cr.className = "credit"; cr.textContent = t.credit;
+    const row = document.createElement("div"); row.className = "row";
+    const pb = document.createElement("button");
+    pb.type = "button"; pb.className = "play-btn";
+    pb.textContent = i === currentIndex && !audio.paused ? "⏸ إيقاف مؤقت" : "▶ تشغيل";
+    pb.addEventListener("click", () => toggleTrack(i));
+    const dl = document.createElement("a");
+    dl.className = "dl-btn"; dl.href = t.src; dl.setAttribute("download", "");
+    dl.textContent = "⬇ تحميل";
+    row.appendChild(pb); row.appendChild(dl);
+    card.appendChild(cat); card.appendChild(h); card.appendChild(cr); card.appendChild(row);
+    grid.appendChild(card);
+  });
+}
+$("#search").addEventListener("input", renderGrid);
+
+/* ---------- اللوحة الجانبية: الكلمات والنبذة ---------- */
+function showStory(t) {
+  const box = $("#storyContent");
+  box.innerHTML = "";
+  const h = document.createElement("h3"); h.textContent = t.title;
+  const cr = document.createElement("div"); cr.className = "credit"; cr.textContent = t.credit;
+  const body = document.createElement("div"); body.className = "body"; body.textContent = t.about;
+  box.appendChild(h); box.appendChild(cr); box.appendChild(body);
+}
+
+/* ================= Web Audio: المعادل + الطيف ================= */
+const BANDS = [
+  { f: 60,   type: "lowshelf"  },
+  { f: 230,  type: "peaking"   },
+  { f: 910,  type: "peaking"   },
+  { f: 3600, type: "peaking"   },
+  { f: 14000,type: "highshelf" }
+];
+const PRESETS = {
+  flat:   [0, 0, 0, 0, 0],
+  voice:  [-4, 2, 6, 5, -2],
+  treble: [-2, 0, 2, 6, 9],
+  deep:   [8, 5, 0, -2, -3]
+};
+let actx = null, filters = [], analyser = null, masterGain = null;
+let eqValues = [0, 0, 0, 0, 0];
+let activePreset = "flat";
+
+function buildBandsUI() {
+  const wrap = $("#bands");
+  BANDS.forEach((b, i) => {
+    const div = document.createElement("div"); div.className = "band";
+    const lab = document.createElement("label"); lab.textContent = b.f >= 1000 ? (b.f / 1000) + "kHz" : b.f + "Hz";
+    const val = document.createElement("span"); val.className = "val"; val.id = "bv" + i; val.textContent = "0 dB";
+    const inp = document.createElement("input");
+    inp.type = "range"; inp.min = -12; inp.max = 12; inp.step = 1; inp.value = 0;
+    inp.setAttribute("aria-label", "نطاق " + lab.textContent);
+    inp.addEventListener("input", () => {
+      eqValues[i] = Number(inp.value);
+      val.textContent = (eqValues[i] > 0 ? "+" : "") + eqValues[i] + " dB";
+      applyEq(); setPresetUI("custom-unsaved");
+    });
+    div.appendChild(lab); div.appendChild(val); div.appendChild(inp);
+    wrap.appendChild(div);
+  });
+}
+function ensureAudioGraph() {
+  if (actx) { if (actx.state === "suspended") actx.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  actx = new AC();
+  const src = actx.createMediaElementSource(audio);
+  let node = src;
+  filters = BANDS.map(b => {
+    const f = actx.createBiquadFilter();
+    f.type = b.type; f.frequency.value = b.f; f.gain.value = eqValues[BANDS.indexOf(b)];
+    if (b.type === "peaking") f.Q.value = 0.9;
+    node.connect(f); node = f; return f;
+  });
+  analyser = actx.createAnalyser(); analyser.fftSize = 128;
+  masterGain = actx.createGain(); masterGain.gain.value = 1;
+  node.connect(analyser); analyser.connect(masterGain); masterGain.connect(actx.destination);
+  drawViz();
+}
+function applyEq() { filters.forEach((f, i) => { if (f) f.gain.value = eqValues[i]; }); }
+function syncBandUI() {
+  document.querySelectorAll("#bands input").forEach((inp, i) => {
+    inp.value = eqValues[i];
+    $("#bv" + i).textContent = (eqValues[i] > 0 ? "+" : "") + eqValues[i] + " dB";
+  });
+}
+function setPresetUI(name) {
+  activePreset = name;
+  document.querySelectorAll("#presets button[data-preset]").forEach(b =>
+    b.classList.toggle("active", b.dataset.preset === name));
+}
+document.querySelectorAll("#presets button[data-preset]").forEach(b => {
+  b.addEventListener("click", () => {
+    const p = b.dataset.preset;
+    if (p === "custom") {
+      const saved = loadCustomEq(); if (!saved) return;
+      eqValues = saved.slice();
+    } else {
+      eqValues = PRESETS[p].slice();
+    }
+    syncBandUI(); applyEq(); setPresetUI(p); ensureAudioGraph();
+  });
+});
+function loadCustomEq() {
+  try {
+    const raw = localStorage.getItem(LS_EQ);
+    if (!raw) return null;
+    const v = JSON.parse(raw);
+    return Array.isArray(v) && v.length === 5 ? v : null;
+  } catch (e) { return null; }
+}
+$("#saveEqBtn").addEventListener("click", () => {
+  try { localStorage.setItem(LS_EQ, JSON.stringify(eqValues)); } catch (e) {}
+  $("#customBtn").style.display = "";
+  setPresetUI("custom");
+  toast("تم حفظ إعدادك المخصص ✓");
+});
+
+/* ---------- مؤشر الطيف الصوتي ---------- */
+const viz = $("#viz"), vctx = viz.getContext("2d");
+function drawViz() {
+  requestAnimationFrame(drawViz);
+  const w = viz.width, h = viz.height;
+  vctx.clearRect(0, 0, w, h);
+  vctx.fillStyle = "#0d0b07"; vctx.fillRect(0, 0, w, h);
+  if (!analyser) {
+    vctx.fillStyle = "#453a20";
+    for (let i = 0; i < 24; i++) vctx.fillRect(6 + i * 12, h - 8, 7, 4);
+    return;
+  }
+  const data = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(data);
+  const bars = 24, bw = w / bars;
+  for (let i = 0; i < bars; i++) {
+    const v = data[Math.floor(i * data.length / bars / 1.4)] / 255;
+    const bh = Math.max(3, v * (h - 8));
+    const grad = vctx.createLinearGradient(0, h, 0, h - bh);
+    grad.addColorStop(0, "#8a7226"); grad.addColorStop(1, "#e8cc6d");
+    vctx.fillStyle = grad;
+    vctx.fillRect(i * bw + 2, h - bh, bw - 4, bh);
+  }
+}
+
+/* ================= التشغيل ================= */
+function fmt(s) {
+  if (!isFinite(s) || s < 0) s = 0;
+  s = Math.floor(s);
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
+  return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(ss).padStart(2, "0");
+}
+function loadTrack(i, autoplay, atTime) {
+  currentIndex = i;
+  const t = LIBRARY[i];
+  ensureAudioGraph();
+  audio.src = t.src;
+  $("#pTitle").textContent = t.title;
+  $("#pCredit").textContent = t.credit;
+  showStory(t);
+  renderGrid();
+  const start = () => { if (atTime && atTime > 5) { try { audio.currentTime = atTime; } catch (e) {} } };
+  audio.addEventListener("loadedmetadata", start, { once: true });
+  if (autoplay) audio.play().catch(() => toast("تعذّر بدء التشغيل — تحقق من الاتصال وحاول مجدداً"));
+}
+function toggleTrack(i) {
+  if (i === currentIndex && audio.src) {
+    if (audio.paused) { ensureAudioGraph(); audio.play().catch(() => {}); }
+    else audio.pause();
+  } else loadTrack(i, true, 0);
+}
+function step(dir) {
+  const list = visibleTracks();
+  if (!list.length) return;
+  let pos = list.findIndex(x => x.i === currentIndex);
+  pos = pos < 0 ? 0 : (pos + dir + list.length) % list.length;
+  loadTrack(list[pos].i, true, 0);
+}
+$("#playBtn").addEventListener("click", () => {
+  if (currentIndex < 0) { const l = visibleTracks(); if (l.length) loadTrack(l[0].i, true, 0); return; }
+  ensureAudioGraph();
+  if (audio.paused) audio.play().catch(() => {}); else audio.pause();
+});
+$("#prevBtn").addEventListener("click", () => step(-1));
+$("#nextBtn").addEventListener("click", () => step(1));
+$("#repeatBtn").addEventListener("click", (e) => {
+  repeatOne = !repeatOne;
+  e.currentTarget.classList.toggle("on", repeatOne);
+  toast(repeatOne ? "تكرار العمل الحالي: مفعّل" : "تكرار العمل الحالي: متوقف");
+});
+audio.addEventListener("play", () => { $("#playBtn").textContent = "⏸"; renderGrid(); });
+audio.addEventListener("pause", () => { $("#playBtn").textContent = "▶"; renderGrid(); saveResume(); });
+audio.addEventListener("timeupdate", () => {
+  if (audio.duration) $("#seek").value = Math.round(audio.currentTime / audio.duration * 1000);
+  $("#tCur").textContent = fmt(audio.currentTime);
+  $("#tDur").textContent = fmt(audio.duration);
+  throttledSave();
+});
+audio.addEventListener("loadedmetadata", () => { $("#tDur").textContent = fmt(audio.duration); });
+audio.addEventListener("ended", () => {
+  clearResume();
+  if (sleepMode === "track") { stopSleep(); return; }
+  if (repeatOne) { audio.currentTime = 0; audio.play().catch(() => {}); return; }
+  step(1);
+});
+$("#seek").addEventListener("input", (e) => {
+  if (audio.duration) audio.currentTime = e.target.value / 1000 * audio.duration;
+});
+$("#vol").addEventListener("input", (e) => { audio.volume = e.target.value / 100; });
+$("#eqBtn").addEventListener("click", () => $("#eqDock").scrollIntoView({ behavior: "smooth", block: "center" }));
+$("#storyBtn").addEventListener("click", () => $("#storyPanel").scrollIntoView({ behavior: "smooth", block: "center" }));
+
+/* ================= الاستكمال التلقائي ================= */
+let lastSave = 0;
+function saveResume() {
+  if (currentIndex < 0 || !audio.duration) return;
+  try {
+    localStorage.setItem(LS_RESUME, JSON.stringify({ i: currentIndex, t: Math.floor(audio.currentTime), done: audio.ended }));
+  } catch (e) {}
+}
+function throttledSave() { const n = Date.now(); if (n - lastSave > 5000) { lastSave = n; saveResume(); } }
+function clearResume() { try { localStorage.removeItem(LS_RESUME); } catch (e) {} }
+function checkResume() {
+  let r = null;
+  try { r = JSON.parse(localStorage.getItem(LS_RESUME) || "null"); } catch (e) {}
+  if (!r || typeof r.i !== "number" || !LIBRARY[r.i] || r.t < 10) return;
+  $("#resumeText").textContent = "توقفت عند «" + LIBRARY[r.i].title + "» — الدقيقة " + fmt(r.t) + ".";
+  $("#resumeBar").classList.add("show");
+  $("#resumeBtn").addEventListener("click", () => {
+    $("#resumeBar").classList.remove("show");
+    loadTrack(r.i, true, r.t);
+  });
+  $("#resumeDismiss").addEventListener("click", () => { $("#resumeBar").classList.remove("show"); clearResume(); });
+}
+
+/* ================= مؤقت النوم ================= */
+let sleepMode = "0", sleepEndAt = 0, sleepInt = null;
+function cancelSleepTimer() {
+  if (sleepInt) { clearInterval(sleepInt); sleepInt = null; }
+  sleepEndAt = 0;
+  if (masterGain && actx) masterGain.gain.setTargetAtTime(1, actx.currentTime, 0.2);
+}
+function stopSleep() {
+  /* انتهت المدة أو انتهى العمل: إيقاف فعلي */
+  cancelSleepTimer();
+  sleepMode = "0"; $("#sleepSel").value = "0"; $("#sleepCd").textContent = "";
+  audio.pause();
+  toast("مؤقت النوم: توقف التشغيل 🌙");
+}
+$("#sleepSel").addEventListener("change", (e) => {
+  const v = e.target.value;
+  cancelSleepTimer();
+  sleepMode = v;
+  if (v === "0") { $("#sleepCd").textContent = ""; return; }
+  if (v === "track") { $("#sleepCd").textContent = "سيتوقف عند انتهاء العمل الحالي"; return; }
+  sleepEndAt = Date.now() + Number(v) * 60 * 1000;
+  sleepInt = setInterval(tickSleep, 500);
+  tickSleep();
+  toast("مؤقت النوم: سيتوقف التشغيل بعد " + v + " دقيقة");
+});
+function tickSleep() {
+  const left = sleepEndAt - Date.now();
+  if (left <= 0) { stopSleep(); return; }
+  $("#sleepCd").textContent = "الإيقاف بعد " + fmt(left / 1000);
+  /* خفض تدريجي للصوت في آخر ١٠ ثوانٍ */
+  if (masterGain && actx) {
+    const target = left <= 10000 ? Math.max(0, left / 10000) : 1;
+    masterGain.gain.setTargetAtTime(target, actx.currentTime, 0.4);
+  }
+}
+
+/* ---------- تنبيهات ---------- */
+let toastTimer = null;
+function toast(msg) {
+  const el = $("#toast");
+  el.textContent = msg; el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
+}
+
+/* ---------- بدء التشغيل ---------- */
+buildBandsUI();
+(function initEq() {
+  const saved = loadCustomEq();
+  if (saved) {
+    $("#customBtn").style.display = "";
+    eqValues = saved.slice(); syncBandUI(); setPresetUI("custom");
+  }
+})();
+renderCats();
+renderGrid();
+checkResume();
+</script>
+</body>
+</html>

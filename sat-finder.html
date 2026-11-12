@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>دليل الترددات وموجه الطبق الذكي — جنود الخفاء</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#0a1120;
+        --bg2:#0f1a30;
+        --card:#12233f;
+        --card2:#16294a;
+        --line:#22385e;
+        --gold:#f0b429;
+        --gold2:#d99a16;
+        --cyan:#38bdf8;
+        --text:#eef3fb;
+        --muted:#9db1cf;
+        --green:#34d399;
+        --red:#f87171;
+        --radius:16px;
+      }
+      *{ box-sizing:border-box; }
+      html{ -webkit-text-size-adjust:100%; }
+      body{
+        margin:0;
+        font-family:"Cairo", system-ui, sans-serif;
+        background:
+          radial-gradient(900px 480px at 85% -10%, rgba(56,189,248,.12), transparent 60%),
+          radial-gradient(800px 500px at 0% 0%, rgba(240,180,41,.10), transparent 55%),
+          linear-gradient(180deg, var(--bg2), var(--bg) 320px);
+        color:var(--text);
+        min-height:100vh;
+      }
+      button, input, select{ font-family:inherit; }
+      button, [role="button"], select, input:not([type="checkbox"]){ min-height:44px; }
+      .wrap{ max-width:860px; margin:0 auto; padding:18px 14px 56px; }
+
+      /* ===== Hero ===== */
+      .hero{ text-align:center; padding:10px 4px 4px; }
+      .hero .dish{ font-size:44px; line-height:1; filter:drop-shadow(0 6px 18px rgba(240,180,41,.35)); }
+      .hero h1{ margin:10px 0 4px; font-size:clamp(24px, 6vw, 36px); font-weight:900; line-height:1.35; }
+      .hero h1 .gold{ color:var(--gold); }
+      .hero p{ margin:0 auto; max-width:520px; color:var(--muted); font-size:15px; line-height:1.9; }
+      .brand{ margin-top:10px; display:inline-block; font-size:13px; font-weight:700; color:var(--gold);
+        border:1px solid rgba(240,180,41,.45); border-radius:999px; padding:5px 14px; background:rgba(240,180,41,.08); }
+
+      /* ===== Tabs ===== */
+      .tabs{ display:flex; gap:8px; margin:22px 0 18px; background:var(--card); border:1px solid var(--line);
+        border-radius:999px; padding:5px; }
+      .tabs button{ flex:1; border:0; border-radius:999px; background:transparent; color:var(--muted);
+        font-size:16px; font-weight:800; cursor:pointer; padding:10px 6px; transition:.2s; }
+      .tabs button.active{ background:linear-gradient(180deg, var(--gold), var(--gold2)); color:#231a02; box-shadow:0 4px 14px rgba(240,180,41,.35); }
+
+      /* ===== Search & chips ===== */
+      .searchbox{ position:relative; margin-bottom:12px; }
+      .searchbox input{ width:100%; border:1px solid var(--line); background:var(--card); color:var(--text);
+        border-radius:var(--radius); padding:12px 44px 12px 14px; font-size:16px; outline:none; }
+      .searchbox input:focus{ border-color:var(--gold); }
+      .searchbox .ico{ position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:19px; opacity:.8; }
+      .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+      .chip{ border:1px solid var(--line); background:var(--card); color:var(--muted); border-radius:999px;
+        padding:8px 14px; font-size:14px; font-weight:700; cursor:pointer; min-height:40px; }
+      .chip.active{ background:rgba(240,180,41,.14); border-color:var(--gold); color:var(--gold); }
+      .count{ color:var(--muted); font-size:13.5px; margin:2px 2px 12px; }
+
+      /* ===== Satellite sections & TP cards ===== */
+      .sat-head{ display:flex; align-items:center; gap:10px; margin:22px 0 10px; }
+      .sat-head .orb{ background:linear-gradient(180deg, var(--gold), var(--gold2)); color:#231a02; font-weight:900;
+        border-radius:10px; padding:4px 12px; font-size:15px; direction:ltr; unicode-bidi:embed; }
+      .sat-head h2{ margin:0; font-size:20px; font-weight:900; }
+      .sat-head .ln{ flex:1; height:1px; background:var(--line); }
+      .tp-grid{ display:grid; grid-template-columns:1fr; gap:10px; }
+      @media (min-width:640px){ .tp-grid{ grid-template-columns:1fr 1fr; } }
+      .tp{ background:linear-gradient(180deg, var(--card2), var(--card)); border:1px solid var(--line);
+        border-radius:var(--radius); padding:14px; }
+      .tp-top{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+      .tp-freq{ font-size:27px; font-weight:900; letter-spacing:.4px; direction:ltr; unicode-bidi:embed; color:#fff; }
+      .tp-freq small{ font-size:12px; color:var(--muted); font-weight:700; }
+      .pol{ font-weight:900; border-radius:8px; padding:3px 10px; font-size:14px; direction:ltr; unicode-bidi:embed; }
+      .pol.V{ background:rgba(56,189,248,.15); color:var(--cyan); border:1px solid rgba(56,189,248,.4); }
+      .pol.H{ background:rgba(240,180,41,.13); color:var(--gold); border:1px solid rgba(240,180,41,.4); }
+      .tp-meta{ display:flex; gap:14px; flex-wrap:wrap; color:var(--muted); font-size:13.5px; margin-top:6px; }
+      .tp-meta b{ color:var(--text); direction:ltr; unicode-bidi:embed; }
+      .cat{ font-size:12px; font-weight:800; border-radius:999px; padding:2px 10px; }
+      .cat.sport{ background:rgba(52,211,153,.14); color:var(--green); }
+      .cat.fun{ background:rgba(167,139,250,.16); color:#c4b5fd; }
+      .cat.news{ background:rgba(248,113,113,.13); color:var(--red); }
+      .channels{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+      .channels span{ background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:8px;
+        padding:3px 9px; font-size:13px; }
+      .empty{ text-align:center; color:var(--muted); padding:34px 10px; border:1px dashed var(--line); border-radius:var(--radius); line-height:2; }
+      .note{ margin-top:22px; background:rgba(240,180,41,.07); border:1px solid rgba(240,180,41,.35);
+        border-radius:var(--radius); padding:12px 14px; font-size:13.5px; line-height:1.95; color:#f3e3bb; }
+
+      /* ===== Finder ===== */
+      .panel{ background:linear-gradient(180deg, var(--card2), var(--card)); border:1px solid var(--line);
+        border-radius:var(--radius); padding:16px; margin-bottom:14px; }
+      .panel h3{ margin:0 0 12px; font-size:17px; font-weight:900; color:var(--gold); }
+      label.flabel{ display:block; font-size:13.5px; color:var(--muted); margin:0 0 6px; font-weight:700; }
+      select, .numin{ width:100%; background:var(--bg); border:1px solid var(--line); color:var(--text);
+        border-radius:12px; padding:10px 12px; font-size:16px; outline:none; }
+      select:focus, .numin:focus{ border-color:var(--gold); }
+      .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+      .btn{ border:0; border-radius:12px; cursor:pointer; font-weight:900; font-size:15.5px; padding:11px 14px; width:100%; }
+      .btn-gold{ background:linear-gradient(180deg, var(--gold), var(--gold2)); color:#231a02; box-shadow:0 4px 14px rgba(240,180,41,.3); }
+      .btn-ghost{ background:transparent; border:1px solid var(--line); color:var(--text); }
+      .btn-cyan{ background:rgba(56,189,248,.14); border:1px solid rgba(56,189,248,.5); color:var(--cyan); }
+      .cities{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+      .cities button{ border:1px solid var(--line); background:rgba(255,255,255,.04); color:var(--muted);
+        border-radius:999px; padding:6px 12px; font-size:13px; font-weight:700; cursor:pointer; min-height:38px; }
+      .status{ font-size:13.5px; color:var(--muted); margin-top:10px; line-height:1.8; min-height:20px; }
+      .status.ok{ color:var(--green); }
+      .status.err{ color:var(--red); }
+
+      .stats{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+      @media (min-width:640px){ .stats{ grid-template-columns:repeat(4, 1fr); } }
+      .stat{ background:linear-gradient(180deg, var(--card2), var(--card)); border:1px solid var(--line);
+        border-radius:var(--radius); padding:14px 10px; text-align:center; }
+      .stat .v{ font-size:31px; font-weight:900; color:#fff; direction:ltr; unicode-bidi:embed; line-height:1.15; }
+      .stat .v small{ font-size:15px; color:var(--gold); }
+      .stat .k{ font-size:13px; color:var(--muted); font-weight:700; margin-top:4px; line-height:1.6; }
+      .stat.hero-stat{ grid-column:span 2; border-color:rgba(240,180,41,.55); background:linear-gradient(180deg, rgba(240,180,41,.13), var(--card)); }
+      @media (min-width:640px){ .stat.hero-stat{ grid-column:span 1; } }
+      .stat.hero-stat .v{ color:var(--gold); font-size:36px; }
+
+      /* ===== Compass ===== */
+      .compass-wrap{ text-align:center; }
+      .compass{ position:relative; width:min(320px, 84vw); aspect-ratio:1; margin:6px auto 4px; }
+      .dial{ position:absolute; inset:0; border-radius:50%; border:2px solid var(--line);
+        background:radial-gradient(circle at 50% 42%, #1a2f52, #0d1830 72%);
+        box-shadow:inset 0 0 40px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.35); will-change:transform; }
+      .dial .card-l{ position:absolute; left:50%; top:50%; font-weight:900; font-size:19px; color:var(--muted); transform:translate(-50%,-50%); }
+      .dial .card-l.n{ color:var(--red); }
+      .dial .tick{ position:absolute; left:50%; top:50%; width:2px; height:9px; background:rgba(255,255,255,.28);
+        transform-origin:50% 0; border-radius:2px; }
+      .dial .tick.big{ height:14px; background:rgba(255,255,255,.55); }
+      .target-dot{ position:absolute; left:50%; top:50%; width:0; height:0; z-index:3; }
+      .target-dot i{ position:absolute; left:-11px; top:calc(-1 * min(160px, 42vw) + 16px); width:22px; height:22px; border-radius:50%;
+        background:var(--gold); border:3px solid #fff3d6; box-shadow:0 0 16px rgba(240,180,41,.9); display:block; }
+      .needle{ position:absolute; left:50%; top:50%; width:0; height:0; z-index:2; will-change:transform; }
+      .needle .arrow{ position:absolute; left:-17px; top:calc(-1 * min(160px, 42vw) + 44px); width:34px; height:calc(min(160px, 42vw) - 58px);
+        background:linear-gradient(180deg, var(--gold), rgba(240,180,41,.15));
+        clip-path:polygon(50% 0, 100% 100%, 50% 82%, 0 100%); filter:drop-shadow(0 0 8px rgba(240,180,41,.5)); }
+      .hub{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:58px; height:58px; border-radius:50%;
+        background:#0d1830; border:2px solid var(--gold); z-index:4; display:flex; align-items:center; justify-content:center;
+        font-size:23px; }
+      .compass-read{ margin-top:10px; font-size:15px; color:var(--muted); line-height:2; }
+      .compass-read b{ color:#fff; direction:ltr; unicode-bidi:embed; }
+      .turn-hint{ font-size:19px; font-weight:900; margin-top:2px; }
+      .turn-hint.on{ color:var(--green); }
+      .turn-hint.off{ color:var(--gold); }
+      .hidden{ display:none !important; }
+      footer{ text-align:center; color:var(--muted); font-size:13px; margin-top:30px; line-height:2; }
+      footer .gold{ color:var(--gold); font-weight:800; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <header class="hero">
+        <div class="dish" aria-hidden="true">📡</div>
+        <h1>دليل الترددات و<span class="gold">موجه الطبق الذكي</span></h1>
+        <p>أهم ترددات الأقمار الصناعية الرياضية والترفيهية، وأداة توجيه تحسب لك اتجاه الطبق وزاوية الارتفاع وميل العدسة حسب موقعك — وبوصلة حية من حساسات موبايلك.</p>
+        <span class="brand">🛡️ جنود الخفاء — حب الخير للغير</span>
+      </header>
+
+      <nav class="tabs" role="tablist" aria-label="أقسام التطبيق">
+        <button id="tabFreq" class="active" role="tab" aria-selected="true">📶 دليل الترددات</button>
+        <button id="tabFind" role="tab" aria-selected="false">🧭 موجه الطبق</button>
+      </nav>
+
+      <!-- ============ Frequencies ============ -->
+      <section id="viewFreq">
+        <div class="searchbox">
+          <span class="ico" aria-hidden="true">🔍</span>
+          <input id="search" type="search" inputmode="search" placeholder="ابحث باسم القناة أو القمر… مثال: أون سبورت، Rai، نايل سات" aria-label="بحث باسم القناة أو القمر" />
+        </div>
+        <div class="chips" id="satChips" role="group" aria-label="تصفية حسب القمر"></div>
+        <p class="count" id="resultCount"></p>
+        <div id="freqList"></div>
+        <div class="note">⚠️ <b>تنبيه:</b> الترددات تتغير من وقت لآخر بقرار من القنوات نفسها. لو تردد لم يعمل معك، جرّب البحث الأعمى (Blind Scan) من الرسيفر، وستجد أي تردد جديد تلقائياً.</div>
+      </section>
+
+      <!-- ============ Finder ============ -->
+      <section id="viewFind" class="hidden">
+        <div class="panel">
+          <h3>١) اختر القمر الصناعي</h3>
+          <label class="flabel" for="satSelect">القمر المراد توجيه الطبق إليه</label>
+          <select id="satSelect"></select>
+        </div>
+
+        <div class="panel">
+          <h3>٢) حدد موقعك</h3>
+          <button class="btn btn-gold" id="btnGeo">📍 استخدم موقعي (GPS)</button>
+          <p class="status" id="geoStatus">أو أدخل الإحداثيات يدوياً بالأسفل — القيم الافتراضية مضبوطة على القاهرة.</p>
+          <div class="row2">
+            <div>
+              <label class="flabel" for="latIn">خط العرض (Latitude)</label>
+              <input class="numin" id="latIn" type="number" step="0.0001" min="-90" max="90" value="30.0444" dir="ltr" />
+            </div>
+            <div>
+              <label class="flabel" for="lonIn">خط الطول (Longitude)</label>
+              <input class="numin" id="lonIn" type="number" step="0.0001" min="-180" max="180" value="31.2357" dir="ltr" />
+            </div>
+          </div>
+          <div class="cities" id="cityChips" aria-label="مدن سريعة"></div>
+        </div>
+
+        <div class="stats" id="statsBox">
+          <div class="stat hero-stat">
+            <div class="v" id="stAzT">—</div>
+            <div class="k">اتجاه الطبق (Azimuth)<br />بالنسبة للشمال الحقيقي</div>
+          </div>
+          <div class="stat">
+            <div class="v" id="stAzM">—</div>
+            <div class="k">الاتجاه المغناطيسي<br />(للبوصلة العادية)</div>
+          </div>
+          <div class="stat">
+            <div class="v" id="stEl">—</div>
+            <div class="k">زاوية الارتفاع (Elevation)<br />ميل الطبق لأعلى</div>
+          </div>
+          <div class="stat">
+            <div class="v" id="stSkew">—</div>
+            <div class="k">ميل العدسة (LNB Skew)<br />لفّ العدسة حول محورها</div>
+          </div>
+        </div>
+        <p class="status err hidden" id="horizonWarn">⚠️ هذا القمر تحت الأفق من موقعك الحالي، ولا يمكن استقباله من هنا.</p>
+
+        <div class="panel compass-wrap">
+          <h3 style="text-align:right">٣) البوصلة الحية</h3>
+          <div class="compass" aria-hidden="true">
+            <div class="dial" id="dial"></div>
+            <div class="needle" id="needle"><div class="arrow"></div></div>
+            <div class="target-dot" id="targetDot"><i></i></div>
+            <div class="hub">🛰️</div>
+          </div>
+          <button class="btn btn-cyan" id="btnCompass">🧭 تشغيل البوصلة الحية</button>
+          <p class="status" id="compassStatus">البوصلة تستخدم حساسات الاتجاه في موبايلك لتدور معك لحظياً.</p>
+          <div class="compass-read">
+            اتجاه موبايلك الآن: <b id="headingOut">—</b><br />
+            اتجاه القمر المطلوب: <b id="targetOut">—</b>
+          </div>
+          <div class="turn-hint off" id="turnHint">اختر قمراً وحدد موقعك لبدء التوجيه</div>
+        </div>
+
+        <div class="note">💡 <b>ملحوظة مهمة:</b> هذه الأرقام تقريبية وتصلح للتوجيه الأولي للطبق. بعد الوصول للاتجاه الصحيح، اضبط الإشارة بدقة من شاشة قياس الإشارة في الرسيفر بحركات صغيرة جداً حتى تصل لأعلى نسبة جودة (Quality).</div>
+      </section>
+
+      <footer>
+        صُنع بحب لأعضاء <span class="gold">جنود الخفاء — حب الخير للغير</span> 🛡️<br />
+        الأقمار والترددات قابلة للتحديث من مصفوفة البيانات داخل الكود مباشرة.
+      </footer>
+    </div>
+
+    <script>
+    /* =========================================================
+       قاعدة بيانات الأقمار والترددات
+       لإضافة تردد جديد: انسخ أي عنصر داخل "tps" وعدّل قيمه.
+       freq = التردد بالميجاهرتز | pol = "V" عمودي أو "H" أفقي
+       sr = معدل الترميز | cat = sport رياضة / fun ترفيه / news أخبار
+       ========================================================= */
+    var SATS = [
+      {
+        id: "nilesat", name: "نايل سات", nameEn: "Nilesat", lon: -7.0, pos: "7°W",
+        tps: [
+          { freq: 11862, pol: "V", sr: 27500, cat: "sport", channels: ["ON Time Sports 1", "ON Time Sports 2", "ON Time Sports 3"] },
+          { freq: 11680, pol: "H", sr: 27500, cat: "sport", channels: ["الجزائرية الأرضية (Programme National)"] },
+          { freq: 11449, pol: "H", sr: 27500, cat: "fun",   channels: ["DMC", "DMC Drama", "DMC Kids"] },
+          { freq: 11785, pol: "V", sr: 27500, cat: "fun",   channels: ["CBC", "Al Nahar", "Al Nahar Drama"] },
+          { freq: 11470, pol: "V", sr: 27500, cat: "fun",   channels: ["MBC Masr", "MBC Masr 2"] },
+          { freq: 11296, pol: "H", sr: 27500, cat: "fun",   channels: ["Rotana Khalijiah", "Rotana Cinema", "Rotana Aflam"] }
+        ]
+      },
+      {
+        id: "amos", name: "آموس", nameEn: "Amos", lon: -4.0, pos: "4°W",
+        tps: [
+          { freq: 11140, pol: "H", sr: 30000, cat: "fun",   channels: ["1+1 Ukraine", "ICTV", "XSport"] },
+          { freq: 12073, pol: "H", sr: 30000, cat: "sport", channels: ["Setanta Sports Ukraine"] },
+          { freq: 10974, pol: "V", sr: 30000, cat: "sport", channels: ["Sport 1 Ukraine", "Sport 2 Ukraine"] }
+        ]
+      },
+      {
+        id: "hotbird", name: "هوت بيرد", nameEn: "Hotbird", lon: 13.0, pos: "13°E",
+        tps: [
+          { freq: 10992, pol: "V", sr: 27500, cat: "sport", channels: ["Rai 1", "Rai 2", "Rai 3", "Rai Sport", "Rai Movie"] },
+          { freq: 11766, pol: "V", sr: 29900, cat: "fun",   channels: ["Rai 1 HD", "Rai 2 HD", "Rai Movie HD", "Rai Premium HD"] },
+          { freq: 11432, pol: "V", sr: 29900, cat: "fun",   channels: ["Canale 5", "Italia 1", "Rete 4", "La 5"] },
+          { freq: 10719, pol: "V", sr: 27500, cat: "fun",   channels: ["TVP Polonia"] },
+          { freq: 11096, pol: "H", sr: 27500, cat: "news",  channels: ["Euronews"] }
+        ]
+      },
+      {
+        id: "eutelsat16", name: "يوتلسات 16", nameEn: "Eutelsat 16A", lon: 16.0, pos: "16°E",
+        tps: [
+          { freq: 10804, pol: "H", sr: 29950, cat: "sport", channels: ["SuperSport 1 Albania", "SuperSport 2 Albania"] },
+          { freq: 10845, pol: "H", sr: 30000, cat: "fun",   channels: ["Film Aksion", "Film Komedi", "Top Channel"] }
+        ]
+      },
+      {
+        id: "astra", name: "أسترا", nameEn: "Astra 1", lon: 19.2, pos: "19.2°E",
+        tps: [
+          { freq: 11494, pol: "H", sr: 22000, cat: "fun",   channels: ["Das Erste HD", "arte HD", "One HD"] },
+          { freq: 11362, pol: "H", sr: 22000, cat: "fun",   channels: ["ZDF HD", "ZDFneo HD", "3sat HD"] },
+          { freq: 12188, pol: "H", sr: 27500, cat: "fun",   channels: ["RTL", "RTL Zwei", "VOX", "Super RTL"] },
+          { freq: 11464, pol: "H", sr: 22000, cat: "fun",   channels: ["ProSieben HD", "Sat.1 HD", "Kabel Eins HD"] },
+          { freq: 12545, pol: "H", sr: 22000, cat: "fun",   channels: ["Sat.1", "ProSieben", "Kabel Eins", "Welt"] }
+        ]
+      },
+      {
+        id: "badr", name: "بدر / عرب سات", nameEn: "Arabsat Badr", lon: 26.0, pos: "26°E",
+        tps: [
+          { freq: 11976, pol: "V", sr: 27500, cat: "fun",   channels: ["MBC 1", "MBC 4", "MBC Action", "MBC Drama"] },
+          { freq: 12418, pol: "H", sr: 27500, cat: "sport", channels: ["SSC Sports — الرياضية السعودية"] },
+          { freq: 12683, pol: "V", sr: 27500, cat: "sport", channels: ["Arryadia — الرياضية المغربية"] },
+          { freq: 12149, pol: "H", sr: 27500, cat: "fun",   channels: ["Saudi TV", "SBC", "Thikrayat"] },
+          { freq: 12130, pol: "V", sr: 27500, cat: "fun",   channels: ["Dubai TV", "Sama Dubai", "Dubai One"] },
+          { freq: 11938, pol: "V", sr: 27500, cat: "fun",   channels: ["Abu Dhabi TV", "AD Drama"] }
+        ]
+      }
+    ];
+
+    var CAT_LABEL = { sport: "⚽ رياضة", fun: "🎬 ترفيه", news: "📰 أخبار" };
+
+    /* ============ Tabs ============ */
+    var tabFreq = document.getElementById("tabFreq");
+    var tabFind = document.getElementById("tabFind");
+    var viewFreq = document.getElementById("viewFreq");
+    var viewFind = document.getElementById("viewFind");
+    function showTab(which){
+      var f = which === "freq";
+      tabFreq.classList.toggle("active", f);
+      tabFind.classList.toggle("active", !f);
+      tabFreq.setAttribute("aria-selected", f);
+      tabFind.setAttribute("aria-selected", !f);
+      viewFreq.classList.toggle("hidden", !f);
+      viewFind.classList.toggle("hidden", f);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    tabFreq.addEventListener("click", function(){ showTab("freq"); });
+    tabFind.addEventListener("click", function(){ showTab("find"); });
+
+    /* ============ Frequencies rendering + search ============ */
+    var activeSat = "all";
+    var chipsBox = document.getElementById("satChips");
+    var freqList = document.getElementById("freqList");
+    var resultCount = document.getElementById("resultCount");
+    var searchIn = document.getElementById("search");
+
+    function makeChip(id, label){
+      var b = document.createElement("button");
+      b.className = "chip" + (activeSat === id ? " active" : "");
+      b.textContent = label;
+      b.addEventListener("click", function(){ activeSat = id; renderChips(); renderFreqs(); });
+      return b;
+    }
+    function renderChips(){
+      chipsBox.innerHTML = "";
+      chipsBox.appendChild(makeChip("all", "🌐 الكل"));
+      SATS.forEach(function(s){ chipsBox.appendChild(makeChip(s.id, "🛰️ " + s.name + " " + s.pos)); });
+    }
+    function norm(t){
+      return (t || "").toLowerCase()
+        .replace(/[ً-ٰٟ]/g, "")
+        .replace(/[إأآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي")
+        .replace(/\s+/g, " ").trim();
+    }
+    function renderFreqs(){
+      var q = norm(searchIn.value);
+      freqList.innerHTML = "";
+      var total = 0;
+      SATS.forEach(function(s){
+        if (activeSat !== "all" && activeSat !== s.id) return;
+        var satMatch = !q || norm(s.name).indexOf(q) > -1 || norm(s.nameEn).indexOf(q) > -1 || norm(s.pos).indexOf(q) > -1;
+        var tps = s.tps.filter(function(tp){
+          if (satMatch) return true;
+          var hay = norm(tp.channels.join(" ") + " " + tp.freq + " " + tp.pol + " " + tp.sr);
+          return hay.indexOf(q) > -1;
+        });
+        if (!tps.length) return;
+        total += tps.length;
+
+        var head = document.createElement("div");
+        head.className = "sat-head";
+        head.innerHTML = '<span class="orb">' + s.pos + '</span><h2>' + s.name + ' <span style="color:var(--muted);font-size:14px">' + s.nameEn + '</span></h2><span class="ln"></span>';
+        freqList.appendChild(head);
+
+        var grid = document.createElement("div");
+        grid.className = "tp-grid";
+        tps.forEach(function(tp){
+          var card = document.createElement("article");
+          card.className = "tp";
+          var chans = tp.channels.map(function(c){ return "<span>" + c + "</span>"; }).join("");
+          card.innerHTML =
+            '<div class="tp-top"><div class="tp-freq">' + tp.freq + ' <small>MHz</small></div>' +
+            '<span class="pol ' + tp.pol + '">' + tp.pol + (tp.pol === "V" ? " عمودي" : " أفقي") + '</span></div>' +
+            '<div class="tp-meta"><span>معدل الترميز: <b>' + tp.sr + '</b></span>' +
+            '<span class="cat ' + tp.cat + '">' + CAT_LABEL[tp.cat] + '</span></div>' +
+            '<div class="channels">' + chans + '</div>';
+          grid.appendChild(card);
+        });
+        freqList.appendChild(grid);
+      });
+      if (!total){
+        freqList.innerHTML = '<div class="empty">لا توجد نتائج مطابقة لبحثك 🔍<br />جرّب اسم قناة آخر أو اختر «الكل» من الأقمار بالأعلى.</div>';
+        resultCount.textContent = "";
+      } else {
+        resultCount.textContent = "عدد الترددات المعروضة: " + total;
+      }
+    }
+    searchIn.addEventListener("input", renderFreqs);
+    renderChips();
+    renderFreqs();
+
+    /* ============ Dish finder math ============ */
+    var satSelect = document.getElementById("satSelect");
+    var latIn = document.getElementById("latIn");
+    var lonIn = document.getElementById("lonIn");
+    SATS.forEach(function(s){
+      var o = document.createElement("option");
+      o.value = s.id;
+      o.textContent = "🛰️ " + s.name + " — " + s.pos;
+      satSelect.appendChild(o);
+    });
+
+    var CITIES = [
+      { n: "القاهرة", lat: 30.0444, lon: 31.2357 },
+      { n: "الإسكندرية", lat: 31.2001, lon: 29.9187 },
+      { n: "الجيزة", lat: 30.0131, lon: 31.2089 },
+      { n: "أسوان", lat: 24.0889, lon: 32.8998 },
+      { n: "الرياض", lat: 24.7136, lon: 46.6753 },
+      { n: "دبي", lat: 25.2048, lon: 55.2708 },
+      { n: "الدوحة", lat: 25.2854, lon: 51.5310 },
+      { n: "الدار البيضاء", lat: 33.5731, lon: -7.5898 },
+      { n: "الجزائر", lat: 36.7538, lon: 3.0588 },
+      { n: "تونس", lat: 36.8065, lon: 10.1815 }
+    ];
+    var cityBox = document.getElementById("cityChips");
+    CITIES.forEach(function(c){
+      var b = document.createElement("button");
+      b.textContent = c.n;
+      b.addEventListener("click", function(){
+        latIn.value = c.lat; lonIn.value = c.lon;
+        setStatus("geoStatus", "تم ضبط الموقع على: " + c.n, "ok");
+        calc();
+      });
+      cityBox.appendChild(b);
+    });
+
+    function setStatus(id, msg, cls){
+      var el = document.getElementById(id);
+      el.textContent = msg;
+      el.className = "status" + (cls ? " " + cls : "");
+    }
+    function rad(d){ return d * Math.PI / 180; }
+    function deg(r){ return r * 180 / Math.PI; }
+    function norm360(d){ return ((d % 360) + 360) % 360; }
+
+    /* Magnetic declination (approx.) from the 2025 position of the
+       magnetic north pole (~80.7°N, 72.7°W): bearing difference
+       between the true pole and the magnetic pole from the user. */
+    function declination(lat, lon){
+      var pLat = rad(lat), mLat = rad(80.7), dLon = rad(-72.7 - lon);
+      var y = Math.sin(dLon) * Math.cos(mLat);
+      var x = Math.cos(pLat) * Math.sin(mLat) - Math.sin(pLat) * Math.cos(mLat) * Math.cos(dLon);
+      return deg(Math.atan2(y, x));
+    }
+
+    var current = { azT: null, azM: null, el: null, skew: null };
+    var heading = null; /* device heading, degrees clockwise from true north */
+
+    function fmt(n, unit){ return n === null || isNaN(n) ? "—" : n.toFixed(1) + "<small>" + unit + "</small>"; }
+
+    function calc(){
+      var lat = parseFloat(latIn.value), lon = parseFloat(lonIn.value);
+      var sat = SATS.filter(function(s){ return s.id === satSelect.value; })[0] || SATS[0];
+      if (isNaN(lat) || isNaN(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180){
+        current = { azT: null, azM: null, el: null, skew: null };
+        paintStats(); return;
+      }
+      var dLon = rad(sat.lon - lon);
+      var pLat = rad(lat);
+      /* Azimuth to the sub-satellite point (equator, sat.lon) */
+      var az = norm360(deg(Math.atan2(Math.sin(dLon), -Math.sin(pLat) * Math.cos(dLon))));
+      /* Elevation (geostationary geometry, Re/(Re+h) = 0.15127) */
+      var cosC = Math.cos(pLat) * Math.cos(dLon);
+      var el = deg(Math.atan2(cosC - 0.15127, Math.sqrt(Math.max(0, 1 - cosC * cosC))));
+      /* LNB skew (polarisation tilt) */
+      var skew = deg(Math.atan(Math.sin(dLon) / Math.tan(pLat)));
+      if (lat < 0) skew = -skew;
+      var decl = declination(lat, lon);
+
+      current.azT = az;
+      current.el = el;
+      current.skew = Math.max(-90, Math.min(90, skew));
+      current.azM = norm360(az - decl);
+      paintStats();
+      document.getElementById("horizonWarn").classList.toggle("hidden", el > 0);
+      updateCompassHint();
+    }
+    function paintStats(){
+      document.getElementById("stAzT").innerHTML = fmt(current.azT, "°");
+      document.getElementById("stAzM").innerHTML = fmt(current.azM, "°");
+      document.getElementById("stEl").innerHTML = fmt(current.el, "°");
+      document.getElementById("stSkew").innerHTML = (current.skew === null ? "—" : (current.skew > 0 ? "+" : "") + fmt(current.skew, "°"));
+      document.getElementById("targetOut").textContent = current.azT === null ? "—" : current.azT.toFixed(1) + "°";
+    }
+    satSelect.addEventListener("change", calc);
+    latIn.addEventListener("input", calc);
+    lonIn.addEventListener("input", calc);
+
+    /* ============ Geolocation ============ */
+    document.getElementById("btnGeo").addEventListener("click", function(){
+      if (!("geolocation" in navigator)){
+        setStatus("geoStatus", "عذراً، متصفحك لا يدعم تحديد الموقع. أدخل الإحداثيات يدوياً أو اختر مدينة.", "err");
+        return;
+      }
+      setStatus("geoStatus", "جارٍ تحديد موقعك… ⏳", "");
+      navigator.geolocation.getCurrentPosition(function(pos){
+        latIn.value = pos.coords.latitude.toFixed(4);
+        lonIn.value = pos.coords.longitude.toFixed(4);
+        setStatus("geoStatus", "تم تحديد موقعك بنجاح ✅ (الدقة التقريبية: " + Math.round(pos.coords.accuracy) + " متر)", "ok");
+        calc();
+      }, function(err){
+        var msg = "تعذّر تحديد الموقع. تأكد من تفعيل GPS ومنح إذن الموقع للمتصفح، أو أدخل الإحداثيات يدوياً.";
+        if (err.code === 1) msg = "تم رفض إذن الموقع. فعّله من إعدادات المتصفح أو أدخل الإحداثيات يدوياً بالأسفل.";
+        setStatus("geoStatus", msg, "err");
+      }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+    });
+
+    /* ============ Compass ============ */
+    var dial = document.getElementById("dial");
+    /* build ticks + cardinal letters */
+    (function buildDial(){
+      var letters = [ { t: "N", c: "n", a: 0 }, { t: "E", a: 90 }, { t: "S", a: 180 }, { t: "W", a: 270 } ];
+      for (var i = 0; i < 72; i++){
+        var a = i * 5;
+        var tick = document.createElement("span");
+        tick.className = "tick" + (a % 30 === 0 ? " big" : "");
+        tick.style.transform = "translate(-50%,-50%) rotate(" + a + "deg) translateY(calc(-1 * (min(160px, 42vw) - 10px)))";
+        dial.appendChild(tick);
+      }
+      letters.forEach(function(L){
+        var s = document.createElement("span");
+        s.className = "card-l" + (L.c ? " " + L.c : "");
+        s.textContent = L.t;
+        s.style.transform = "translate(-50%,-50%) rotate(" + L.a + "deg) translateY(calc(-1 * (min(160px, 42vw) - 34px))) rotate(" + (-L.a) + "deg)";
+        dial.appendChild(s);
+      });
+    })();
+
+    var needle = document.getElementById("needle");
+    var targetDot = document.getElementById("targetDot");
+    var orientationOn = false;
+
+    function paintCompass(){
+      if (current.azT === null) return;
+      var h = heading === null ? 0 : heading;
+      var rel = norm360(current.azT - h);
+      needle.style.transform = "rotate(" + rel + "deg)";
+      targetDot.style.transform = "rotate(" + rel + "deg)";
+      dial.style.transform = "rotate(" + (-h) + "deg)";
+      document.getElementById("headingOut").textContent = heading === null ? "— (فعّل البوصلة)" : heading.toFixed(0) + "°";
+      updateCompassHint();
+    }
+    function updateCompassHint(){
+      var hint = document.getElementById("turnHint");
+      if (current.azT === null){ hint.textContent = "اختر قمراً وحدد موقعك لبدء التوجيه"; hint.className = "turn-hint off"; return; }
+      if (heading === null){
+        hint.textContent = "وجّه الطبق ناحية " + current.azT.toFixed(0) + "° من الشمال (استخدم الأرقام أو فعّل البوصلة)";
+        hint.className = "turn-hint off"; return;
+      }
+      var diff = ((current.azT - heading + 540) % 360) - 180; /* -180..180, + = turn right */
+      if (Math.abs(diff) <= 5){
+        hint.textContent = "🎯 أحسنت! أنت في اتجاه القمر تقريباً — حرّك الطبق ببطء واضبط الإشارة من الرسيفر";
+        hint.className = "turn-hint on";
+      } else if (diff > 0){
+        hint.textContent = "↪️ لف يميناً " + Math.abs(diff).toFixed(0) + "°";
+        hint.className = "turn-hint off";
+      } else {
+        hint.textContent = "↩️ لف يساراً " + Math.abs(diff).toFixed(0) + "°";
+        hint.className = "turn-hint off";
+      }
+    }
+
+    function onOrientation(e){
+      var h = null;
+      if (typeof e.webkitCompassHeading === "number" && !isNaN(e.webkitCompassHeading)){
+        h = e.webkitCompassHeading; /* iOS: already degrees clockwise from north */
+      } else if (e.alpha !== null && e.alpha !== undefined){
+        h = norm360(360 - e.alpha);
+        /* On Android, alpha is relative to magnetic north in most browsers;
+           correct to true north with the local declination. */
+        var lat = parseFloat(latIn.value), lon = parseFloat(lonIn.value);
+        if (!isNaN(lat) && !isNaN(lon)) h = norm360(h + declination(lat, lon));
+      }
+      if (h === null || isNaN(h)) return;
+      /* light smoothing to reduce jitter */
+      if (heading === null) heading = h;
+      else {
+        var d = ((h - heading + 540) % 360) - 180;
+        heading = norm360(heading + d * 0.35);
+      }
+      paintCompass();
+    }
+
+    document.getElementById("btnCompass").addEventListener("click", function(){
+      var statusId = "compassStatus";
+      function start(){
+        window.addEventListener("deviceorientationabsolute", onOrientation, true);
+        window.addEventListener("deviceorientation", onOrientation, true);
+        orientationOn = true;
+        setStatus(statusId, "البوصلة تعمل الآن ✅ حرّك موبايلك ببطء واتبع السهم الذهبي حتى يشير للقمر.", "ok");
+        document.getElementById("btnCompass").textContent = "🧭 البوصلة تعمل — وجّه موبايلك الآن";
+      }
+      if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function"){
+        /* iOS 13+ needs explicit permission */
+        DeviceOrientationEvent.requestPermission().then(function(res){
+          if (res === "granted") start();
+          else setStatus(statusId, "لم يتم منح إذن الحساسات. لا مشكلة — استخدم أرقام الاتجاه بالأعلى مع أي بوصلة عادية.", "err");
+        }).catch(function(){
+          setStatus(statusId, "تعذّر طلب إذن الحساسات. استخدم أرقام الاتجاه بالأعلى مع أي بوصلة عادية.", "err");
+        });
+      } else if ("DeviceOrientationEvent" in window){
+        start();
+        setTimeout(function(){
+          if (orientationOn && heading === null){
+            setStatus(statusId, "يبدو أن جهازك لا يرسل بيانات اتجاه (لا توجد بوصلة مغناطيسية أو الحساسات مقيدة). الأرقام بالأعلى تكفيك للتوجيه مع بوصلة عادية.", "err");
+          }
+        }, 3500);
+      } else {
+        setStatus(statusId, "عذراً، متصفحك أو جهازك لا يدعم حساسات الاتجاه. اعتمد على الأرقام الكبيرة بالأعلى مع بوصلة عادية وستصل لنفس النتيجة.", "err");
+      }
+    });
+
+    calc();
+    paintCompass();
+    </script>
+  </body>
+</html>

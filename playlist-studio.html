@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>استوديو قوائم البث — M3U &amp; Xtream Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#0b1220; --bg2:#0e1628; --panel:#111c31; --panel2:#0d1729;
+  --line:#22334f; --line2:#2c4568;
+  --text:#e8eef7; --muted:#9db1c9; --faint:#6f87a5;
+  --cyan:#2fb9d8; --cyan-d:#0e7d99; --gold:#f0b93e; --green:#34c47c; --red:#f26d6d; --orange:#f59e4c;
+  --radius:14px;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo",system-ui,sans-serif;line-height:1.65;
+  background-image:radial-gradient(900px 420px at 85% -120px,rgba(47,185,216,.10),transparent 60%),radial-gradient(700px 380px at 8% -100px,rgba(240,185,62,.06),transparent 60%);}
+button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 70px}
+h1{font-size:clamp(24px,4.5vw,36px);font-weight:900;margin:0;line-height:1.3}
+h1 .en{font-family:var(--mono);font-size:.52em;color:var(--cyan);font-weight:600;letter-spacing:.5px;display:block;margin-top:2px}
+.lead{color:var(--muted);margin:8px 0 0;max-width:70ch}
+.privacy{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:rgba(52,196,124,.10);border:1px solid rgba(52,196,124,.35);color:#9fe6c3;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px}
+.privacy svg{flex:none}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:22px 0 6px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;text-align:center}
+.stat b{display:block;font-size:clamp(22px,3.4vw,30px);font-weight:900;font-variant-numeric:tabular-nums;line-height:1.2;font-family:var(--mono);letter-spacing:.5px}
+.stat span{font-size:12.5px;color:var(--muted);font-weight:700}
+.stat.c1 b{color:var(--cyan)} .stat.c2 b{color:var(--gold)} .stat.c3 b{color:var(--green)} .stat.c4 b{color:var(--orange)} .stat.c5 b{color:#c9d8ec}
+
+/* Sections */
+section.panel{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:18px}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+.sec-num{width:40px;height:40px;flex:none;border-radius:11px;background:rgba(47,185,216,.13);border:1px solid rgba(47,185,216,.4);display:grid;place-items:center;color:var(--cyan)}
+.sec-head h2{margin:0;font-size:20px;font-weight:800}
+.sec-head p{margin:0;color:var(--muted);font-size:13.5px;width:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+.sub{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.sub h3{margin:0 0 4px;font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
+.sub h3 .tag{font-family:var(--mono);font-size:11px;color:var(--cyan);background:rgba(47,185,216,.12);border:1px solid rgba(47,185,216,.35);padding:1px 8px;border-radius:999px;direction:ltr}
+.sub .hint{color:var(--faint);font-size:12.5px;margin:0 0 12px}
+label.f{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:10px 0 5px}
+input[type=text],input[type=password],input[type=url],input[type=number],select,textarea{
+  width:100%;background:#0a1322;border:1px solid var(--line2);border-radius:10px;color:var(--text);
+  padding:9px 12px;font-family:inherit;font-size:14.5px;outline:none;transition:border-color .15s, box-shadow .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(47,185,216,.18)}
+.mono{direction:ltr;text-align:left;font-family:var(--mono);font-size:13px}
+textarea.mono{font-size:12.5px;line-height:1.7}
+.row2{display:grid;grid-template-columns:1fr 110px;gap:10px}
+.pwd-wrap{position:relative}
+.pwd-wrap input{padding-left:44px}
+.eye{position:absolute;left:4px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px;display:grid;place-items:center;min-height:36px;min-width:36px}
+.eye:hover{color:var(--cyan)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;border:1px solid var(--line2);
+  background:#16263f;color:var(--text);font-family:inherit;font-weight:800;font-size:14px;padding:9px 16px;cursor:pointer;transition:filter .15s,background .15s;min-height:42px}
+.btn:hover{filter:brightness(1.15)}
+.btn.primary{background:var(--cyan-d);border-color:var(--cyan);color:#eafcff}
+.btn.gold{background:#8a6410;border-color:var(--gold);color:#fff6dd}
+.btn.green{background:#166b41;border-color:var(--green);color:#eafff3}
+.btn.danger{background:#5c2222;border-color:#a04444;color:#ffe3e3}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:36px;padding:5px 12px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+
+.out{margin-top:14px;background:#081020;border:1px dashed var(--line2);border-radius:10px;padding:12px}
+.out label{font-size:12px;color:var(--faint);font-weight:700;display:block;margin-bottom:5px}
+.out .url{direction:ltr;text-align:left;font-family:var(--mono);font-size:12.5px;word-break:break-all;color:#aee6f5;line-height:1.7}
+.variants{margin-top:12px;display:grid;gap:8px}
+.variant{display:flex;gap:9px;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:7px 10px}
+.variant .vn{font-size:12.5px;font-weight:800;color:var(--gold);white-space:nowrap;min-width:86px}
+.variant .vu{flex:1;direction:ltr;text-align:left;font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{flex:none;background:#16263f;border:1px solid var(--line2);color:var(--text);border-radius:8px;min-width:38px;min-height:38px;display:grid;place-items:center;cursor:pointer}
+.icon-btn:hover{color:var(--cyan);border-color:var(--cyan)}
+.extracted{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.extracted .cell{background:rgba(47,185,216,.06);border:1px solid rgba(47,185,216,.3);border-radius:9px;padding:8px 11px}
+.extracted .cell span{font-size:11.5px;color:var(--faint);font-weight:700;display:block}
+.extracted .cell b{font-family:var(--mono);font-size:13px;direction:ltr;display:block;text-align:left;word-break:break-all;font-weight:600}
+
+/* Editor */
+.drop{border:2px dashed var(--line2);border-radius:var(--radius);padding:22px 16px;text-align:center;color:var(--muted);transition:border-color .15s,background .15s;cursor:pointer}
+.drop:hover,.drop.over{border-color:var(--cyan);background:rgba(47,185,216,.06);color:var(--text)}
+.drop b{color:var(--text)}
+.drop .fname{font-family:var(--mono);font-size:12.5px;color:var(--cyan);direction:ltr}
+details.paste{margin-top:12px}
+details.paste summary{cursor:pointer;font-weight:800;color:var(--cyan);padding:8px 0;min-height:36px}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.toolbar .sep{width:1px;height:30px;background:var(--line2);margin:0 2px}
+.toolbar select{width:auto;min-width:170px}
+.search-box{flex:1;min-width:200px;position:relative}
+.search-box input{padding-right:38px}
+.search-box svg{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--faint);pointer-events:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.chips .clabel{font-size:12.5px;color:var(--faint);font-weight:700}
+.chip{background:#16263f;border:1px solid var(--line2);color:var(--text);border-radius:999px;padding:5px 14px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;min-height:36px}
+.chip:hover{border-color:var(--gold);color:var(--gold)}
+.work{display:grid;grid-template-columns:290px 1fr;gap:16px;margin-top:16px;align-items:start}
+.groups{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:14px;max-height:560px;overflow:auto}
+.groups h3,.chans-head h3{margin:0 0 10px;font-size:15px;font-weight:800}
+.gitem{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:9px;cursor:pointer}
+.gitem:hover{background:rgba(255,255,255,.045)}
+.gitem input{width:19px;height:19px;accent-color:var(--cyan);flex:none;cursor:pointer}
+.gitem .gname{flex:1;font-weight:700;font-size:13.5px;word-break:break-word}
+.gitem .gcount{font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums;background:rgba(255,255,255,.05);padding:1px 8px;border-radius:999px;white-space:nowrap}
+.gitem.off .gname{color:var(--faint);text-decoration:line-through}
+.chans{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.chans-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chans-head select{width:auto}
+.chans-list{margin-top:10px;max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead th{position:sticky;top:0;background:#0d1830;color:var(--muted);font-size:12px;text-align:right;padding:9px 10px;border-bottom:1px solid var(--line2);z-index:1}
+tbody td{padding:8px 10px;border-bottom:1px solid rgba(34,51,79,.6);vertical-align:middle}
+tbody tr:hover{background:rgba(47,185,216,.045)}
+tbody tr.off{opacity:.42}
+tbody tr.off .cname{text-decoration:line-through}
+td.chk{width:40px}
+td.chk input{width:19px;height:19px;accent-color:var(--cyan);cursor:pointer}
+.cname{font-weight:700}
+.clogo{width:34px;height:24px;object-fit:contain;border-radius:4px;background:rgba(255,255,255,.06);vertical-align:middle}
+.cgroup{font-size:11.5px;color:var(--gold);background:rgba(240,185,62,.10);border:1px solid rgba(240,185,62,.3);padding:1px 8px;border-radius:999px;white-space:nowrap}
+.curl{direction:ltr;text-align:left;font-family:var(--mono);font-size:11px;color:var(--faint);max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dup-badge{font-size:11px;color:var(--orange);font-weight:800}
+.empty{padding:38px 16px;text-align:center;color:var(--faint)}
+.more-note{padding:10px;text-align:center;color:var(--faint);font-size:12.5px;background:rgba(255,255,255,.03)}
+.export-bar{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.export-bar .fname-in{width:210px}
+
+/* Toasts */
+#toasts{position:fixed;bottom:18px;inset-inline-start:18px;z-index:99;display:flex;flex-direction:column;gap:9px;max-width:min(92vw,380px)}
+.toast{background:#0f2138;border:1px solid var(--green);color:#dffbea;border-radius:11px;padding:11px 15px;font-weight:700;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.45);display:flex;gap:9px;align-items:flex-start;animation:tin .25s ease}
+.toast.err{border-color:var(--red);color:#ffe1e1}
+.toast.warn{border-color:var(--orange);color:#ffedd6}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.toast{animation:none} html{scroll-behavior:auto}}
+
+footer{margin-top:26px;color:var(--faint);font-size:12.5px;text-align:center}
+@media(max-width:900px){.stats{grid-template-columns:repeat(3,1fr)} .stat.c5{display:none}}
+@media(max-width:760px){
+  .grid2,.work{grid-template-columns:1fr}
+  .groups{max-height:300px}
+  .curl{display:none} td.urlcell,th.urlcell{display:none}
+  .extracted{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)} .stat.c5{display:block}
+  .export-bar .fname-in{width:100%}
+  section.panel{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>استوديو قوائم البث <span class="en">M3U &amp; Xtream Studio</span></h1>
+    <p class="lead">أداة المتخصصين لتحويل حسابات Xtream إلى روابط M3U والعكس، وتنظيف ملفات القنوات وفلترتها حسب الباقات، وتصديرها بصيغة M3U نظيفة أو ملف XML جاهز للرسيفرات.</p>
+    <span class="privacy"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> كل المعالجة تتم داخل متصفحك على جهازك — روابط سيرفراتك لا تُرفع لأي خادم خارجي.</span>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats" role="status" aria-label="إحصائيات القائمة">
+    <div class="stat c1"><b id="stTotal">0</b><span>إجمالي القنوات</span></div>
+    <div class="stat c2"><b id="stGroups">0</b><span>الباقات (المجموعات)</span></div>
+    <div class="stat c3"><b id="stSelected">0</b><span>محددة للتصدير</span></div>
+    <div class="stat c4"><b id="stDups">0</b><span>قنوات مكررة الآن</span></div>
+    <div class="stat c5"><b id="stSize">0 KB</b><span>حجم ملف التصدير التقديري</span></div>
+  </div>
+
+  <!-- 1) Converter -->
+  <section class="panel" id="converter">
+    <div class="sec-head">
+      <div class="sec-num"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4-4 4"/><path d="M21 7H9a5 5 0 0 0-5 5"/><path d="M7 21l-4-4 4-4"/><path d="M3 17h12a5 5 0 0 0 5-5"/></svg></div>
+      <h2>محوّل Xtream ⇄ M3U</h2>
+      <p>حوّل بيانات أي حساب Xtream Codes إلى رابط قائمة تشغيل مباشر، أو استخرج بيانات الحساب من أي رابط M3U طويل.</p>
+    </div>
+
+    <div class="grid2">
+      <!-- Forward -->
+      <div class="sub">
+        <h3>من بيانات Xtream إلى رابط M3U <span class="tag">Xtream → M3U</span></h3>
+        <p class="hint">أدخل بيانات الحساب وسيتولّد الرابط المختصر فوراً — جاهز للنسخ أو الفتح في أي مشغّل.</p>
+        <label class="f" for="xHost">الهوست (Host) — مثال: server.example.com أو http://server.example.com</label>
+        <input type="text" id="xHost" class="mono" placeholder="server.example.com" autocomplete="off" spellcheck="false" />
+        <div class="row2">
+          <div>
+            <label class="f" for="xUser">اسم المستخدم (Username)</label>
+            <input type="text" id="xUser" class="mono" placeholder="username" autocomplete="off" spellcheck="false" />
+          </div>
+          <div>
+            <label class="f" for="xPort">المنفذ (Port)</label>
+            <input type="text" id="xPort" class="mono" inputmode="numeric" placeholder="8080" autocomplete="off" spellcheck="false" />
+          </div>
+        </div>
+        <label class="f" for="xPass">كلمة المرور (Password)</label>
+        <div class="pwd-wrap">
+          <input type="password" id="xPass" class="mono" placeholder="password" autocomplete="off" spellcheck="false" />
+          <button class="eye" type="button" data-eye="xPass" aria-label="إظهار أو إخفاء كلمة المرور"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <div class="row2" style="grid-template-columns:1fr 1fr">
+          <div>
+            <label class="f" for="xType">نوع القائمة</label>
+            <select id="xType">
+              <option value="m3u_plus" selected>M3U Plus (بالباقات والشعارات)</option>
+              <option value="m3u">M3U عادي</option>
+            </select>
+          </div>
+          <div>
+            <label class="f" for="xOutput">صيغة البث (Output)</label>
+            <select id="xOutput">
+              <option value="ts" selected>TS — الأنسب للرسيفرات</option>
+              <option value="mpegts">MPEGTS</option>
+              <option value="m3u8">HLS (m3u8)</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn primary" id="btnGen" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2Z"/></svg> توليد الرابط</button>
+          <button class="btn ghost" id="btnClearX" type="button">مسح الحقول</button>
+        </div>
+        <div class="out" id="genOut" hidden>
+          <label>رابط M3U المباشر</label>
+          <div class="url" id="genUrl"></div>
+          <div class="btn-row">
+            <button class="btn sm primary" id="btnCopyGen" type="button">نسخ الرابط</button>
+            <a class="btn sm" id="btnOpenGen" href="#" target="_blank" rel="noopener" style="text-decoration:none">فتح الرابط</a>
+          </div>
+          <div class="variants" id="genVariants"></div>
+        </div>
+      </div>
+
+      <!-- Reverse -->
+      <div class="sub">
+        <h3>من رابط M3U إلى بيانات Xtream <span class="tag">M3U → Xtream</span></h3>
+        <p class="hint">الصق أي رابط قائمة طويل (get.php أو رابط بث مباشر) وسيستخرج الاستوديو الهوست والمنفذ واليوزر والباسورد تلقائياً.</p>
+        <label class="f" for="rUrl">رابط M3U الكامل</label>
+        <textarea id="rUrl" class="mono" rows="4" placeholder="http://server.example.com:8080/get.php?username=..&amp;password=..&amp;type=m3u_plus&amp;output=ts" spellcheck="false"></textarea>
+        <div class="btn-row">
+          <button class="btn gold" id="btnExtract" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> استخراج البيانات</button>
+          <button class="btn ghost" id="btnClearR" type="button">مسح</button>
+        </div>
+        <div id="extOut" hidden>
+          <div class="extracted">
+            <div class="cell"><span>الهوست (Host)</span><b id="exHost">—</b></div>
+            <div class="cell"><span>المنفذ (Port)</span><b id="exPort">—</b></div>
+            <div class="cell"><span>اسم المستخدم (Username)</span><b id="exUser">—</b></div>
+            <div class="cell"><span>كلمة المرور (Password)</span><b id="exPass">—</b></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn sm primary" id="btnFill" type="button">تعبئة البيانات في المحوّل</button>
+            <button class="btn sm" id="btnCopyEx" type="button">نسخ البيانات منسقة</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) Editor -->
+  <section class="panel" id="editor">
+    <div class="sec-head">
+      <div class="sec-num"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h13M10 18h10"/><circle cx="4" cy="18" r="1" fill="currentColor"/><circle cx="7" cy="12" r="0" fill="currentColor"/></svg></div>
+      <h2>محرّر وفلتر ملفات M3U</h2>
+      <p>ارفع ملف قائمة أو الصق محتواه، وسيحلّله الاستوديو ويعرض القنوات وباقاتها — حدّد ما تريد، احذف المكررات، ثم صدّر قائمة نظيفة.</p>
+    </div>
+
+    <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="رفع ملف M3U">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--cyan)"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+      <div><b>اسحب ملف .m3u أو .m3u8 هنا</b> أو اضغط للاختيار من جهازك</div>
+      <div class="fname" id="fileName"></div>
+      <input type="file" id="fileInput" accept=".m3u,.m3u8,.txt" hidden />
+    </div>
+
+    <details class="paste">
+      <summary>أو الصق محتوى القائمة كنص</summary>
+      <textarea id="pasteArea" class="mono" rows="7" placeholder="#EXTM3U&#10;#EXTINF:-1 tvg-logo=&quot;..&quot; group-title=&quot;الرياضة&quot;,اسم القناة&#10;http://..." spellcheck="false"></textarea>
+      <div class="btn-row">
+        <button class="btn primary" id="btnParsePaste" type="button">تحليل المحتوى الملصوق</button>
+        <button class="btn ghost" id="btnDemo" type="button">تجربة ببيانات تجريبية</button>
+      </div>
+    </details>
+
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="chSearch" placeholder="بحث فوري باسم القناة…" />
+      </div>
+      <select id="viewFilter" aria-label="طريقة العرض">
+        <option value="all">عرض: كل القنوات</option>
+        <option value="in">عرض: المحددة للتصدير فقط</option>
+        <option value="out">عرض: المستبعدة فقط</option>
+      </select>
+      <div class="sep"></div>
+      <button class="btn sm" id="btnSelAll" type="button">تحديد الكل</button>
+      <button class="btn sm" id="btnSelNone" type="button">إلغاء الكل</button>
+      <button class="btn sm" id="btnInvert" type="button">عكس التحديد</button>
+    </div>
+
+    <div class="chips" id="quickChips">
+      <span class="clabel">تحديد باقة واحدة بسرعة:</span>
+      <button class="chip" data-kw="sport,رياض,كرة,bein" type="button">الرياضة فقط</button>
+      <button class="chip" data-kw="nile,نايل,مصر,egypt,masr" type="button">قنوات نايل سات / مصر</button>
+      <button class="chip" data-kw="news,أخبار,اخبار" type="button">الأخبار فقط</button>
+      <button class="chip" data-kw="movie,film,أفلام,افلام,سينما,cinema" type="button">الأفلام فقط</button>
+      <button class="chip" data-kw="kids,أطفال,اطفال,كرتون" type="button">الأطفال فقط</button>
+      <button class="chip" data-kw="series,مسلسل,دراما,drama" type="button">المسلسلات فقط</button>
+    </div>
+
+    <div class="toolbar">
+      <label style="font-size:13px;font-weight:700;color:var(--muted)" for="dupMode">حذف المكررات حسب:</label>
+      <select id="dupMode">
+        <option value="url">رابط البث (URL)</option>
+        <option value="nameUrl">الاسم + الرابط</option>
+        <option value="name">اسم القناة فقط</option>
+      </select>
+      <button class="btn sm gold" id="btnDedup" type="button">حذف القنوات المكررة</button>
+      <div class="sep"></div>
+      <button class="btn sm danger" id="btnDelOut" type="button">حذف المستبعدة نهائياً</button>
+      <button class="btn sm danger" id="btnClearAll" type="button">تفريغ القائمة</button>
+    </div>
+
+    <div class="work">
+      <aside class="groups">
+        <h3>الباقات (المجموعات) <span id="grpCount" style="color:var(--faint);font-size:12.5px"></span></h3>
+        <div id="groupList"><div class="empty">لا توجد قائمة محمّلة بعد.<br/>ارفع ملفاً أو الصق محتواه لعرض الباقات هنا.</div></div>
+      </aside>
+
+      <div class="chans">
+        <div class="chans-head">
+          <h3 style="margin:0">القنوات <span id="chShown" style="color:var(--faint);font-size:12.5px"></span></h3>
+        </div>
+        <div class="chans-list" id="chList">
+          <div class="empty">ستظهر القنوات هنا بعد تحليل القائمة، مع إمكانية تحديد أو استبعاد كل قناة على حدة.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-bar">
+      <input type="text" id="outName" class="fname-in" value="clean-playlist" aria-label="اسم ملف التصدير" />
+      <button class="btn green" id="btnExpM3U" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></svg> تصدير M3U نظيف</button>
+      <button class="btn gold" id="btnExpXML" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg> تصدير channels.xml للرسيفر</button>
+      <button class="btn" id="btnCopyM3U" type="button">نسخ محتوى M3U</button>
+    </div>
+  </section>
+
+  <footer>استوديو قوائم البث — يعمل بالكامل داخل المتصفح. ملف XML الناتج بصيغة منظمة (باقات ← قنوات ← رابط البث) يقبلها أغلب برامج تحرير قنوات الرسيفرات.</footer>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------- Toasts ---------- */
+function toast(msg, type){
+  const t = document.createElement("div");
+  t.className = "toast" + (type ? " " + type : "");
+  t.innerHTML = (type === "err" ? "⛔ " : type === "warn" ? "⚠️ " : "✅ ") + esc(msg);
+  $("toasts").appendChild(t);
+  setTimeout(() => { t.style.opacity = "0"; t.style.transition = "opacity .3s"; setTimeout(() => t.remove(), 320); }, 3600);
+}
+
+/* ---------- Copy helper ---------- */
+async function copyText(txt, okMsg){
+  try { await navigator.clipboard.writeText(txt); }
+  catch(e){
+    const ta = document.createElement("textarea");
+    ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch(_){}
+    ta.remove();
+  }
+  if (okMsg) toast(okMsg);
+}
+
+/* ---------- Download helper ---------- */
+function download(name, content, mime){
+  const blob = new Blob([content], { type: mime || "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+/* =========================================================
+   1) Xtream → M3U converter
+========================================================= */
+function normalizeBase(hostRaw, portRaw){
+  let h = (hostRaw || "").trim();
+  if (!h) return "";
+  if (!/^https?:\/\//i.test(h)) h = "http://" + h;
+  h = h.replace(/\/+$/, "");
+  try {
+    const u = new URL(h);
+    const port = (portRaw || "").trim();
+    if (port && !u.port) u.port = port;
+    return u.origin;
+  } catch(e){ return ""; }
+}
+function buildLinks(){
+  const base = normalizeBase($("xHost").value, $("xPort").value);
+  const user = $("xUser").value.trim(), pass = $("xPass").value;
+  if (!base || !user || !pass) return null;
+  const q = "username=" + encodeURIComponent(user) + "&password=" + encodeURIComponent(pass);
+  const type = $("xType").value, out = $("xOutput").value;
+  return {
+    main: base + "/get.php?" + q + "&type=" + type + "&output=" + out,
+    variants: [
+      ["M3U Plus + TS", base + "/get.php?" + q + "&type=m3u_plus&output=ts"],
+      ["M3U عادي + TS", base + "/get.php?" + q + "&type=m3u&output=ts"],
+      ["دليل EPG (XMLTV)", base + "/xmltv.php?" + q],
+      ["واجهة API", base + "/player_api.php?" + q]
+    ]
+  };
+}
+function renderGen(silent){
+  const links = buildLinks();
+  if (!links){
+    if (!silent) toast("أدخل الهوست واسم المستخدم وكلمة المرور أولاً", "err");
+    $("genOut").hidden = true; return false;
+  }
+  $("genUrl").textContent = links.main;
+  $("btnOpenGen").href = links.main;
+  $("genVariants").innerHTML = links.variants.map((v, i) =>
+    '<div class="variant"><span class="vn">' + esc(v[0]) + '</span><span class="vu" title="' + esc(v[1]) + '">' + esc(v[1]) + '</span>' +
+    '<button class="icon-btn" type="button" data-copy-variant="' + i + '" aria-label="نسخ ' + esc(v[0]) + '"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>'
+  ).join("");
+  $("genVariants").querySelectorAll("[data-copy-variant]").forEach(b =>
+    b.addEventListener("click", () => copyText(links.variants[+b.dataset.copyVariant][1], "تم نسخ الرابط بنجاح")));
+  $("genOut").hidden = false;
+  return true;
+}
+$("btnGen").addEventListener("click", () => { if (renderGen(false)) toast("تم توليد رابط M3U بنجاح"); });
+["xHost","xPort","xUser","xPass","xType","xOutput"].forEach(id =>
+  $(id).addEventListener("input", () => { if (!$("genOut").hidden) renderGen(true); }));
+$("btnCopyGen").addEventListener("click", () => { const l = buildLinks(); if (l) copyText(l.main, "تم نسخ رابط M3U بنجاح"); });
+$("btnClearX").addEventListener("click", () => {
+  ["xHost","xPort","xUser","xPass"].forEach(id => $(id).value = "");
+  $("genOut").hidden = true; toast("تم مسح حقول المحوّل", "warn");
+});
+document.querySelectorAll("[data-eye]").forEach(b => b.addEventListener("click", () => {
+  const inp = $(b.dataset.eye); inp.type = inp.type === "password" ? "text" : "password"; inp.focus();
+}));
+
+/* =========================================================
+   2) M3U → Xtream extractor
+========================================================= */
+let extracted = null;
+function extractData(){
+  const raw = $("rUrl").value.trim();
+  if (!raw) { toast("الصق رابط M3U أولاً", "err"); return; }
+  let urlStr = raw.split(/\s+/)[0];
+  if (!/^https?:\/\//i.test(urlStr)) urlStr = "http://" + urlStr;
+  let u;
+  try { u = new URL(urlStr); } catch(e){ toast("الرابط غير صالح — تأكد من نسخه كاملاً", "err"); return; }
+  const data = { host: u.hostname, port: u.port || (u.protocol === "https:" ? "443" : "80"),
+                 protocol: u.protocol.replace(":", ""), user: "", pass: "" };
+  const sp = u.searchParams;
+  if (sp.get("username")) data.user = sp.get("username");
+  if (sp.get("password")) data.pass = sp.get("password");
+  if (!data.user){
+    // Path style: /live/USER/PASS/ID.ts  or  /USER/PASS/ID
+    const parts = u.pathname.split("/").filter(Boolean).map(decodeURIComponent);
+    const m = parts.join("/");
+    const mm = m.match(/(?:^|\/)(?:live|movie|series)\/([^\/]+)\/([^\/]+)\//) || m.match(/^([^\/]+)\/([^\/]+)\/\d+/);
+    if (mm){ data.user = mm[1]; data.pass = mm[2]; }
+  }
+  if (!data.user){ toast("لم أجد اسم مستخدم في هذا الرابط — جرّب رابط get.php الكامل", "warn"); }
+  extracted = data;
+  $("exHost").textContent = data.host;
+  $("exPort").textContent = data.port;
+  $("exUser").textContent = data.user || "—";
+  $("exPass").textContent = data.pass || "—";
+  $("extOut").hidden = false;
+  toast("تم استخراج بيانات الحساب من الرابط");
+}
+$("btnExtract").addEventListener("click", extractData);
+$("btnClearR").addEventListener("click", () => { $("rUrl").value = ""; $("extOut").hidden = true; extracted = null; });
+$("btnFill").addEventListener("click", () => {
+  if (!extracted) return;
+  $("xHost").value = extracted.protocol + "://" + extracted.host;
+  $("xPort").value = extracted.port;
+  $("xUser").value = extracted.user;
+  $("xPass").value = extracted.pass;
+  renderGen(true);
+  document.getElementById("converter").scrollIntoView({ behavior: "smooth", block: "start" });
+  toast("تمت تعبئة البيانات في المحوّل وتوليد الرابط");
+});
+$("btnCopyEx").addEventListener("click", () => {
+  if (!extracted) return;
+  copyText(extracted.protocol + "://" + extracted.host + ":" + extracted.port +
+           "\nusername=" + extracted.user + "\npassword=" + extracted.pass, "تم نسخ البيانات منسقة");
+});
+
+/* =========================================================
+   3) M3U parser & editor state
+========================================================= */
+let channels = [];        // {name, group, logo, tvgId, tvgName, dur, url, opts:[], included}
+let epgUrl = "";
+let srcFileName = "";
+
+function parseAttrs(str){
+  const attrs = {};
+  const re = /([\w-]+)="([^"]*)"/g; let m;
+  while ((m = re.exec(str)) !== null) attrs[m[1].toLowerCase()] = m[2];
+  return attrs;
+}
+function splitExtinf(line){
+  // Split at the first comma that is outside quotes: left = meta, right = name
+  let inQ = false;
+  for (let i = 0; i < line.length; i++){
+    const c = line[i];
+    if (c === '"') inQ = !inQ;
+    else if (c === "," && !inQ) return [line.slice(0, i), line.slice(i + 1).trim()];
+  }
+  return [line, ""];
+}
+function parseM3U(text){
+  const lines = String(text || "").replace(/\r\n?/g, "\n").split("\n");
+  const out = []; let pending = null; let grpOverride = "";
+  epgUrl = "";
+  for (let raw of lines){
+    const line = raw.trim();
+    if (!line) continue;
+    if (line.startsWith("#EXTM3U")){
+      const a = parseAttrs(line);
+      epgUrl = a["url-tvg"] || a["x-tvg-url"] || "";
+      continue;
+    }
+    if (line.startsWith("#EXTINF:")){
+      const body = line.slice(8);
+      const [meta, name] = splitExtinf(body);
+      const durM = meta.match(/^\s*(-?\d+(?:\.\d+)?)/);
+      const attrs = parseAttrs(meta);
+      pending = {
+        name: name || attrs["tvg-name"] || "قناة بدون اسم",
+        group: attrs["group-title"] || grpOverride || "بدون باقة",
+        logo: attrs["tvg-logo"] || "",
+        tvgId: attrs["tvg-id"] || "",
+        tvgName: attrs["tvg-name"] || "",
+        dur: durM ? durM[1] : "-1",
+        url: "", opts: [], included: true
+      };
+      grpOverride = "";
+      continue;
+    }
+    if (line.startsWith("#EXTGRP:")){ grpOverride = line.slice(8).trim(); continue; }
+    if (line.startsWith("#")){
+      if (pending) pending.opts.push(line);
+      continue;
+    }
+    // URL line
+    if (pending){ pending.url = line; out.push(pending); pending = null; }
+    else out.push({ name: line.split("/").pop() || "قناة", group: grpOverride || "بدون باقة", logo: "", tvgId: "", tvgName: "", dur: "-1", url: line, opts: [], included: true });
+  }
+  return out;
+}
+
+function loadPlaylist(text, sourceLabel){
+  const parsed = parseM3U(text);
+  if (!parsed.length){ toast("لم يتم العثور على أي قناة صالحة في هذا المحتوى", "err"); return; }
+  channels = parsed;
+  srcFileName = sourceLabel || "";
+  renderAll();
+  const dups = countDups("url");
+  toast("تم تحليل القائمة: " + channels.length + " قناة في " + groupMap().size + " باقة" + (dups ? " — منها " + dups + " مكررة" : ""));
+  document.getElementById("editor").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* ---------- File loading ---------- */
+const dz = $("dropZone"), fi = $("fileInput");
+dz.addEventListener("click", () => fi.click());
+dz.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fi.click(); } });
+["dragover","dragenter"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add("over"); }));
+["dragleave","drop"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove("over"); }));
+dz.addEventListener("drop", e => { const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) readFile(f); });
+fi.addEventListener("change", () => { if (fi.files[0]) readFile(fi.files[0]); fi.value = ""; });
+function readFile(f){
+  const reader = new FileReader();
+  reader.onload = () => { $("fileName").textContent = f.name + " (" + Math.max(1, Math.round(f.size/1024)) + " KB)"; loadPlaylist(String(reader.result), f.name); };
+  reader.onerror = () => toast("تعذّرت قراءة الملف", "err");
+  reader.readAsText(f);
+}
+$("btnParsePaste").addEventListener("click", () => {
+  const t = $("pasteArea").value.trim();
+  if (!t){ toast("الصق محتوى القائمة أولاً", "err"); return; }
+  $("fileName").textContent = "";
+  loadPlaylist(t, "ملصوق يدوياً");
+});
+$("btnDemo").addEventListener("click", () => {
+  const demo = [
+    '#EXTM3U x-tvg-url="http://epg.example.com/guide.xml"',
+    '#EXTINF:-1 tvg-id="sport1" group-title="الرياضة",قناة رياضة 1 (تجريبية)',
+    'http://demo.example.com/live/sport1.ts',
+    '#EXTINF:-1 tvg-id="sport2" group-title="الرياضة",قناة رياضة 2 (تجريبية)',
+    'http://demo.example.com/live/sport2.ts',
+    '#EXTINF:-1 tvg-id="sport1" group-title="الرياضة",قناة رياضة 1 (تجريبية)',
+    'http://demo.example.com/live/sport1.ts',
+    '#EXTINF:-1 group-title="قنوات نايل سات",قناة نايل دراما (تجريبية)',
+    'http://demo.example.com/live/nile-drama.ts',
+    '#EXTINF:-1 group-title="قنوات نايل سات",قناة نايل سينما (تجريبية)',
+    'http://demo.example.com/live/nile-cinema.ts',
+    '#EXTINF:-1 group-title="الأخبار",قناة أخبار 24 (تجريبية)',
+    'http://demo.example.com/live/news24.ts',
+    '#EXTINF:-1 group-title="الأفلام",قناة أفلام كلاسيك (تجريبية)',
+    'http://demo.example.com/live/movies.ts',
+    '#EXTINF:-1 group-title="الأطفال",قناة كرتون (تجريبية)',
+    'http://demo.example.com/live/kids.ts',
+    '#EXTINF:-1 group-title="الأخبار",قناة أخبار 24 (تجريبية)',
+    'http://demo.example.com/live/news24.ts'
+  ].join("\n");
+  $("pasteArea").value = demo;
+  loadPlaylist(demo, "بيانات تجريبية");
+});
+
+/* ---------- Derived data ---------- */
+function groupMap(){
+  const map = new Map();
+  channels.forEach(c => {
+    if (!map.has(c.group)) map.set(c.group, { total: 0, inc: 0 });
+    const g = map.get(c.group); g.total++; if (c.included) g.inc++;
+  });
+  return map;
+}
+function dupKey(c, mode){
+  if (mode === "name") return "n:" + c.name.trim().toLowerCase();
+  if (mode === "nameUrl") return "nu:" + c.name.trim().toLowerCase() + "|" + c.url.trim();
+  return "u:" + c.url.trim();
+}
+function countDups(mode){
+  const seen = new Set(); let d = 0;
+  channels.forEach(c => { const k = dupKey(c, mode); if (seen.has(k)) d++; else seen.add(k); });
+  return d;
+}
+function buildM3U(list){
+  let out = '#EXTM3U' + (epgUrl ? ' x-tvg-url="' + epgUrl + '"' : "") + "\n";
+  list.forEach(c => {
+    let attrs = "";
+    if (c.tvgId) attrs += ' tvg-id="' + c.tvgId + '"';
+    if (c.tvgName) attrs += ' tvg-name="' + c.tvgName + '"';
+    if (c.logo) attrs += ' tvg-logo="' + c.logo + '"';
+    attrs += ' group-title="' + (c.group || "") + '"';
+    out += "#EXTINF:" + (c.dur || "-1") + attrs + "," + c.name + "\n";
+    c.opts.forEach(o => { out += o + "\n"; });
+    out += c.url + "\n";
+  });
+  return out;
+}
+
+/* ---------- Rendering ---------- */
+const RENDER_CAP = 400;
+function renderStats(){
+  const inc = channels.filter(c => c.included);
+  $("stTotal").textContent = channels.length.toLocaleString("en-US");
+  $("stGroups").textContent = groupMap().size.toLocaleString("en-US");
+  $("stSelected").textContent = inc.length.toLocaleString("en-US");
+  $("stDups").textContent = countDups($("dupMode").value).toLocaleString("en-US");
+  const bytes = new Blob([buildM3U(inc)]).size;
+  $("stSize").textContent = bytes > 1048576 ? (bytes/1048576).toFixed(1) + " MB" : Math.max(1, Math.round(bytes/1024)) + " KB";
+  if (!channels.length){ $("stSize").textContent = "0 KB"; }
+}
+function renderGroups(){
+  const box = $("groupList");
+  const map = groupMap();
+  $("grpCount").textContent = map.size ? "— " + map.size + " باقة" : "";
+  if (!map.size){ box.innerHTML = '<div class="empty">لا توجد قائمة محمّلة بعد.</div>'; return; }
+  box.innerHTML = "";
+  [...map.entries()].sort((a,b) => b[1].total - a[1].total).forEach(([g, info]) => {
+    const lab = document.createElement("label");
+    lab.className = "gitem" + (info.inc === 0 ? " off" : "");
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.checked = info.inc > 0;
+    cb.indeterminate = info.inc > 0 && info.inc < info.total;
+    cb.addEventListener("change", () => {
+      channels.forEach(c => { if (c.group === g) c.included = cb.checked; });
+      renderAll();
+      toast((cb.checked ? "تم تحديد باقة «" : "تم استبعاد باقة «") + g + "» بالكامل");
+    });
+    const nm = document.createElement("span"); nm.className = "gname"; nm.textContent = g;
+    const ct = document.createElement("span"); ct.className = "gcount"; ct.textContent = info.inc + " / " + info.total;
+    lab.append(cb, nm, ct);
+    box.appendChild(lab);
+  });
+}
+function visibleChannels(){
+  const q = $("chSearch").value.trim().toLowerCase();
+  const vf = $("viewFilter").value;
+  const dupSet = new Set(); const seen = new Set();
+  channels.forEach((c, i) => { const k = dupKey(c, "url"); if (seen.has(k)) dupSet.add(i); else seen.add(k); });
+  return channels.map((c, i) => ({ c, i, dup: dupSet.has(i) })).filter(({ c }) => {
+    if (vf === "in" && !c.included) return false;
+    if (vf === "out" && c.included) return false;
+    if (q && !(c.name.toLowerCase().includes(q) || c.group.toLowerCase().includes(q))) return false;
+    return true;
+  });
+}
+function renderChannels(){
+  const box = $("chList");
+  if (!channels.length){
+    box.innerHTML = '<div class="empty">ستظهر القنوات هنا بعد تحليل القائمة، مع إمكانية تحديد أو استبعاد كل قناة على حدة.</div>';
+    $("chShown").textContent = ""; return;
+  }
+  const vis = visibleChannels();
+  $("chShown").textContent = "— يعرض " + Math.min(vis.length, RENDER_CAP) + " من " + vis.length + " مطابقة";
+  if (!vis.length){ box.innerHTML = '<div class="empty">لا توجد قنوات مطابقة للبحث أو طريقة العرض الحالية.</div>'; return; }
+  const rows = vis.slice(0, RENDER_CAP).map(({ c, i, dup }) =>
+    '<tr class="' + (c.included ? "" : "off") + '">' +
+    '<td class="chk"><input type="checkbox" data-ch="' + i + '"' + (c.included ? " checked" : "") + ' aria-label="تحديد قناة ' + esc(c.name) + '" /></td>' +
+    '<td>' + (c.logo ? '<img class="clogo" src="' + esc(c.logo) + '" alt="" loading="lazy" onerror="this.remove()" /> ' : "") + '<span class="cname">' + esc(c.name) + '</span>' + (dup ? ' <span class="dup-badge">مكررة</span>' : "") + '</td>' +
+    '<td><span class="cgroup">' + esc(c.group) + '</span></td>' +
+    '<td class="urlcell"><div class="curl" title="' + esc(c.url) + '">' + esc(c.url) + '</div></td></tr>'
+  ).join("");
+  box.innerHTML = '<table><thead><tr><th></th><th>القناة</th><th>الباقة</th><th class="urlcell">رابط البث</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    (vis.length > RENDER_CAP ? '<div class="more-note">و ' + (vis.length - RENDER_CAP) + ' قناة أخرى مطابقة غير معروضة في الجدول (التحديد بالباقات والتصدير يشملها كلها) — ضيّق البحث لعرضها.</div>' : "");
+  box.querySelectorAll("[data-ch]").forEach(cb => cb.addEventListener("change", () => {
+    channels[+cb.dataset.ch].included = cb.checked;
+    renderAll();
+  }));
+}
+function renderAll(){ renderStats(); renderGroups(); renderChannels(); }
+$("chSearch").addEventListener("input", renderChannels);
+$("viewFilter").addEventListener("change", renderChannels);
+$("dupMode").addEventListener("change", renderStats);
+
+/* ---------- Selection actions ---------- */
+function setAll(val){ if (!channels.length) return toast("حمّل قائمة أولاً", "warn"); channels.forEach(c => c.included = val); renderAll(); toast(val ? "تم تحديد كل القنوات" : "تم إلغاء تحديد الكل"); }
+$("btnSelAll").addEventListener("click", () => setAll(true));
+$("btnSelNone").addEventListener("click", () => setAll(false));
+$("btnInvert").addEventListener("click", () => {
+  if (!channels.length) return toast("حمّل قائمة أولاً", "warn");
+  channels.forEach(c => c.included = !c.included); renderAll(); toast("تم عكس التحديد");
+});
+document.querySelectorAll("#quickChips .chip").forEach(chip => chip.addEventListener("click", () => {
+  if (!channels.length) return toast("حمّل قائمة أولاً", "warn");
+  const kws = chip.dataset.kw.split(",").map(s => s.trim().toLowerCase());
+  let matched = 0;
+  channels.forEach(c => {
+    const hay = (c.group + " " + c.name).toLowerCase();
+    c.included = kws.some(k => hay.includes(k));
+    if (c.included) matched++;
+  });
+  renderAll();
+  toast(matched ? "تم تحديد " + matched + " قناة مطابقة فقط" : "لا توجد قنوات مطابقة لهذا الاختيار", matched ? "" : "warn");
+}));
+
+/* ---------- Dedup & delete ---------- */
+$("btnDedup").addEventListener("click", () => {
+  if (!channels.length) return toast("حمّل قائمة أولاً", "warn");
+  const mode = $("dupMode").value;
+  const seen = new Set(); const before = channels.length;
+  channels = channels.filter(c => { const k = dupKey(c, mode); if (seen.has(k)) return false; seen.add(k); return true; });
+  const removed = before - channels.length;
+  renderAll();
+  toast(removed ? "تم حذف " + removed + " قناة مكررة — تبقّى " + channels.length + " قناة" : "لا توجد قنوات مكررة حسب طريقة المقارنة المختارة", removed ? "" : "warn");
+});
+$("btnDelOut").addEventListener("click", () => {
+  const before = channels.length;
+  channels = channels.filter(c => c.included);
+  renderAll();
+  toast(before - channels.length ? "تم حذف " + (before - channels.length) + " قناة مستبعدة نهائياً" : "لا توجد قنوات مستبعدة لحذفها", before - channels.length ? "" : "warn");
+});
+$("btnClearAll").addEventListener("click", () => {
+  channels = []; epgUrl = ""; $("fileName").textContent = ""; renderAll(); toast("تم تفريغ القائمة", "warn");
+});
+
+/* ---------- Export ---------- */
+function outBaseName(){
+  return ($("outName").value.trim() || "clean-playlist").replace(/[\\/:*?"<>|]/g, "-");
+}
+function includedOrWarn(){
+  const inc = channels.filter(c => c.included);
+  if (!channels.length){ toast("حمّل قائمة أولاً", "err"); return null; }
+  if (!inc.length){ toast("لا توجد قنوات محددة للتصدير — حدّد باقة أو قناة واحدة على الأقل", "err"); return null; }
+  return inc;
+}
+$("btnExpM3U").addEventListener("click", () => {
+  const inc = includedOrWarn(); if (!inc) return;
+  download(outBaseName() + ".m3u", buildM3U(inc), "audio/x-mpegurl;charset=utf-8");
+  toast("تم تصدير " + inc.length + " قناة في ملف M3U نظيف");
+});
+$("btnCopyM3U").addEventListener("click", () => {
+  const inc = includedOrWarn(); if (!inc) return;
+  copyText(buildM3U(inc), "تم نسخ محتوى M3U (" + inc.length + " قناة)");
+});
+function xmlEsc(s){ return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+$("btnExpXML").addEventListener("click", () => {
+  const inc = includedOrWarn(); if (!inc) return;
+  const groups = new Map();
+  inc.forEach(c => { if (!groups.has(c.group)) groups.set(c.group, []); groups.get(c.group).push(c); });
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<channel_list>\n';
+  groups.forEach((list, g) => {
+    xml += '  <group name="' + xmlEsc(g) + '">\n';
+    list.forEach((c, idx) => {
+      xml += '    <channel id="' + (idx + 1) + '">\n';
+      xml += '      <name>' + xmlEsc(c.name) + '</name>\n';
+      if (c.tvgId) xml += '      <tvg_id>' + xmlEsc(c.tvgId) + '</tvg_id>\n';
+      if (c.logo) xml += '      <logo>' + xmlEsc(c.logo) + '</logo>\n';
+      xml += '      <stream_url>' + xmlEsc(c.url) + '</stream_url>\n';
+      xml += '    </channel>\n';
+    });
+    xml += '  </group>\n';
+  });
+  xml += '</channel_list>\n';
+  download("channels.xml", xml, "text/xml;charset=utf-8");
+  toast("تم إنشاء channels.xml بعدد " + inc.length + " قناة في " + groups.size + " باقة — جاهز للرسيفر");
+});
+
+renderAll();
+</script>
+</body>
+</html>

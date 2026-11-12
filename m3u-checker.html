@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>فاحص وفلترة ملفات القنوات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #0a1120;
+        --bg-2: #0f1a30;
+        --panel: #12203c;
+        --panel-2: #16263f;
+        --line: #24365a;
+        --ink: #eef2fb;
+        --muted: #9db0d0;
+        --gold: #e3b341;
+        --gold-2: #f5cd6b;
+        --cyan: #2fb9d8;
+        --green: #3ec97e;
+        --red: #f0685e;
+        --radius: 14px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(900px 400px at 85% -80px, rgba(47,185,216,.10), transparent 60%),
+          radial-gradient(700px 380px at 8% 0, rgba(227,179,65,.07), transparent 55%),
+          var(--bg);
+        color: var(--ink);
+        font-family: "Tajawal", system-ui, sans-serif;
+        line-height: 1.7;
+      }
+      button, [role="button"], select, summary, input:not([type="checkbox"]) { min-height: 2.75rem; }
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 20px 16px 64px; }
+
+      /* ---------- Header ---------- */
+      .brand { text-align: center; padding: 14px 0 4px; }
+      .brand .shield { font-size: 2rem; line-height: 1; }
+      .brand .group-name { color: var(--gold-2); font-family: "Cairo", sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: .2px; margin-top: 4px; }
+      h1 {
+        font-family: "Cairo", sans-serif; font-weight: 900;
+        font-size: clamp(1.6rem, 5.4vw, 2.4rem); line-height: 1.35;
+        margin: 10px 0 6px; text-align: center;
+      }
+      h1 .gold { color: var(--gold); }
+      .lede { text-align: center; color: var(--muted); max-width: 640px; margin: 0 auto; font-size: 1.02rem; }
+      .privacy-note {
+        text-align: center; color: var(--muted); font-size: .88rem; margin: 12px auto 0;
+        max-width: 640px;
+      }
+      .privacy-note b { color: var(--cyan); font-weight: 700; }
+
+      /* ---------- Sections ---------- */
+      section.panel {
+        background: linear-gradient(180deg, var(--panel-2), var(--panel));
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 22px 20px 24px;
+        margin-top: 28px;
+      }
+      .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+      .sec-num {
+        flex: 0 0 auto; width: 38px; height: 38px; border-radius: 10px;
+        display: grid; place-items: center;
+        background: rgba(227,179,65,.14); border: 1px solid rgba(227,179,65,.45);
+        color: var(--gold-2); font-family: "Cairo", sans-serif; font-weight: 900; font-size: 1.1rem;
+      }
+      h2 { font-family: "Cairo", sans-serif; font-weight: 800; font-size: 1.3rem; margin: 0; }
+      .sec-sub { color: var(--muted); margin: 2px 0 18px; font-size: .96rem; }
+
+      /* ---------- Inputs ---------- */
+      label.f-label { display: block; font-weight: 700; font-size: .94rem; margin: 14px 0 6px; font-family: "Cairo", sans-serif; }
+      input[type="text"], input[type="password"], input[type="url"], textarea {
+        width: 100%; background: var(--bg-2); color: var(--ink);
+        border: 1px solid var(--line); border-radius: 10px;
+        padding: 10px 12px; font: inherit; font-size: .98rem;
+      }
+      input:focus, textarea:focus { outline: 2px solid rgba(47,185,216,.55); outline-offset: 1px; border-color: var(--cyan); }
+      textarea { min-height: 110px; resize: vertical; direction: ltr; text-align: left; font-family: ui-monospace, "Courier New", monospace; font-size: .82rem; line-height: 1.5; }
+      .ltr { direction: ltr; text-align: left; }
+      .row { display: flex; gap: 10px; flex-wrap: wrap; }
+      .row > * { flex: 1 1 200px; }
+
+      .dropzone {
+        border: 2px dashed var(--line); border-radius: var(--radius);
+        padding: 26px 16px; text-align: center; cursor: pointer;
+        background: rgba(15,26,48,.55); transition: border-color .15s, background .15s;
+      }
+      .dropzone:hover, .dropzone.drag { border-color: var(--gold); background: rgba(227,179,65,.06); }
+      .dropzone .dz-icon { font-size: 2rem; }
+      .dropzone .dz-main { font-family: "Cairo", sans-serif; font-weight: 800; font-size: 1.05rem; margin-top: 4px; }
+      .dropzone .dz-sub { color: var(--muted); font-size: .9rem; }
+      .dropzone input { display: none; }
+
+      .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+      .tab {
+        border: 1px solid var(--line); background: var(--bg-2); color: var(--muted);
+        border-radius: 999px; padding: 6px 16px; cursor: pointer;
+        font-family: "Cairo", sans-serif; font-weight: 700; font-size: .95rem;
+      }
+      .tab[aria-pressed="true"] { background: rgba(227,179,65,.15); border-color: var(--gold); color: var(--gold-2); }
+      .tab-pane { display: none; }
+      .tab-pane.active { display: block; }
+
+      .btn {
+        border: 1px solid var(--line); background: var(--panel-2); color: var(--ink);
+        border-radius: 10px; padding: 8px 18px; cursor: pointer;
+        font-family: "Cairo", sans-serif; font-weight: 700; font-size: .98rem;
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      }
+      .btn:hover { border-color: var(--gold); }
+      .btn:disabled { opacity: .45; cursor: not-allowed; }
+      .btn.gold { background: linear-gradient(180deg, var(--gold-2), var(--gold)); color: #221a05; border-color: var(--gold); }
+      .btn.gold:hover { filter: brightness(1.06); }
+      .btn.cyan { background: rgba(47,185,216,.14); border-color: rgba(47,185,216,.5); color: #bdeef9; }
+      .btn.small { min-height: 2.4rem; padding: 4px 14px; font-size: .9rem; }
+      .btn.block { width: 100%; }
+
+      /* ---------- Stats ---------- */
+      .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0 4px; }
+      .stat {
+        background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px;
+        padding: 12px 10px; text-align: center;
+      }
+      .stat .num { font-family: "Cairo", sans-serif; font-weight: 900; font-size: 1.55rem; color: var(--gold-2); line-height: 1.2; }
+      .stat .lbl { color: var(--muted); font-size: .88rem; }
+
+      /* ---------- Groups & channels ---------- */
+      .quick { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 6px; }
+      .cols { display: grid; grid-template-columns: 1fr 1.4fr; gap: 18px; margin-top: 14px; align-items: start; }
+      @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+      .col-title { font-family: "Cairo", sans-serif; font-weight: 800; font-size: 1.02rem; margin: 0 0 8px; }
+      .col-title span { color: var(--muted); font-weight: 500; font-size: .88rem; }
+      .scrollbox {
+        border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2);
+        max-height: 420px; overflow-y: auto; padding: 6px;
+      }
+      .group-item, .chan-item {
+        display: flex; align-items: center; gap: 10px;
+        padding: 9px 10px; border-radius: 8px; cursor: pointer; min-height: 44px;
+      }
+      .group-item:hover, .chan-item:hover { background: rgba(47,185,216,.07); }
+      .group-item input, .chan-item input { width: 20px; height: 20px; accent-color: var(--gold); flex: 0 0 auto; cursor: pointer; }
+      .group-item .gname, .chan-item .cname { flex: 1 1 auto; font-weight: 500; overflow-wrap: anywhere; }
+      .group-item .gcount { color: var(--muted); font-size: .85rem; white-space: nowrap; }
+      .group-item .gcount b { color: var(--gold-2); }
+      .chan-item .clogo { width: 34px; height: 24px; object-fit: contain; flex: 0 0 auto; border-radius: 4px; background: rgba(255,255,255,.06); }
+      .chan-item .cgroup { color: var(--muted); font-size: .8rem; white-space: nowrap; }
+      .empty-msg { color: var(--muted); text-align: center; padding: 22px 10px; font-size: .94rem; }
+
+      .download-bar { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+      .download-bar .sel-count { color: var(--muted); font-size: .95rem; }
+      .download-bar .sel-count b { color: var(--gold-2); font-size: 1.05rem; }
+
+      /* ---------- Messages ---------- */
+      .msg { border-radius: 12px; padding: 14px 16px; margin-top: 16px; font-size: .97rem; display: none; }
+      .msg.show { display: block; }
+      .msg.err { background: rgba(240,104,94,.1); border: 1px solid rgba(240,104,94,.5); }
+      .msg.ok { background: rgba(62,201,126,.1); border: 1px solid rgba(62,201,126,.5); }
+      .msg.warn { background: rgba(227,179,65,.1); border: 1px solid rgba(227,179,65,.55); }
+      .msg .msg-title { font-family: "Cairo", sans-serif; font-weight: 800; margin-bottom: 2px; }
+      .msg.warn .msg-title { color: var(--gold-2); }
+      .msg.err .msg-title { color: #ffb3ad; }
+      .msg.ok .msg-title { color: #a9ecc6; }
+
+      /* ---------- Xtream result ---------- */
+      .acct-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+      @media (max-width: 560px) { .acct-grid { grid-template-columns: 1fr; } }
+      .acct-cell { background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+      .acct-cell .k { color: var(--muted); font-size: .88rem; }
+      .acct-cell .v { font-family: "Cairo", sans-serif; font-weight: 800; font-size: 1.12rem; margin-top: 2px; overflow-wrap: anywhere; }
+      .badge { display: inline-block; padding: 2px 14px; border-radius: 999px; font-weight: 800; font-size: .95rem; }
+      .badge.active { background: rgba(62,201,126,.16); color: #a9ecc6; border: 1px solid rgba(62,201,126,.55); }
+      .badge.inactive { background: rgba(240,104,94,.14); color: #ffb3ad; border: 1px solid rgba(240,104,94,.55); }
+      .expired-note { color: var(--red); font-weight: 700; }
+
+      .spinner {
+        width: 18px; height: 18px; border-radius: 50%;
+        border: 3px solid rgba(255,255,255,.25); border-top-color: currentColor;
+        animation: spin .7s linear infinite; display: none;
+      }
+      .loading .spinner { display: inline-block; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } html { scroll-behavior: auto; } }
+
+      .toast {
+        position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px);
+        background: #123524; color: #d9fbe7; border: 1px solid var(--green);
+        padding: 10px 22px; border-radius: 999px; font-family: "Cairo", sans-serif; font-weight: 700;
+        opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 50;
+        box-shadow: 0 10px 30px rgba(0,0,0,.45); white-space: nowrap;
+      }
+      .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+      footer { text-align: center; color: var(--muted); font-size: .9rem; margin-top: 34px; }
+      footer .gold { color: var(--gold-2); font-weight: 700; }
+      .hidden { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="brand">
+        <div class="shield" aria-hidden="true">🛡️</div>
+        <div class="group-name">جنود الخفاء — حب الخير للغير</div>
+      </div>
+      <h1>فاحص وفلترة <span class="gold">ملفات القنوات</span></h1>
+      <p class="lede">نظّف ملف القنوات بتاعك في ثوانٍ: ارفع ملف M3U، اختار المجموعات اللي تهمك بس (رياضة، قنوات مصرية، أو أي مجموعة)، وحمّل ملفاً جديداً نظيفاً جاهزاً للتشغيل. وكمان تقدر تفحص حساب Xtream وتعرف حالته وتاريخ انتهائه.</p>
+      <p class="privacy-note">🔒 <b>خصوصيتك محفوظة:</b> فلترة ملفات M3U بتتم بالكامل داخل متصفحك على جهازك. ولو فحصت حساب Xtream، بياناتك بتتبعت <b>للسيرفر اللي انت كاتبه بنفسك بس</b> لغرض الفحص — مش لأي طرف تالت، ومفيش أي بيانات بتتخزن عندنا.</p>
+
+      <!-- ============ القسم الأول: فلترة M3U ============ -->
+      <section class="panel" id="m3u-section">
+        <div class="sec-head">
+          <div class="sec-num">١</div>
+          <h2>فحص وفلترة ملف M3U</h2>
+        </div>
+        <p class="sec-sub">هات الملف بأي طريقة من التلاتة دول، وبعدها اختار المجموعات وحمّل النسخة النظيفة.</p>
+
+        <div class="tabs" role="group" aria-label="طريقة إدخال الملف">
+          <button class="tab" data-tab="file" aria-pressed="true">📁 رفع ملف</button>
+          <button class="tab" data-tab="paste" aria-pressed="false">📋 لصق المحتوى</button>
+          <button class="tab" data-tab="url" aria-pressed="false">🔗 رابط ملف</button>
+        </div>
+
+        <div class="tab-pane active" id="pane-file">
+          <label class="dropzone" id="dropzone">
+            <input type="file" id="fileInput" accept=".m3u,.m3u8,.txt,text/plain" />
+            <div class="dz-icon" aria-hidden="true">📂</div>
+            <div class="dz-main">اسحب ملف M3U هنا أو اضغط للاختيار</div>
+            <div class="dz-sub">امتدادات مدعومة: m3u و m3u8 و txt</div>
+          </label>
+        </div>
+
+        <div class="tab-pane" id="pane-paste">
+          <label class="f-label" for="pasteArea">الصق محتوى ملف M3U هنا</label>
+          <textarea id="pasteArea" placeholder="#EXTM3U&#10;#EXTINF:-1 group-title=&quot;Sports&quot;,Channel Name&#10;http://..."></textarea>
+          <div style="margin-top:10px">
+            <button class="btn gold" id="parsePasteBtn">تحليل المحتوى</button>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="pane-url">
+          <label class="f-label" for="urlInput">رابط ملف M3U المباشر</label>
+          <input type="url" id="urlInput" class="ltr" placeholder="https://example.com/playlist.m3u" />
+          <div style="margin-top:10px">
+            <button class="btn gold" id="fetchUrlBtn"><span class="spinner"></span> جلب وتحليل الرابط</button>
+          </div>
+        </div>
+
+        <div class="msg err" id="m3uError" role="alert"></div>
+
+        <div id="results" class="hidden">
+          <div class="stats">
+            <div class="stat"><div class="num" id="statTotal">٠</div><div class="lbl">إجمالي القنوات</div></div>
+            <div class="stat"><div class="num" id="statGroups">٠</div><div class="lbl">عدد المجموعات</div></div>
+            <div class="stat"><div class="num" id="statSelected">٠</div><div class="lbl">قنوات محددة</div></div>
+          </div>
+
+          <div class="quick">
+            <button class="btn small cyan" id="quickSports">⚽ الرياضة فقط</button>
+            <button class="btn small cyan" id="quickEgypt">🇪🇬 القنوات المصرية فقط</button>
+            <button class="btn small" id="quickAll">تحديد الكل</button>
+            <button class="btn small" id="quickNone">إلغاء الكل</button>
+          </div>
+
+          <div class="cols">
+            <div>
+              <p class="col-title">المجموعات <span>— فعّل أو عطّل أي مجموعة كاملة</span></p>
+              <div class="scrollbox" id="groupsList"></div>
+            </div>
+            <div>
+              <p class="col-title">القنوات <span>— تقدر تعدّل قنوات بعينها</span></p>
+              <input type="text" id="searchInput" placeholder="🔍 ابحث باسم القناة…" style="margin-bottom:8px" />
+              <div class="scrollbox" id="channelsList"></div>
+              <p class="col-title" style="margin-top:8px"><span id="shownCount"></span></p>
+            </div>
+          </div>
+
+          <div class="download-bar">
+            <button class="btn gold" id="downloadBtn">⬇️ تحميل الملف النظيف (M3U)</button>
+            <span class="sel-count">المحدد: <b id="selCount">٠</b> قناة من <span id="selTotal">٠</span></span>
+          </div>
+          <div class="msg warn" id="dlWarn"></div>
+        </div>
+      </section>
+
+      <!-- ============ القسم الثاني: فحص Xtream ============ -->
+      <section class="panel" id="xtream-section">
+        <div class="sec-head">
+          <div class="sec-num">٢</div>
+          <h2>فحص حساب Xtream</h2>
+        </div>
+        <p class="sec-sub">دخّل بيانات الاشتراك (الهوست واسم المستخدم وكلمة المرور) واعرف حالة الحساب وتاريخ انتهائه، أو اجلب قائمة القنوات وفلترها في القسم اللي فوق.</p>
+
+        <label class="f-label" for="hostInput">الهوست (السيرفر مع البورت)</label>
+        <input type="text" id="hostInput" class="ltr" placeholder="http://server.com:8080" autocomplete="off" />
+        <div class="row">
+          <div>
+            <label class="f-label" for="userInput">اسم المستخدم</label>
+            <input type="text" id="userInput" class="ltr" placeholder="username" autocomplete="off" />
+          </div>
+          <div>
+            <label class="f-label" for="passInput">كلمة المرور</label>
+            <input type="password" id="passInput" class="ltr" placeholder="password" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+          <button class="btn gold" id="checkAccountBtn"><span class="spinner"></span> فحص الحساب</button>
+          <button class="btn cyan" id="fetchListBtn"><span class="spinner"></span> جلب قائمة القنوات للفلترة</button>
+        </div>
+
+        <div class="msg err" id="xtreamError" role="alert"></div>
+
+        <div id="acctResult" class="hidden">
+          <div class="acct-grid">
+            <div class="acct-cell"><div class="k">حالة الحساب</div><div class="v" id="acctStatus">—</div></div>
+            <div class="acct-cell"><div class="k">اسم المستخدم</div><div class="v ltr" id="acctUser" style="text-align:left">—</div></div>
+            <div class="acct-cell"><div class="k">تاريخ الإنشاء</div><div class="v" id="acctCreated">—</div></div>
+            <div class="acct-cell"><div class="k">تاريخ الانتهاء</div><div class="v" id="acctExpiry">—</div></div>
+            <div class="acct-cell"><div class="k">أقصى عدد اتصالات مسموح</div><div class="v" id="acctMax">—</div></div>
+            <div class="acct-cell"><div class="k">الاتصالات النشطة الآن</div><div class="v" id="acctActive">—</div></div>
+          </div>
+          <p id="acctNote" style="margin:12px 0 0"></p>
+        </div>
+      </section>
+
+      <footer>
+        <span class="gold">جنود الخفاء</span> — حب الخير للغير 🛡️<br />
+        أداة مجانية لأعضاء الجروب — الفلترة على جهازك، وفحص Xtream بيتم من متصفحك للسيرفر بتاعك مباشرة.
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script>
+      "use strict";
+
+      /* ================= أدوات صغيرة ================= */
+      var $ = function (id) { return document.getElementById(id); };
+      var AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+      function arNum(n) {
+        return String(n).replace(/[0-9]/g, function (d) { return AR_DIGITS[+d]; });
+      }
+      function toast(text) {
+        var t = $("toast");
+        t.textContent = text;
+        t.classList.add("show");
+        clearTimeout(t._timer);
+        t._timer = setTimeout(function () { t.classList.remove("show"); }, 2600);
+      }
+      function showMsg(el, type, title, body) {
+        el.className = "msg show " + type;
+        el.innerHTML = "";
+        var h = document.createElement("div");
+        h.className = "msg-title";
+        h.textContent = title;
+        var p = document.createElement("div");
+        p.textContent = body;
+        el.appendChild(h); el.appendChild(p);
+      }
+      function hideMsg(el) { el.className = "msg"; el.innerHTML = ""; }
+
+      /* رسالة CORS الودودة — تُستخدم عند فشل أي جلب من سيرفر خارجي */
+      var CORS_TITLE = "السيرفر رفض الفحص من المتصفح";
+      var CORS_BODY = "متقلقش — ده مش معناه إن الحساب أو الرابط واقف. بعض السيرفرات بتمنع المواقع والتطبيقات الخارجية من الاتصال بيها مباشرة (حماية اسمها CORS)، فالمتصفح مقدرش يوصل لها من هنا. جرّب تحمل ملف M3U بتاعك من التطبيق أو اللوحة بتاعتك وارفعه في قسم الفلترة اللي فوق — هيشتغل معاك على طول.";
+
+      /* ================= تحليل M3U ================= */
+      var channels = []; // {name, group, logo, extinf, url, selected}
+
+      function parseM3U(text) {
+        var lines = String(text || "").split(/\r?\n/);
+        var out = [];
+        var pending = null;
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i].trim();
+          if (!line) continue;
+          if (line.indexOf("#EXTINF") === 0) {
+            var attrs = {};
+            var re = /([a-zA-Z0-9_-]+)="([^"]*)"/g, m;
+            while ((m = re.exec(line)) !== null) attrs[m[1].toLowerCase()] = m[2];
+            var comma = line.lastIndexOf(",");
+            var name = comma >= 0 ? line.slice(comma + 1).trim() : "";
+            pending = {
+              name: name || "قناة بدون اسم",
+              group: (attrs["group-title"] || "").trim() || "بدون مجموعة",
+              logo: attrs["tvg-logo"] || "",
+              extinf: line,
+              url: "",
+              selected: true
+            };
+          } else if (line.charAt(0) === "#") {
+            continue; // سطور وصفية أخرى نتجاهلها
+          } else if (pending) {
+            pending.url = line;
+            out.push(pending);
+            pending = null;
+          }
+        }
+        return out;
+      }
+
+      function loadPlaylist(text, sourceLabel) {
+        var parsed = parseM3U(text);
+        if (!parsed.length) {
+          showMsg($("m3uError"), "err", "مش لاقي قنوات في الملف",
+            "الملف أو المحتوى اللي دخلته مفيهوش قنوات بصيغة M3U سليمة. اتأكد إن المحتوى بيبدأ بسطور #EXTINF وروابط القنوات تحتها، وجرّب تاني.");
+          return;
+        }
+        hideMsg($("m3uError"));
+        channels = parsed;
+        $("results").classList.remove("hidden");
+        $("searchInput").value = "";
+        renderAll();
+        toast("تم تحليل " + arNum(channels.length) + " قناة بنجاح ✅");
+        $("results").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      /* ================= العرض ================= */
+      function groupsMap() {
+        var map = new Map();
+        channels.forEach(function (c) {
+          if (!map.has(c.group)) map.set(c.group, { total: 0, selected: 0 });
+          var g = map.get(c.group);
+          g.total++;
+          if (c.selected) g.selected++;
+        });
+        return map;
+      }
+
+      function renderStats() {
+        var sel = channels.filter(function (c) { return c.selected; }).length;
+        $("statTotal").textContent = arNum(channels.length);
+        $("statGroups").textContent = arNum(groupsMap().size);
+        $("statSelected").textContent = arNum(sel);
+        $("selCount").textContent = arNum(sel);
+        $("selTotal").textContent = arNum(channels.length);
+        $("downloadBtn").disabled = sel === 0;
+      }
+
+      function renderGroups() {
+        var box = $("groupsList");
+        box.innerHTML = "";
+        var map = groupsMap();
+        var names = Array.from(map.keys()).sort(function (a, b) { return a.localeCompare(b, "ar"); });
+        if (!names.length) {
+          box.innerHTML = '<div class="empty-msg">لا توجد مجموعات</div>';
+          return;
+        }
+        names.forEach(function (name) {
+          var g = map.get(name);
+          var label = document.createElement("label");
+          label.className = "group-item";
+          var cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = g.selected > 0;
+          cb.indeterminate = g.selected > 0 && g.selected < g.total;
+          cb.addEventListener("change", function () {
+            channels.forEach(function (c) { if (c.group === name) c.selected = cb.checked; });
+            renderAll();
+          });
+          var nm = document.createElement("span");
+          nm.className = "gname"; nm.textContent = name;
+          var cnt = document.createElement("span");
+          cnt.className = "gcount";
+          cnt.innerHTML = "<b>" + arNum(g.selected) + "</b>/" + arNum(g.total);
+          label.appendChild(cb); label.appendChild(nm); label.appendChild(cnt);
+          box.appendChild(label);
+        });
+      }
+
+      var RENDER_CAP = 600;
+      function renderChannels() {
+        var q = $("searchInput").value.trim().toLowerCase();
+        var box = $("channelsList");
+        box.innerHTML = "";
+        var frag = document.createDocumentFragment();
+        var shown = 0, matched = 0;
+        for (var i = 0; i < channels.length; i++) {
+          var c = channels[i];
+          if (q && c.name.toLowerCase().indexOf(q) === -1) continue;
+          matched++;
+          if (shown >= RENDER_CAP) continue;
+          shown++;
+          (function (chan) {
+            var label = document.createElement("label");
+            label.className = "chan-item";
+            var cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.checked = chan.selected;
+            cb.addEventListener("change", function () {
+              chan.selected = cb.checked;
+              renderStats(); renderGroups();
+            });
+            label.appendChild(cb);
+            if (chan.logo) {
+              var img = document.createElement("img");
+              img.className = "clogo"; img.alt = ""; img.loading = "lazy";
+              img.src = chan.logo;
+              img.onerror = function () { img.remove(); };
+              label.appendChild(img);
+            }
+            var nm = document.createElement("span");
+            nm.className = "cname"; nm.textContent = chan.name;
+            var gr = document.createElement("span");
+            gr.className = "cgroup"; gr.textContent = chan.group;
+            label.appendChild(nm); label.appendChild(gr);
+            frag.appendChild(label);
+          })(c);
+        }
+        box.appendChild(frag);
+        if (!matched) {
+          box.innerHTML = '<div class="empty-msg">لا توجد قنوات مطابقة لبحثك</div>';
+        }
+        $("shownCount").textContent = channels.length
+          ? ("المعروض: " + arNum(shown) + " من " + arNum(matched) + " قناة مطابقة" + (matched > RENDER_CAP ? " — استخدم البحث للوصول لقناة بعينها" : ""))
+          : "";
+      }
+
+      function renderAll() { renderStats(); renderGroups(); renderChannels(); }
+
+      /* ================= كشف المجموعات الرياضية والمصرية ================= */
+      var SPORT_KEYS = ["sport", "bein", "be in", "رياض", "الكاس", "الكأس", "alkass", "ssc", "eurosport", "يورو سبورت",
+        "espn", "fox sport", "sky sport", "arena sport", "nova sport", "canal+ sport", "on time sport",
+        "أون تايم سبورت", "أبو ظبي الرياضية", "ad sport", "دبي الرياضية", "dubai sport", "الرياضية", "كووورة", "kooora"];
+      var EGYPT_KEYS = ["egypt", "مصر", "مصري", "نايل", "nile", "ontv", "on tv", "on e", "dmc", "دي إم سي",
+        "cbc", "سي بي سي", "النهار", "alnahar", "al nahar", "الحياة", "al hayat", "alhayat", "صدى البلد", "sada elbalad", "sada el balad",
+        "المحور", "mehwar", "القاهرة والناس", "extra news", "إكسترا نيوز", "إكسترا", "mbc masr", "إم بي سي مصر", "ten tv", "قناة ten",
+        "النيل", "الأزهر", "الصعيد", "الدلتا", "القنال", "الإسكندرية", "طيبة", "ماسبيرو", "الفضائية المصرية", "on time"];
+
+      function groupMatches(group, keys) {
+        var g = group.toLowerCase();
+        return keys.some(function (k) { return g.indexOf(k) !== -1; });
+      }
+      function selectOnly(predicate, emptyTitle, emptyBody) {
+        var any = false;
+        channels.forEach(function (c) {
+          c.selected = predicate(c);
+          if (c.selected) any = true;
+        });
+        renderAll();
+        if (!any) {
+          showMsg($("dlWarn"), "warn", emptyTitle, emptyBody);
+        } else {
+          hideMsg($("dlWarn"));
+        }
+      }
+
+      $("quickSports").addEventListener("click", function () {
+        selectOnly(function (c) { return groupMatches(c.group, SPORT_KEYS); },
+          "مش لاقي مجموعات رياضية",
+          "ملفك مفيهوش مجموعات اسمها بيدل على الرياضة (زي Sports أو beIN أو الرياضية). اختار المجموعات يدوياً من القائمة.");
+      });
+      $("quickEgypt").addEventListener("click", function () {
+        selectOnly(function (c) { return groupMatches(c.group, EGYPT_KEYS); },
+          "مش لاقي مجموعات مصرية",
+          "ملفك مفيهوش مجموعات اسمها بيدل على قنوات مصرية (زي Egypt أو مصر أو نايل). اختار المجموعات يدوياً من القائمة.");
+      });
+      $("quickAll").addEventListener("click", function () {
+        channels.forEach(function (c) { c.selected = true; });
+        hideMsg($("dlWarn")); renderAll();
+      });
+      $("quickNone").addEventListener("click", function () {
+        channels.forEach(function (c) { c.selected = false; });
+        renderAll();
+      });
+      $("searchInput").addEventListener("input", renderChannels);
+
+      /* ================= التحميل ================= */
+      $("downloadBtn").addEventListener("click", function () {
+        var sel = channels.filter(function (c) { return c.selected; });
+        if (!sel.length) return;
+        var out = "#EXTM3U\n";
+        sel.forEach(function (c) { out += c.extinf + "\n" + c.url + "\n"; });
+        var blob = new Blob([out], { type: "audio/x-mpegurl" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "jnoud-filtered.m3u";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+        toast("تم تحميل " + arNum(sel.length) + " قناة في ملف نظيف ✅");
+      });
+
+      /* ================= التبويبات وطرق الإدخال ================= */
+      var tabs = document.querySelectorAll(".tab");
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          tabs.forEach(function (t) { t.setAttribute("aria-pressed", "false"); });
+          tab.setAttribute("aria-pressed", "true");
+          document.querySelectorAll(".tab-pane").forEach(function (p) { p.classList.remove("active"); });
+          $("pane-" + tab.getAttribute("data-tab")).classList.add("active");
+        });
+      });
+
+      var fileInput = $("fileInput"), dropzone = $("dropzone");
+      function handleFile(file) {
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function () { loadPlaylist(String(reader.result || ""), file.name); };
+        reader.onerror = function () {
+          showMsg($("m3uError"), "err", "مقدرتش أقرأ الملف", "حصلت مشكلة أثناء قراءة الملف من جهازك. جرّب تاني أو الصق محتواه في تبويب «لصق المحتوى».");
+        };
+        reader.readAsText(file);
+      }
+      fileInput.addEventListener("change", function () { handleFile(fileInput.files[0]); });
+      ["dragenter", "dragover"].forEach(function (ev) {
+        dropzone.addEventListener(ev, function (e) { e.preventDefault(); dropzone.classList.add("drag"); });
+      });
+      ["dragleave", "drop"].forEach(function (ev) {
+        dropzone.addEventListener(ev, function (e) { e.preventDefault(); dropzone.classList.remove("drag"); });
+      });
+      dropzone.addEventListener("drop", function (e) { handleFile(e.dataTransfer.files[0]); });
+
+      $("parsePasteBtn").addEventListener("click", function () {
+        var text = $("pasteArea").value;
+        if (!text.trim()) {
+          showMsg($("m3uError"), "err", "المربع فاضي", "الصق محتوى ملف M3U الأول وبعدين اضغط «تحليل المحتوى».");
+          return;
+        }
+        loadPlaylist(text, "ملصوق");
+      });
+
+      $("fetchUrlBtn").addEventListener("click", function () {
+        var url = $("urlInput").value.trim();
+        if (!url) {
+          showMsg($("m3uError"), "err", "دخّل الرابط الأول", "الصق رابط ملف M3U المباشر وبعدين اضغط «جلب وتحليل الرابط».");
+          return;
+        }
+        var btn = $("fetchUrlBtn");
+        btn.disabled = true; btn.classList.add("loading");
+        fetch(url)
+          .then(function (r) {
+            if (!r.ok) throw new Error("bad");
+            return r.text();
+          })
+          .then(function (text) { loadPlaylist(text, "رابط"); })
+          .catch(function () { showMsg($("m3uError"), "warn", CORS_TITLE, CORS_BODY); })
+          .finally(function () { btn.disabled = false; btn.classList.remove("loading"); });
+      });
+
+      /* ================= فحص Xtream ================= */
+      function normHost(raw) {
+        var h = String(raw || "").trim().replace(/\/+$/, "");
+        if (!h) return "";
+        if (!/^https?:\/\//i.test(h)) h = "http://" + h;
+        return h;
+      }
+      function xtreamInputs() {
+        var host = normHost($("hostInput").value);
+        var user = $("userInput").value.trim();
+        var pass = $("passInput").value.trim();
+        if (!host || !user || !pass) {
+          showMsg($("xtreamError"), "err", "البيانات ناقصة", "دخّل الهوست واسم المستخدم وكلمة المرور كاملة وبعدين جرّب تاني.");
+          return null;
+        }
+        return { host: host, user: user, pass: pass };
+      }
+      function fmtDate(ts) {
+        if (ts === null || ts === undefined || ts === "" || Number(ts) === 0) return null;
+        var d = new Date(Number(ts) * 1000);
+        if (isNaN(d.getTime())) return null;
+        return d.toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" });
+      }
+
+      $("checkAccountBtn").addEventListener("click", function () {
+        var inp = xtreamInputs();
+        if (!inp) return;
+        hideMsg($("xtreamError"));
+        var btn = $("checkAccountBtn");
+        btn.disabled = true; btn.classList.add("loading");
+        var api = inp.host + "/player_api.php?username=" + encodeURIComponent(inp.user) + "&password=" + encodeURIComponent(inp.pass);
+        fetch(api)
+          .then(function (r) {
+            if (!r.ok) throw new Error("bad");
+            return r.json();
+          })
+          .then(function (data) {
+            var info = (data && data.user_info) || null;
+            if (!info) {
+              showMsg($("xtreamError"), "err", "البيانات مش مظبوطة",
+                "السيرفر رد لكن من غير بيانات حساب — غالباً اسم المستخدم أو كلمة المرور غلط. راجع البيانات وجرّب تاني.");
+              return;
+            }
+            $("acctResult").classList.remove("hidden");
+            var status = String(info.status || "");
+            var isActive = status.toLowerCase() === "active";
+            $("acctStatus").innerHTML = "";
+            var badge = document.createElement("span");
+            badge.className = "badge " + (isActive ? "active" : "inactive");
+            badge.textContent = isActive ? "✅ نشط (Active)" : (status ? status : "غير معروف");
+            $("acctStatus").appendChild(badge);
+            $("acctUser").textContent = info.username || inp.user;
+            $("acctCreated").textContent = fmtDate(info.created_at) || "غير متاح";
+            var expiryText = fmtDate(info.exp_date);
+            var expiryEl = $("acctExpiry");
+            expiryEl.textContent = expiryText || "غير محدود (مدى الحياة)";
+            expiryEl.classList.remove("expired-note");
+            var note = "";
+            if (info.exp_date && Number(info.exp_date) * 1000 < Date.now()) {
+              expiryEl.classList.add("expired-note");
+              note = "⏰ خلي بالك: تاريخ انتهاء الاشتراك عدى خلاص — الحساب محتاج تجديد عشان يشتغل.";
+            } else if (info.exp_date) {
+              var days = Math.ceil((Number(info.exp_date) * 1000 - Date.now()) / 86400000);
+              note = "📅 باقي على انتهاء الاشتراك حوالي " + arNum(days) + " يوم.";
+            }
+            if (!isActive && status) {
+              note = "الحساب حالته دلوقتي «" + status + "» — لو الاشتراك لسه ساري، كلم مقدم الخدمة بتاعك. " + note;
+            }
+            var noteEl = $("acctNote");
+            noteEl.textContent = note;
+            noteEl.style.display = note ? "" : "none";
+            $("acctMax").textContent = (info.max_connections !== undefined && info.max_connections !== null && info.max_connections !== "")
+              ? arNum(info.max_connections) : "غير متاح";
+            $("acctActive").textContent = (info.active_cons !== undefined && info.active_cons !== null && info.active_cons !== "")
+              ? arNum(info.active_cons) : "٠";
+            $("acctResult").scrollIntoView({ behavior: "smooth", block: "nearest" });
+          })
+          .catch(function () { showMsg($("xtreamError"), "warn", CORS_TITLE, CORS_BODY); })
+          .finally(function () { btn.disabled = false; btn.classList.remove("loading"); });
+      });
+
+      $("fetchListBtn").addEventListener("click", function () {
+        var inp = xtreamInputs();
+        if (!inp) return;
+        hideMsg($("xtreamError"));
+        var btn = $("fetchListBtn");
+        btn.disabled = true; btn.classList.add("loading");
+        var url = inp.host + "/get.php?username=" + encodeURIComponent(inp.user) +
+          "&password=" + encodeURIComponent(inp.pass) + "&type=m3u_plus&output=ts";
+        fetch(url)
+          .then(function (r) {
+            if (!r.ok) throw new Error("bad");
+            return r.text();
+          })
+          .then(function (text) {
+            if (String(text).indexOf("#EXTINF") === -1) {
+              showMsg($("xtreamError"), "err", "السيرفر مرجعش قائمة قنوات",
+                "الرد اللي وصل مش قائمة قنوات M3U — غالباً البيانات غلط أو نوع الحساب مش بيدعم جلب القائمة بالطريقة دي. راجع البيانات وجرّب تاني.");
+              return;
+            }
+            loadPlaylist(text, "xtream");
+          })
+          .catch(function () { showMsg($("xtreamError"), "warn", CORS_TITLE, CORS_BODY); })
+          .finally(function () { btn.disabled = false; btn.classList.remove("loading"); });
+      });
+    </script>
+  </body>
+</html>

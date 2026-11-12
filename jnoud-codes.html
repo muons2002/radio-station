@@ -113,6 +113,57 @@
   .intro .hint{flex:1 1 260px;color:var(--muted);font-size:.9rem;margin:0}
   .intro .hint b{color:var(--blue)}
 
+  /* ===== كارت البطل: ثبّت Downloader أولاً ===== */
+  .first-step{
+    text-align:center;
+    background:
+      radial-gradient(560px 240px at 50% -60px, rgba(245,158,11,.22), transparent 65%),
+      linear-gradient(180deg,#26334d,var(--surface-2));
+    border:2px solid var(--gold);
+    border-radius:18px;padding:30px 20px 28px;margin-bottom:20px;
+    box-shadow:0 0 0 4px rgba(245,158,11,.14),0 0 34px rgba(245,158,11,.30),var(--shadow);
+  }
+  .hero-arrow{
+    width:84px;height:84px;margin:0 auto 14px;border-radius:50%;
+    background:var(--gold);color:#1c1206;display:grid;place-items:center;
+    box-shadow:0 0 26px rgba(245,158,11,.55);
+    animation:heroBounce 1.8s ease-in-out infinite;
+  }
+  .hero-arrow svg{width:46px;height:46px}
+  @keyframes heroBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+  @media (prefers-reduced-motion:reduce){.hero-arrow{animation:none}}
+  .first-step h2{margin:0 0 8px;font-size:1.7rem;font-weight:900;line-height:1.45}
+  .first-step h2 .dl-name{color:var(--gold)}
+  @media (min-width:760px){.first-step h2{font-size:2.1rem}}
+  .first-step p{
+    margin:0 auto 20px;max-width:580px;
+    color:var(--muted);font-size:1.02rem;font-weight:600;
+  }
+  .hero-code{
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    max-width:520px;margin:0 auto;
+  }
+  .hero-code-label{
+    display:flex;align-items:center;gap:6px;color:var(--gold);
+    font-size:.9rem;font-weight:800;
+  }
+  .hero-code-label svg{width:16px;height:16px}
+  .hero-code-value{
+    width:100%;direction:ltr;text-align:center;
+    font-family:ui-monospace,"Courier New",monospace;
+    font-size:2.7rem;font-weight:700;letter-spacing:.28em;color:#fff;
+    background:#020617;border:2px dashed rgba(245,158,11,.75);
+    border-radius:14px;padding:12px 8px 12px calc(8px + .28em);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  @media (max-width:420px){.hero-code-value{font-size:2.05rem}}
+  .hero-copy{
+    width:100%;justify-content:center;
+    font-size:1.15rem;padding:13px 22px;border-radius:12px;min-height:3.4rem;
+  }
+  .hero-copy svg{width:20px;height:20px}
+  @media (min-width:640px){.hero-copy{width:auto;min-width:320px}}
+
   /* ===== أزرار التصفية ===== */
   .filters{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:8px}
   .filter-btn{
@@ -210,7 +261,7 @@
   .copy-btn svg{width:16px;height:16px}
   .copy-btn.copied{background:#14532d}
 
-  .card-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .card-actions{display:grid;grid-template-columns:1fr;gap:10px}
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:8px;
     border-radius:11px;padding:9px 10px;font-size:.95rem;font-weight:800;
@@ -218,8 +269,6 @@
     transition:background .15s,border-color .15s;
   }
   .btn svg{width:17px;height:17px;flex:0 0 auto}
-  .btn-download{background:var(--gold);color:#1c1206}
-  .btn-download:hover{background:#fbbf24}
   .btn-guide{background:transparent;color:var(--blue);border-color:rgba(56,189,248,.55)}
   .btn-guide:hover{background:var(--blue-soft)}
   .btn-tutorial{background:var(--gold-soft);color:var(--gold);border-color:rgba(245,158,11,.5);grid-column:1/-1}
@@ -334,11 +383,31 @@
 </header>
 
 <main>
+  <!-- كارت البطل: تثبيت تطبيق Downloader نفسه أولاً -->
+  <section class="first-step" aria-label="الخطوة الأولى: تثبيت تطبيق Downloader">
+    <div class="hero-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="M6 9l6 6 6-6"/><path d="M4 20h16"/></svg>
+    </div>
+    <h2>⬇️ ابدأ هنا: ثبّت تطبيق <span class="dl-name">Downloader</span> أولاً</h2>
+    <p>كل الأكواد اللي تحت بتتفتح بتطبيق Downloader — ثبّته الأول بالكود ده.</p>
+    <div class="hero-code">
+      <div class="hero-code-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h.01M11 9h.01M15 9h.01M17 9h.01M7 13h.01M17 13h.01M10 13h4"/></svg>
+        كود تثبيت Downloader
+      </div>
+      <div class="hero-code-value" dir="ltr">740479</div>
+      <button type="button" class="copy-btn hero-copy" id="dlBannerCopy" aria-label="نسخ كود تثبيت تطبيق Downloader">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        نسخ الكود
+      </button>
+    </div>
+  </section>
+
   <!-- شريط تعريفي -->
   <section class="intro" aria-label="نبذة عن البوابة">
     <div class="stat"><b id="statApps">0</b><span>تطبيق وملف</span></div>
     <div class="stat"><b id="statCats">0</b><span>فئات</span></div>
-    <p class="hint">انسخ <b>كود Downloader</b> من أي بطاقة بضغطة واحدة، ثم الصقه في تطبيق Downloader على الشاشة أو البوكس — أو حمّل الـ APK مباشرة.</p>
+    <p class="hint">انسخ <b>كود Downloader</b> من أي بطاقة بضغطة واحدة، ثم الصقه في تطبيق Downloader على الشاشة أو البوكس.</p>
   </section>
 
   <!-- أزرار التصفية حسب الفئة -->
@@ -410,8 +479,6 @@
                    misc = مشغلات وسيرفرات متنوعة
      description : وصف مختصر يظهر في البطاقة
      code        : كود التحميل الخاص بتطبيق Downloader
-     downloadUrl : رابط التحميل المباشر لملف الـ APK
-                   (اتركه "#" إلى أن تضع الرابط الحقيقي)
      icon        : حرفان يظهران كأيقونة (مثال: "TV")
      gold        : true لتلوين الأيقونة بالذهبي، false للأزرق
      status      : حالة التطبيق: "working" = متاح (شارة خضراء)
@@ -423,9 +490,9 @@
                    تبويب جديد عند الضغط على زر «شرح التفعيل»
                    (اتركه "" فارغاً فيختفي الزر من البطاقة)
 
-   عدّاد مرات التحميل والنسخ: يُحفظ تلقائياً لكل تطبيق في متصفح
-   الزائر (localStorage) ويزيد عند الضغط على زر التحميل المباشر
-   أو نسخ الكود، ويظهر في البطاقة — لا يحتاج أي إعداد منك.
+   عدّاد مرات النسخ: يُحفظ تلقائياً لكل تطبيق في متصفح
+   الزائر (localStorage) ويزيد عند نسخ الكود، ويظهر في
+   البطاقة — لا يحتاج أي إعداد منك.
 
    ملحوظة: الأكواد التالية هي أكواد Downloader الحقيقية من بوستر
    أكواد مجموعة جنود الخفاء (آخر تحديث: 12 نوفمبر 2026).
@@ -439,7 +506,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "938951",
-    downloadUrl: "#",
     icon: "WI",
     gold: false,
     status: "working",
@@ -454,7 +520,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "934057",
-    downloadUrl: "#",
     icon: "IS",
     gold: false,
     status: "working",
@@ -469,7 +534,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "702807",
-    downloadUrl: "#",
     icon: "S4",
     gold: false,
     status: "working",
@@ -484,7 +548,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "166480",
-    downloadUrl: "#",
     icon: "ST",
     gold: false,
     status: "working",
@@ -499,7 +562,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "459131",
-    downloadUrl: "#",
     icon: "YT",
     gold: false,
     status: "working",
@@ -514,7 +576,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "740479",
-    downloadUrl: "#",
     icon: "D1",
     gold: false,
     status: "working",
@@ -529,7 +590,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "865931",
-    downloadUrl: "#",
     icon: "T4",
     gold: false,
     status: "working",
@@ -544,7 +604,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "178719",
-    downloadUrl: "#",
     icon: "T4",
     gold: false,
     status: "working",
@@ -559,7 +618,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "449368",
-    downloadUrl: "#",
     icon: "8F",
     gold: false,
     status: "working",
@@ -574,7 +632,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "802469",
-    downloadUrl: "#",
     icon: "8P",
     gold: false,
     status: "working",
@@ -589,7 +646,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "209613",
-    downloadUrl: "#",
     icon: "4P",
     gold: false,
     status: "working",
@@ -604,7 +660,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "627481",
-    downloadUrl: "#",
     icon: "4V",
     gold: false,
     status: "working",
@@ -619,7 +674,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "477632",
-    downloadUrl: "#",
     icon: "F4",
     gold: false,
     status: "working",
@@ -634,7 +688,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "490737",
-    downloadUrl: "#",
     icon: "KP",
     gold: false,
     status: "working",
@@ -649,7 +702,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "788538",
-    downloadUrl: "#",
     icon: "Z4",
     gold: false,
     status: "working",
@@ -664,7 +716,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "726885",
-    downloadUrl: "#",
     icon: "S4",
     gold: false,
     status: "working",
@@ -679,7 +730,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "242460",
-    downloadUrl: "#",
     icon: "S4",
     gold: false,
     status: "working",
@@ -694,7 +744,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "355031",
-    downloadUrl: "#",
     icon: "FP",
     gold: false,
     status: "working",
@@ -709,7 +758,6 @@ const appsData = [
     category: "broadcast",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "404425",
-    downloadUrl: "#",
     icon: "FP",
     gold: false,
     status: "working",
@@ -724,7 +772,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "408610",
-    downloadUrl: "#",
     icon: "F4",
     gold: true,
     status: "working",
@@ -739,7 +786,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "307255",
-    downloadUrl: "#",
     icon: "F4",
     gold: true,
     status: "working",
@@ -754,7 +800,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "958250",
-    downloadUrl: "#",
     icon: "FU",
     gold: true,
     status: "working",
@@ -769,7 +814,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "596491",
-    downloadUrl: "#",
     icon: "AP",
     gold: true,
     status: "working",
@@ -784,7 +828,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "439772",
-    downloadUrl: "#",
     icon: "L2",
     gold: true,
     status: "working",
@@ -799,7 +842,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "751473",
-    downloadUrl: "#",
     icon: "LP",
     gold: true,
     status: "working",
@@ -814,7 +856,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "946215",
-    downloadUrl: "#",
     icon: "M4",
     gold: true,
     status: "working",
@@ -829,7 +870,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "321431",
-    downloadUrl: "#",
     icon: "DP",
     gold: true,
     status: "working",
@@ -844,7 +884,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "941733",
-    downloadUrl: "#",
     icon: "FT",
     gold: true,
     status: "working",
@@ -859,7 +898,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "237832",
-    downloadUrl: "#",
     icon: "FT",
     gold: true,
     status: "working",
@@ -874,7 +912,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "836436",
-    downloadUrl: "#",
     icon: "FT",
     gold: true,
     status: "working",
@@ -889,7 +926,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "216560",
-    downloadUrl: "#",
     icon: "OT",
     gold: true,
     status: "working",
@@ -904,7 +940,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "953685",
-    downloadUrl: "#",
     icon: "L4",
     gold: true,
     status: "working",
@@ -919,7 +954,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "352624",
-    downloadUrl: "#",
     icon: "IP",
     gold: true,
     status: "working",
@@ -934,7 +968,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "878397",
-    downloadUrl: "#",
     icon: "IP",
     gold: true,
     status: "working",
@@ -949,7 +982,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "173557",
-    downloadUrl: "#",
     icon: "M4",
     gold: true,
     status: "working",
@@ -964,7 +996,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "533481",
-    downloadUrl: "#",
     icon: "MT",
     gold: true,
     status: "working",
@@ -979,7 +1010,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "368855",
-    downloadUrl: "#",
     icon: "K3",
     gold: true,
     status: "working",
@@ -994,7 +1024,6 @@ const appsData = [
     category: "family",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "558238",
-    downloadUrl: "#",
     icon: "K3",
     gold: true,
     status: "working",
@@ -1009,7 +1038,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "192020",
-    downloadUrl: "#",
     icon: "FO",
     gold: false,
     status: "working",
@@ -1024,7 +1052,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "963194",
-    downloadUrl: "#",
     icon: "VT",
     gold: false,
     status: "working",
@@ -1039,7 +1066,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "982169",
-    downloadUrl: "#",
     icon: "JU",
     gold: false,
     status: "working",
@@ -1054,7 +1080,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "542017",
-    downloadUrl: "#",
     icon: "P4",
     gold: false,
     status: "working",
@@ -1069,7 +1094,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "513486",
-    downloadUrl: "#",
     icon: "SO",
     gold: false,
     status: "working",
@@ -1084,7 +1108,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "612797",
-    downloadUrl: "#",
     icon: "GV",
     gold: false,
     status: "working",
@@ -1099,7 +1122,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "463476",
-    downloadUrl: "#",
     icon: "GM",
     gold: false,
     status: "working",
@@ -1114,7 +1136,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "898142",
-    downloadUrl: "#",
     icon: "CO",
     gold: false,
     status: "working",
@@ -1129,7 +1150,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "754253",
-    downloadUrl: "#",
     icon: "M9",
     gold: false,
     status: "working",
@@ -1144,7 +1164,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "237718",
-    downloadUrl: "#",
     icon: "E4",
     gold: false,
     status: "working",
@@ -1159,7 +1178,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "495709",
-    downloadUrl: "#",
     icon: "E4",
     gold: false,
     status: "working",
@@ -1174,7 +1192,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "375198",
-    downloadUrl: "#",
     icon: "E4",
     gold: false,
     status: "working",
@@ -1189,7 +1206,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "375194",
-    downloadUrl: "#",
     icon: "D4",
     gold: false,
     status: "working",
@@ -1204,7 +1220,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "200691",
-    downloadUrl: "#",
     icon: "L4",
     gold: false,
     status: "working",
@@ -1219,7 +1234,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "550014",
-    downloadUrl: "#",
     icon: "AP",
     gold: false,
     status: "working",
@@ -1234,7 +1248,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "628907",
-    downloadUrl: "#",
     icon: "P8",
     gold: false,
     status: "working",
@@ -1249,7 +1262,6 @@ const appsData = [
     category: "ott",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "137292",
-    downloadUrl: "#",
     icon: "J3",
     gold: false,
     status: "working",
@@ -1264,7 +1276,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "293290",
-    downloadUrl: "#",
     icon: "MP",
     gold: true,
     status: "working",
@@ -1279,7 +1290,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "934525",
-    downloadUrl: "#",
     icon: "WZ",
     gold: true,
     status: "working",
@@ -1294,7 +1304,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "588810",
-    downloadUrl: "#",
     icon: "WO",
     gold: true,
     status: "working",
@@ -1309,7 +1318,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "696303",
-    downloadUrl: "#",
     icon: "WP",
     gold: true,
     status: "working",
@@ -1324,7 +1332,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "257926",
-    downloadUrl: "#",
     icon: "B4",
     gold: true,
     status: "working",
@@ -1339,7 +1346,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "769119",
-    downloadUrl: "#",
     icon: "KM",
     gold: true,
     status: "working",
@@ -1354,7 +1360,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "364128",
-    downloadUrl: "#",
     icon: "KM",
     gold: true,
     status: "working",
@@ -1369,7 +1374,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "266891",
-    downloadUrl: "#",
     icon: "KM",
     gold: true,
     status: "working",
@@ -1384,7 +1388,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "726425",
-    downloadUrl: "#",
     icon: "B4",
     gold: true,
     status: "working",
@@ -1399,7 +1402,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "960865",
-    downloadUrl: "#",
     icon: "A8",
     gold: true,
     status: "working",
@@ -1414,7 +1416,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "973285",
-    downloadUrl: "#",
     icon: "IM",
     gold: true,
     status: "working",
@@ -1429,7 +1430,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "842666",
-    downloadUrl: "#",
     icon: "VG",
     gold: true,
     status: "working",
@@ -1444,7 +1444,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "909694",
-    downloadUrl: "#",
     icon: "OP",
     gold: true,
     status: "working",
@@ -1459,7 +1458,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "981893",
-    downloadUrl: "#",
     icon: "GO",
     gold: true,
     status: "working",
@@ -1474,7 +1472,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "273989",
-    downloadUrl: "#",
     icon: "PT",
     gold: true,
     status: "working",
@@ -1489,7 +1486,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "198776",
-    downloadUrl: "#",
     icon: "FT",
     gold: true,
     status: "working",
@@ -1504,7 +1500,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "615572",
-    downloadUrl: "#",
     icon: "PP",
     gold: true,
     status: "working",
@@ -1519,7 +1514,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "82224",
-    downloadUrl: "#",
     icon: "PU",
     gold: true,
     status: "working",
@@ -1534,7 +1528,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "6468112",
-    downloadUrl: "#",
     icon: "PO",
     gold: true,
     status: "working",
@@ -1549,7 +1542,6 @@ const appsData = [
     category: "misc",
     description: "تطبيق ومشغل بث — حمّله على الشاشة أو البوكس بكتابة كود Downloader التالي في تطبيق Downloader.",
     code: "6708246",
-    downloadUrl: "#",
     icon: "PT",
     gold: true,
     status: "working",
@@ -1712,7 +1704,6 @@ function cardHTML(app) {
       </div>
     </div>
     <div class="card-actions">
-      <a class="btn btn-download" href="${escapeHTML(app.downloadUrl)}" data-download="${escapeHTML(app.name)}" data-app-id="${app.id}" download>${icoDownload} تحميل مباشر</a>
       <button type="button" class="btn btn-guide" data-guide="${app.id}">${icoGuide} شرح التثبيت</button>
       ${app.tutorial ? `<a class="btn btn-tutorial" href="${escapeHTML(app.tutorial)}" target="_blank" rel="noopener">${icoPlay} شرح التفعيل</a>` : ""}
     </div>
@@ -1762,7 +1753,7 @@ function render() {
   document.getElementById("statCats").textContent = categories.length - 1;
 }
 
-/* ===== أحداث البطاقات (نسخ / شرح / تحميل) ===== */
+/* ===== أحداث البطاقات (نسخ / شرح التثبيت) ===== */
 grid.addEventListener("click", e => {
   const copyBtn = e.target.closest("[data-copy]");
   if (copyBtn) {
@@ -1777,15 +1768,13 @@ grid.addEventListener("click", e => {
     if (app) openModal(app);
     return;
   }
+});
 
-  const dl = e.target.closest("[data-download]");
-  if (dl) {
-    bumpCount(Number(dl.getAttribute("data-app-id")));
-    if (dl.getAttribute("href") === "#") {
-      e.preventDefault();
-      showToast("التحميل المباشر غير مفعّل لهذا التطبيق — استخدم كود Downloader بالأعلى", true);
-    }
-  }
+/* ===== نسخ كود شريط الخطوة الأولى (تثبيت Downloader — 740479) ===== */
+document.getElementById("dlBannerCopy").addEventListener("click", function () {
+  copyCode("740479", this);
+  const dlApp = appsData.find(a => a.code === "740479");
+  if (dlApp) bumpCount(dlApp.id);
 });
 
 /* ===== النافذة المنبثقة ===== */

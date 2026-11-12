@@ -199,11 +199,16 @@
   }
   .card-head{display:flex;align-items:flex-start;gap:12px}
   .app-icon{
-    width:54px;height:54px;flex:0 0 54px;border-radius:13px;
-    display:grid;place-items:center;font-weight:900;font-size:1.25rem;
-    background:var(--blue-soft);color:var(--blue);border:1px solid rgba(56,189,248,.35);
+    width:60px;height:60px;flex:0 0 60px;border-radius:15px;
+    display:grid;place-items:center;font-size:1.95rem;line-height:1;
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 8px 18px rgba(2,6,23,.45),inset 0 1px 0 rgba(255,255,255,.28);
+    text-shadow:0 2px 6px rgba(2,6,23,.45);
   }
-  .app-icon.gold{background:var(--gold-soft);color:var(--gold);border-color:rgba(245,158,11,.4)}
+  .app-icon.cat-broadcast{background:linear-gradient(145deg,#38bdf8,#1d6fb8 55%,#0b3a63)}
+  .app-icon.cat-family{background:linear-gradient(145deg,#fbbf24,#d97706 55%,#92400e)}
+  .app-icon.cat-ott{background:linear-gradient(145deg,#2dd4bf,#0d9488 55%,#134e4a)}
+  .app-icon.cat-misc{background:linear-gradient(145deg,#fb7185,#e11d48 55%,#881337)}
   .card-head h2{margin:0;font-size:1.12rem;font-weight:800;line-height:1.45}
   .cat-badge{
     display:inline-block;margin-top:3px;font-size:.76rem;font-weight:700;
@@ -479,7 +484,9 @@
                    misc = مشغلات وسيرفرات متنوعة
      description : وصف مختصر يظهر في البطاقة
      code        : كود التحميل الخاص بتطبيق Downloader
-     icon        : حرفان يظهران كأيقونة (مثال: "TV")
+     icon        : (لم يعد يُستخدم في العرض) — أيقونة الكارت إيموجي
+                   يُختار تلقائياً من اسم التطبيق ثم قسمه،
+                   ولون تدرّج المربع يتبع القسم
      gold        : true لتلوين الأيقونة بالذهبي، false للأزرق
      status      : حالة التطبيق: "working" = متاح (شارة خضراء)
                    أو "stopped" = غير متاح (شارة حمراء)
@@ -1674,13 +1681,47 @@ function renderFilters() {
   });
 }
 
+/* ===== اختيار أيقونة إيموجي رمزية لكل تطبيق =====
+   الأولوية لاسم التطبيق (كلمات مفتاحية مرتبة من الأكثر تحديداً)،
+   ثم الافتراضي حسب القسم. لا صور خارجية — إيموجي فقط. */
+const emojiRules = [
+  ["wolf", "🐺"], ["eagle", "🦅"], ["fox", "🦊"], ["fennec", "🦊"],
+  ["crystal", "💠"], ["luna", "🌙"], ["jupiter", "🪐"], ["mango", "🥭"],
+  ["king", "👑"], ["crown", "👑"], ["fuego", "🔥"], ["viper", "🐍"],
+  ["atlas", "🗺️"], ["lynx", "🐱"], ["iron", "🦾"], ["dream", "💭"],
+  ["plume", "🪶"], ["shooters", "🎯"], ["amigo", "🤝"], ["petra", "🏛️"],
+  ["forever", "♾️"], ["zen", "🧘"], ["legacy", "🏛️"], ["matic", "⚙️"],
+  ["family", "👨‍👩‍👧"], ["kids", "🧸"], ["children", "🧸"],
+  ["golden", "🥇"], ["gold", "🥇"], ["platinum", "💎"], ["silver", "🥈"],
+  ["blue", "🔵"], ["pure", "💧"], ["prime", "⭐"], ["downloader", "⬇️"],
+  ["windows", "🪟"], ["strong", "💪"], ["fast", "🚀"], ["power", "⚡"],
+  ["max", "💪"], ["ultra", "💎"], ["vip", "👑"], ["pro", "👑"], ["plus", "👑"],
+  ["cinema", "🎬"], ["movies", "🎬"], ["movie", "🎬"],
+  ["sport", "⚽"], ["news", "📰"], ["top", "🏆"], ["pc", "💻"],
+  ["tv", "📺"], ["player", "▶️"]
+];
+const catEmojiDefault = {
+  broadcast: "📺",
+  family: "👨‍👩‍👧",
+  ott: "📡",
+  misc: "🛰️"
+};
+function pickEmoji(app) {
+  const n = " " + String(app.name || "").toLowerCase() + " ";
+  if (/\bdar\b/.test(n)) return "🏠";
+  for (const [word, emoji] of emojiRules) {
+    if (n.includes(word)) return emoji;
+  }
+  return catEmojiDefault[app.category] || "📺";
+}
+
 /* ===== بناء بطاقة تطبيق ===== */
 function cardHTML(app) {
   const isGoldCat = app.gold;
   return `
   <article class="card">
     <div class="card-head">
-      <div class="app-icon ${app.gold ? "gold" : ""}" aria-hidden="true">${escapeHTML(app.icon)}</div>
+      <div class="app-icon cat-${escapeHTML(app.category)}" role="img" aria-label="أيقونة ${escapeHTML(app.name)}">${pickEmoji(app)}</div>
       <div>
         <h2>${escapeHTML(app.name)}</h2>
         <div class="badges">

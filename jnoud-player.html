@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<!-- gateway build 2026-11-14 v2: relay fallback with retries for HTTP/CORS-blocked panels -->
+<!-- gateway build 2026-11-14 v3: own Cloudflare gateway first, public relay backup, retries -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
@@ -591,7 +591,12 @@ function connectSaved(id){
 var GW_MODE = "auto";
 try { GW_MODE = localStorage.getItem("jnoud_gw") || "auto"; } catch(e){}
 var GW_ACTIVE = false, GW_NOTED = false;
-function gwWrap(url){ return "https://api.allorigins.win/raw?url=" + encodeURIComponent(url); }
+const GW_PROVIDERS = [
+  "https://jnoud-gateway.m-uons2002.workers.dev/?url=",
+  "https://api.allorigins.win/raw?url="
+];
+let GW_OK = 0;
+function gwWrap(url){ return GW_PROVIDERS[GW_OK] + encodeURIComponent(url); }
 function gwWanted(){ return GW_MODE === "on" || GW_ACTIVE; }
 function noteGw(){
   if(GW_NOTED) return; GW_NOTED = true;
@@ -604,14 +609,21 @@ function fetchText(url, opts){
       return r.text();
     });
   }
-  function goGw(tries){
-    return go(gwWrap(url)).then(function(t){ GW_ACTIVE = true; noteGw(); return t; })
-      .catch(function(e){ if(tries > 1) return new Promise(function(res){ setTimeout(res, 1300); }).then(function(){ return goGw(tries - 1); }); throw e; });
+  function goGw(){
+    let chain = Promise.reject(new Error("gw"));
+    GW_PROVIDERS.forEach(function(base, idx){
+      for(let k = 0; k < 2; k++){
+        chain = chain.catch(function(){
+          return go(base + encodeURIComponent(url)).then(function(t){ GW_OK = idx; GW_ACTIVE = true; noteGw(); return t; });
+        });
+      }
+    });
+    return chain;
   }
-  if(GW_MODE === "on" || GW_ACTIVE) return goGw(3);
+  if(GW_MODE === "on" || GW_ACTIVE) return goGw();
   return go(url).catch(function(e){
     if(GW_MODE === "off") throw e;
-    return goGw(3);
+    return goGw();
   });
 }
 (function(){

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<!-- gateway build 2026-11-14: relay fallback for HTTP/CORS-blocked panels -->
+<!-- gateway build 2026-11-14 v2: relay fallback with retries for HTTP/CORS-blocked panels -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
@@ -604,10 +604,14 @@ function fetchText(url, opts){
       return r.text();
     });
   }
-  if(GW_MODE === "on" || GW_ACTIVE) return go(gwWrap(url)).then(function(t){ GW_ACTIVE = true; noteGw(); return t; });
+  function goGw(tries){
+    return go(gwWrap(url)).then(function(t){ GW_ACTIVE = true; noteGw(); return t; })
+      .catch(function(e){ if(tries > 1) return new Promise(function(res){ setTimeout(res, 1300); }).then(function(){ return goGw(tries - 1); }); throw e; });
+  }
+  if(GW_MODE === "on" || GW_ACTIVE) return goGw(3);
   return go(url).catch(function(e){
     if(GW_MODE === "off") throw e;
-    return go(gwWrap(url)).then(function(t){ GW_ACTIVE = true; noteGw(); return t; });
+    return goGw(3);
   });
 }
 (function(){
@@ -622,8 +626,14 @@ function fetchText(url, opts){
   });
 })();
 function fetchJson(url, opts){
-  return fetchText(url, opts).then(function(t){
-    try { return JSON.parse(t); } catch(e){ throw new Error("bad json"); }
+  function once(){
+    return fetchText(url, opts).then(function(t){
+      try { return JSON.parse(t); } catch(e){ throw new Error("bad json"); }
+    });
+  }
+  return once().catch(function(e){
+    if(GW_MODE === "off" || !GW_ACTIVE) throw e;
+    return new Promise(function(res){ setTimeout(res, 1300); }).then(once).catch(function(){ return new Promise(function(res){ setTimeout(res, 1300); }).then(once); });
   });
 }
 function netError(e){

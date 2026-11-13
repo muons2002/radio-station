@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- gateway build 2026-11-14: relay fallback for HTTP/CORS-blocked panels -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
@@ -230,9 +231,15 @@
       <input class="field" id="xUser" autocomplete="off" autocapitalize="off" />
       <label for="xPass">كلمة المرور (Password)</label>
       <input class="field" id="xPass" type="password" autocomplete="off" />
+      <label for="gwMode">الاتصال عبر البوابة — للسيرفرات اللي المتصفح بيقفلها</label>
+      <select class="field" id="gwMode">
+        <option value="auto">تلقائي: مباشر الأول، ولو قفل نجرب البوابة</option>
+        <option value="on">البوابة دائماً</option>
+        <option value="off">مباشر فقط (من غير بوابة)</option>
+      </select>
       <button class="btn" id="xBtn" type="submit">اتصال وتشغيل</button>
       <div class="errbox" id="xErr"></div>
-      <div class="privacy"><span aria-hidden="true">🔒</span><span>بياناتك لا تغادر جهازك إلا إلى سيرفرك أنت — الحفظ يتم في متصفحك فقط.</span></div>
+      <div class="privacy"><span aria-hidden="true">🔒</span><span>في الوضع المباشر بياناتك بتروح لسيرفرك أنت بس. ولو البوابة اشتغلت، طلباتك بتعدي على خدمة وسيطة عشان تفتح السيرفرات المقفولة على المتصفحات — والحفظ يتم في متصفحك فقط.</span></div>
     </form>
 
     <!-- M3U -->
@@ -248,7 +255,7 @@
       <div style="display:flex;align-items:center;gap:10px;margin:18px 0 4px;color:var(--faint);font-size:13px"><span style="flex:1;border-top:1px solid var(--line)"></span>أو عندك ملف على جهازك؟<span style="flex:1;border-top:1px solid var(--line)"></span></div>
       <label class="btn ghost" style="display:block;text-align:center;margin-top:10px" for="mFile">رفع ملف M3U من الجهاز (.m3u / .m3u8)</label>
       <input type="file" id="mFile" accept=".m3u,.m3u8,text/plain" style="display:none" onchange="loadM3uFile(this)" />
-      <div class="privacy"><span aria-hidden="true">🔒</span><span>بياناتك لا تغادر جهازك إلا إلى سيرفرك أنت — الحفظ يتم في متصفحك فقط.</span></div>
+      <div class="privacy"><span aria-hidden="true">🔒</span><span>في الوضع المباشر بياناتك بتروح لسيرفرك أنت بس. ولو البوابة اشتغلت، طلباتك بتعدي على خدمة وسيطة عشان تفتح السيرفرات المقفولة على المتصفحات — والحفظ يتم في متصفحك فقط.</span></div>
     </form>
 
     <!-- MAC / Stalker -->
@@ -267,7 +274,7 @@
         الحل السريع: انسخ بيانات بوابتك والصقها في تطبيق <b>STBEmu</b> أو في جهاز الاستقبال نفسه، وهتشتغل على طول.
         <button type="button" class="btn" onclick="copyMacData()">نسخ بيانات البوابة (الرابط + الماك)</button>
       </div>
-      <div class="privacy"><span aria-hidden="true">🔒</span><span>بياناتك لا تغادر جهازك إلا إلى سيرفرك أنت — الحفظ يتم في متصفحك فقط.</span></div>
+      <div class="privacy"><span aria-hidden="true">🔒</span><span>في الوضع المباشر بياناتك بتروح لسيرفرك أنت بس. ولو البوابة اشتغلت، طلباتك بتعدي على خدمة وسيطة عشان تفتح السيرفرات المقفولة على المتصفحات — والحفظ يتم في متصفحك فقط.</span></div>
     </form>
 
     <!-- تشغيل سريع -->
@@ -578,12 +585,42 @@ function connectSaved(id){
 }
 
 /* ---------- أدوات الشبكة ---------- */
+/* البوابة (وضع التوافق): المتصفحات بتمنع أي صفحة آمنة HTTPS إنها تكلم
+   سيرفرات HTTP العادية أو اللي قافلة CORS. في الوضع ده الطلبات بتعدي
+   على خدمة وسيطة (relay) بتجيب الرد من السيرفر وترجعه بعنوان آمن. */
+var GW_MODE = "auto";
+try { GW_MODE = localStorage.getItem("jnoud_gw") || "auto"; } catch(e){}
+var GW_ACTIVE = false, GW_NOTED = false;
+function gwWrap(url){ return "https://api.allorigins.win/raw?url=" + encodeURIComponent(url); }
+function gwWanted(){ return GW_MODE === "on" || GW_ACTIVE; }
+function noteGw(){
+  if(GW_NOTED) return; GW_NOTED = true;
+  try { toast("تم الاتصال عبر البوابة — وضع التوافق للسيرفرات المقفولة على المتصفح"); } catch(e){}
+}
 function fetchText(url, opts){
-  return fetch(url, opts || {}).then(function(r){
-    if(!r.ok) throw new Error("http " + r.status);
-    return r.text();
+  function go(u){
+    return fetch(u, opts || {}).then(function(r){
+      if(!r.ok) throw new Error("http " + r.status);
+      return r.text();
+    });
+  }
+  if(GW_MODE === "on" || GW_ACTIVE) return go(gwWrap(url)).then(function(t){ GW_ACTIVE = true; noteGw(); return t; });
+  return go(url).catch(function(e){
+    if(GW_MODE === "off") throw e;
+    return go(gwWrap(url)).then(function(t){ GW_ACTIVE = true; noteGw(); return t; });
   });
 }
+(function(){
+  var sel = document.getElementById("gwMode");
+  if(!sel) return;
+  sel.value = GW_MODE;
+  sel.addEventListener("change", function(){
+    GW_MODE = sel.value;
+    try { localStorage.setItem("jnoud_gw", GW_MODE); } catch(e){}
+    if(GW_MODE === "off"){ GW_ACTIVE = false; toast("الاتصال المباشر فقط"); }
+    else toast(GW_MODE === "on" ? "البوابة مفعلة دائماً" : "البوابة على الوضع التلقائي");
+  });
+})();
 function fetchJson(url, opts){
   return fetchText(url, opts).then(function(t){
     try { return JSON.parse(t); } catch(e){ throw new Error("bad json"); }
@@ -591,7 +628,7 @@ function fetchJson(url, opts){
 }
 function netError(e){
   // أي فشل شبكة من المتصفح غالباً CORS أو السيرفر مش بيرد
-  return "السيرفر ما ردش على المتصفح. ده بيحصل لو السيرفر قافل الاتصال من المتصفحات (حماية CORS) أو الرابط مش شغال. جرّب تفتح نفس البيانات في تطبيق خارجي، أو تأكد من الرابط وحاول تاني.";
+  return "السيرفر ما ردش على المتصفح لا مباشر ولا عبر البوابة. ده بيحصل لو الرابط مش شغال أو السيرفر واقف. تأكد من الرابط وحاول تاني، أو جرّب نفس البيانات في تطبيق خارجي.";
 }
 function normalizeHost(raw, port){
   var h = String(raw || "").trim().replace(/\/+$/, "");
@@ -1383,7 +1420,9 @@ function nextAttempt(){
 function startHls(url, seq){
   if(window.Hls && Hls.isSupported()){
     var retries = 0;
-    var hls = new Hls({ maxBufferLength: 30, fragLoadingMaxRetry: 2, manifestLoadingMaxRetry: 1 });
+    var hlsCfg = { maxBufferLength: 30, fragLoadingMaxRetry: 2, manifestLoadingMaxRetry: 1 };
+    if(gwWanted()) hlsCfg.xhrSetup = function(xhr, u){ xhr.open("GET", gwWrap(u), true); };
+    var hls = new Hls(hlsCfg);
     state.hls = hls;
     hls.loadSource(url);
     hls.attachMedia(video);
@@ -1411,7 +1450,7 @@ function startTs(url, seq){
     if(!state.current || state.playSeq !== seq) return;
     killTs();
     try {
-      var pl = mpegts.createPlayer({ type: "mpegts", isLive: true, url: url }, { enableWorker: false, lazyLoadMaxDuration: 180 });
+      var pl = mpegts.createPlayer({ type: "mpegts", isLive: true, url: gwWanted() ? gwWrap(url) : url }, { enableWorker: false, lazyLoadMaxDuration: 180 });
       state.mpeg = pl;
       pl.attachMediaElement(video);
       pl.load();
@@ -1434,7 +1473,7 @@ function startNative(url, seq){
     video.onerror = null;
     nextAttempt();
   };
-  video.src = url;
+  video.src = gwWanted() ? gwWrap(url) : url;
   tryPlay();
 }
 /* كل الطرق فشلت: قول للعضو السبب المرجح والحل، بدل شاشة سودا ساكتة */

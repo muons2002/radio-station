@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بطاقة عضوية جنود الخفاء</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #0a1628; color: #eef6fb; min-height: 100vh; }
+  header { text-align: center; padding: 26px 14px 6px; }
+  header h1 { color: #ffd257; font-size: 25px; }
+  header p { color: #2fb9d8; margin-top: 6px; font-size: 14px; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 14px; }
+  label { display: block; margin: 14px 0 6px; color: #8fd8ef; font-size: 14px; }
+  input[type=text] { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid #1e4a68;
+                     background: #0d2137; color: #fff; font-size: 17px; }
+  .designs { display: flex; gap: 10px; }
+  .designs button { flex: 1; padding: 12px 6px; border-radius: 10px; border: 2px solid #1e4a68; cursor: pointer;
+                    color: #fff; font-size: 14px; font-family: inherit; }
+  .designs button.sel { border-color: #ffd257; }
+  .d1 { background: linear-gradient(135deg,#0d2137,#123a5c); }
+  .d2 { background: linear-gradient(135deg,#14181f,#3a2f10); }
+  .d3 { background: linear-gradient(135deg,#2a0a3a,#5a2d82); }
+  canvas { width: 100%; height: auto; border-radius: 14px; margin-top: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .dl { width: 100%; margin-top: 14px; padding: 14px; border: none; border-radius: 12px; cursor: pointer;
+        background: linear-gradient(135deg,#1668a0,#2fb9d8); color: #fff; font-size: 17px; font-weight: 700; font-family: inherit; }
+  .note { text-align: center; color: #7fa8c4; font-size: 12.5px; margin-top: 12px; line-height: 1.8; }
+  footer { text-align: center; color: #7fa8c4; font-size: 12px; padding: 16px 10px 24px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🪪 بطاقة عضوية جنود الخفاء</h1>
+  <p>اكتب اسمك واستلم بطاقتك الرسمية… وانشرها بفخر 🛡️</p>
+</header>
+<div class="wrap">
+  <label for="name">الاسم اللي هيظهر على البطاقة</label>
+  <input type="text" id="name" placeholder="مثال: أبو أحمد" maxlength="30">
+  <label>اختار تصميم البطاقة</label>
+  <div class="designs">
+    <button type="button" class="d1 sel" data-d="1">🌊 كحلي سماوي</button>
+    <button type="button" class="d2" data-d="2">🏆 فحمي دهبي</button>
+    <button type="button" class="d3" data-d="3">👑 ملكي بنفسجي</button>
+  </div>
+  <canvas id="card" width="1000" height="630"></canvas>
+  <button class="dl" id="dl">⬇️ تنزيل البطاقة صورة</button>
+  <p class="note">رقم عضويتك بيتحفظ على جهازك — نفس الاسم بنفس الرقم كل مرة.<br>انشر بطاقتك في الجروب وعلى صفحتك وورّينا فخر الانتماء 💙</p>
+</div>
+<footer>🛡️ جنود الخفاء — حب الخير للغير • heylink.me/InvisibleSoldiers</footer>
+
+<script>
+const cv = document.getElementById('card'), ctx = cv.getContext('2d');
+let design = 1;
+
+const THEMES = {
+  1: { a: '#0d2137', b: '#1f6fb4', accent: '#2fb9d8', gold: '#ffd257', name: '#ffffff', sub: '#bfe6f5' },
+  2: { a: '#10151c', b: '#4a3a10', accent: '#c9a227', gold: '#ffd257', name: '#ffffff', sub: '#e8d9a8' },
+  3: { a: '#2a0a3a', b: '#7b2dbe', accent: '#c99aff', gold: '#ffd257', name: '#ffffff', sub: '#e6d4ff' }
+};
+
+function memberNo(name) {
+  const key = 'jnoud_card_no_' + name;
+  let n = localStorage.getItem(key);
+  if (!n) {
+    let h = 0; for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    n = String(100000 + (h % 899999));
+    localStorage.setItem(key, n);
+  }
+  return n;
+}
+
+function draw() {
+  const t = THEMES[design];
+  const name = (document.getElementById('name').value || '').trim() || 'اسم العضو';
+  const W = cv.width, H = cv.height;
+
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, t.a); g.addColorStop(1, t.b);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // decorative circles
+  ctx.globalAlpha = 0.10; ctx.fillStyle = '#ffffff';
+  ctx.beginPath(); ctx.arc(W - 90, 70, 150, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.arc(60, H - 40, 110, 0, 7); ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // gold frame
+  ctx.strokeStyle = t.gold; ctx.lineWidth = 6;
+  ctx.strokeRect(14, 14, W - 28, H - 28);
+  ctx.strokeStyle = t.accent; ctx.lineWidth = 2;
+  ctx.strokeRect(26, 26, W - 52, H - 52);
+
+  ctx.textAlign = 'center';
+  ctx.font = '92px "Segoe UI", Tahoma, Arial';
+  ctx.fillText('🛡️', W / 2, 128);
+
+  ctx.fillStyle = t.gold;
+  ctx.font = 'bold 54px "Segoe UI", Tahoma, Arial';
+  ctx.fillText('جنود الخفاء', W / 2, 205);
+
+  ctx.fillStyle = t.accent;
+  ctx.font = '26px "Segoe UI", Tahoma, Arial';
+  ctx.fillText('بطاقة عضوية رسمية  •  حب الخير للغير', W / 2, 248);
+
+  // name band
+  ctx.fillStyle = 'rgba(0,0,0,0.30)';
+  ctx.fillRect(60, 285, W - 120, 110);
+  ctx.strokeStyle = t.accent; ctx.lineWidth = 2;
+  ctx.strokeRect(60, 285, W - 120, 110);
+  ctx.fillStyle = t.name;
+  let size = 58;
+  ctx.font = 'bold ' + size + 'px "Segoe UI", Tahoma, Arial';
+  while (ctx.measureText(name).width > W - 180 && size > 26) {
+    size -= 4; ctx.font = 'bold ' + size + 'px "Segoe UI", Tahoma, Arial';
+  }
+  ctx.fillText(name, W / 2, 360);
+
+  const today = new Date();
+  const dateStr = today.getFullYear() + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + String(today.getDate()).padStart(2, '0');
+  ctx.fillStyle = t.sub;
+  ctx.font = '30px "Segoe UI", Tahoma, Arial';
+  ctx.textAlign = 'right';
+  ctx.fillText('رقم العضوية: ' + memberNo(name), W - 70, 465);
+  ctx.textAlign = 'left';
+  ctx.fillText('تاريخ الإصدار: ' + dateStr, 70, 465);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = t.gold;
+  ctx.font = 'bold 27px "Segoe UI", Tahoma, Arial';
+  ctx.fillText('جندي من جنود الخفاء — نساعد بعض ونحب الخير للغير', W / 2, 530);
+
+  ctx.fillStyle = t.sub;
+  ctx.font = '23px "Segoe UI", Tahoma, Arial';
+  ctx.fillText('heylink.me/InvisibleSoldiers', W / 2, 578);
+}
+
+document.getElementById('name').addEventListener('input', draw);
+document.querySelectorAll('.designs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.designs button').forEach(x => x.classList.remove('sel'));
+  b.classList.add('sel');
+  design = +b.dataset.d;
+  draw();
+}));
+document.getElementById('dl').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.download = 'jnoud-member-card.png';
+  a.href = cv.toDataURL('image/png');
+  a.click();
+});
+draw();
+</script>
+</body>
+</html>

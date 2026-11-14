@@ -46,7 +46,7 @@
   <button class="dl" id="dl">⬇️ تنزيل البطاقة صورة</button>
   <p class="note">رقم عضويتك بيتحفظ على جهازك — نفس الاسم بنفس الرقم كل مرة.<br>انشر بطاقتك في الجروب وعلى صفحتك وورّينا فخر الانتماء 💙</p>
 </div>
-<footer>🛡️ جنود الخفاء — حب الخير للغير • heylink.me/InvisibleSoldiers</footer>
+<footer>🛡️ جنود الخفاء — حب الخير للغير</footer>
 
 <script>
 const cv = document.getElementById('card'), ctx = cv.getContext('2d');
@@ -58,7 +58,13 @@ const THEMES = {
   3: { a: '#2a0a3a', b: '#7b2dbe', accent: '#c99aff', gold: '#ffd257', name: '#ffffff', sub: '#e6d4ff' }
 };
 
+function isFounder(name) {
+  const n = name.replace(/\s+/g, ' ').trim();
+  return n === 'محمد يونس' || n === 'مهندس محمد يونس';
+}
+
 function memberNo(name) {
+  if (isFounder(name)) return '1 👑 المؤسس';
   const key = 'jnoud_card_no_' + name;
   let n = localStorage.getItem(key);
   if (!n) {
@@ -127,11 +133,7 @@ function draw() {
   ctx.textAlign = 'center';
   ctx.fillStyle = t.gold;
   ctx.font = 'bold 27px "Segoe UI", Tahoma, Arial';
-  ctx.fillText('جندي من جنود الخفاء — نساعد بعض ونحب الخير للغير', W / 2, 530);
-
-  ctx.fillStyle = t.sub;
-  ctx.font = '23px "Segoe UI", Tahoma, Arial';
-  ctx.fillText('heylink.me/InvisibleSoldiers', W / 2, 578);
+  ctx.fillText('جندي من جنود الخفاء — نساعد بعض ونحب الخير للغير', W / 2, 545);
 }
 
 document.getElementById('name').addEventListener('input', draw);

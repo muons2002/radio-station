@@ -44,7 +44,7 @@
   </div>
   <canvas id="card" width="1000" height="630"></canvas>
   <button class="dl" id="dl">⬇️ تنزيل البطاقة صورة</button>
-  <p class="note">رقم عضويتك بيتحفظ على جهازك — نفس الاسم بنفس الرقم كل مرة.<br>انشر بطاقتك في الجروب وعلى صفحتك وورّينا فخر الانتماء 💙</p>
+  <p class="note">تاريخ تسجيل عضويتك بيتثبت على جهازك من أول مرة تعمل فيها بطاقتك وبيفضل ثابت على طول.<br>انشر بطاقتك في الجروب وعلى صفحتك وورّينا فخر الانتماء 💙</p>
 </div>
 <footer>🛡️ جنود الخفاء — حب الخير للغير</footer>
 
@@ -63,16 +63,16 @@ function isFounder(name) {
   return n === 'محمد يونس' || n === 'مهندس محمد يونس';
 }
 
-function memberNo(name) {
-  if (isFounder(name)) return '1 👑 المؤسس';
-  const key = 'jnoud_card_no_' + name;
-  let n = localStorage.getItem(key);
-  if (!n) {
-    let h = 0; for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
-    n = String(100000 + (h % 899999));
-    localStorage.setItem(key, n);
+function regDate(name) {
+  if (isFounder(name)) return 'جندي مؤسس 👑';
+  const key = 'jnoud_reg_' + name;
+  let d = localStorage.getItem(key);
+  if (!d) {
+    const t = new Date();
+    d = t.getFullYear() + '/' + String(t.getMonth() + 1).padStart(2, '0') + '/' + String(t.getDate()).padStart(2, '0');
+    localStorage.setItem(key, d);
   }
-  return n;
+  return d;
 }
 
 function draw() {
@@ -121,14 +121,10 @@ function draw() {
   }
   ctx.fillText(name, W / 2, 360);
 
-  const today = new Date();
-  const dateStr = today.getFullYear() + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + String(today.getDate()).padStart(2, '0');
   ctx.fillStyle = t.sub;
-  ctx.font = '30px "Segoe UI", Tahoma, Arial';
-  ctx.textAlign = 'right';
-  ctx.fillText('رقم العضوية: ' + memberNo(name), W - 70, 465);
-  ctx.textAlign = 'left';
-  ctx.fillText('تاريخ الإصدار: ' + dateStr, 70, 465);
+  ctx.font = '32px "Segoe UI", Tahoma, Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('📅 تاريخ تسجيل العضوية: ' + regDate(name), W / 2, 470);
 
   ctx.textAlign = 'center';
   ctx.fillStyle = t.gold;

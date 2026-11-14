@@ -42,9 +42,9 @@
     <button type="button" class="d2" data-d="2">🏆 فحمي دهبي</button>
     <button type="button" class="d3" data-d="3">👑 ملكي بنفسجي</button>
   </div>
-  <canvas id="card" width="1000" height="630"></canvas>
+  <canvas id="card" width="1000" height="690"></canvas>
   <button class="dl" id="dl">⬇️ تنزيل البطاقة صورة</button>
-  <p class="note">تاريخ تسجيل عضويتك بيتثبت على جهازك من أول مرة تعمل فيها بطاقتك وبيفضل ثابت على طول.<br>انشر بطاقتك في الجروب وعلى صفحتك وورّينا فخر الانتماء 💙</p>
+  <p class="note">تاريخ تسجيل عضويتك بيتثبت على جهازك من أول مرة تعمل فيها بطاقتك وبيفضل ثابت على طول.<br>انشر بطاقتك في الجروب وعلى صفحتك وورّينا فخر الانتماء 💙<br>الكود اللي على البطاقة بيودّي الزائر لمجموعتنا على فيسبوك على طول.</p>
 </div>
 <footer>🛡️ جنود الخفاء — حب الخير للغير</footer>
 
@@ -73,6 +73,51 @@ function regDate(name) {
     localStorage.setItem(key, d);
   }
   return d;
+}
+
+const QR = [
+  '111111100100111011111101001111111',
+  '100000100111111111000100101000001',
+  '101110101010010111111101001011101',
+  '101110101001101110011000001011101',
+  '101110101100100100100111101011101',
+  '100000101010000111101100001000001',
+  '111111101010101010101010101111111',
+  '000000001111000100000110100000000',
+  '101111100101011111000011101111100',
+  '110111001101001010110001001101111',
+  '001000101101000110101100110010100',
+  '000010010011101010010101011011110',
+  '010101110001100000110001000011000',
+  '000011000011001111001111111100011',
+  '010100101101001001010000011110110',
+  '111011011111011010011110111000100',
+  '111100100101000001010011110111001',
+  '000011010010100011111101111101111',
+  '100000101011000101001110010110100',
+  '101001000001111001111111010111111',
+  '010100100011111110011100000011011',
+  '100000010000001101100101111100101',
+  '100010110110011110001110010000110',
+  '100101001100100100000111011000111',
+  '101111101010111111100010111111011',
+  '000000001101011010111101100010101',
+  '111111100011011110101101101010100',
+  '100000101000100010011101100011111',
+  '101110101101111100110100111111000',
+  '101110101001001111001101010010101',
+  '101110101000011001010001111101000',
+  '100000100001001010011101001010100',
+  '111111101110100001010010100101010'
+];
+
+function drawQR(x, y, box) {
+  const n = QR.length, pad = box * 0.08, cell = (box - pad * 2) / n;
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath(); ctx.roundRect(x, y, box, box, 12); ctx.fill();
+  ctx.fillStyle = '#0a1628';
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++)
+    if (QR[r][c] === '1') ctx.fillRect(x + pad + c * cell, y + pad + r * cell, cell + 0.7, cell + 0.7);
 }
 
 function draw() {
@@ -124,12 +169,26 @@ function draw() {
   ctx.fillStyle = t.sub;
   ctx.font = '32px "Segoe UI", Tahoma, Arial';
   ctx.textAlign = 'center';
-  ctx.fillText('📅 تاريخ تسجيل العضوية: ' + regDate(name), W / 2, 470);
+  ctx.fillText('📅 تاريخ تسجيل العضوية: ' + regDate(name), W / 2, 465);
 
   ctx.textAlign = 'center';
   ctx.fillStyle = t.gold;
   ctx.font = 'bold 27px "Segoe UI", Tahoma, Arial';
-  ctx.fillText('جندي من جنود الخفاء — نساعد بعض ونحب الخير للغير', W / 2, 545);
+  ctx.fillText('جندي من جنود الخفاء — نساعد بعض ونحب الخير للغير', W / 2, 528);
+
+  // footer band: QR to the group (right) + HeyLink address (left)
+  drawQR(W - 172, 552, 104);
+  ctx.fillStyle = t.sub;
+  ctx.font = '21px "Segoe UI", Tahoma, Arial';
+  ctx.textAlign = 'right';
+  ctx.fillText('امسح الكود وانضم لمجموعتنا', W - 190, 612);
+  ctx.textAlign = 'left';
+  ctx.fillStyle = t.accent;
+  ctx.font = '21px "Segoe UI", Tahoma, Arial';
+  ctx.fillText('كل مشاريعنا في صفحة واحدة', 60, 580);
+  ctx.fillStyle = t.gold;
+  ctx.font = 'bold 25px "Segoe UI", Tahoma, Arial';
+  ctx.fillText('heylink.me/InvisibleSoldiers', 60, 616);
 }
 
 document.getElementById('name').addEventListener('input', draw);

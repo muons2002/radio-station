@@ -30,6 +30,16 @@
   "file": "konouz-elturath.html"
  },
  {
+  "key": "matches",
+  "title": "مباريات اليوم",
+  "emoji": "⚽",
+  "category": "sport",
+  "color1": "#0E5C46",
+  "color2": "#17A374",
+  "url": "https://muons2002.dpdns.org/matches.html",
+  "file": "matches.html"
+ },
+ {
   "key": "radar",
   "title": "رادار الدوري المصري",
   "emoji": "📡",

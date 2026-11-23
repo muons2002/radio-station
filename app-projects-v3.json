@@ -190,6 +190,16 @@
   "file": "aghani-zaman.html"
  },
  {
+  "key": "aghaniapp",
+  "title": "تطبيق أغاني جنود الخفاء",
+  "emoji": "🎧",
+  "category": "audio",
+  "color1": "#4A148C",
+  "color2": "#8E24AA",
+  "url": "https://muons2002.dpdns.org/JnoudAghani-1.0.apk",
+  "file": "JnoudAghani-1.0.apk"
+ },
+ {
   "key": "hikayat",
   "title": "حكايات عبد العزيز العروي",
   "emoji": "🪔",

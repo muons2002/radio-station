@@ -120,16 +120,6 @@
   "file": "sat-finder.html"
  },
  {
-  "key": "maintenance",
-  "title": "المساعد الهندسي للصيانة والشبكات",
-  "emoji": "🛠️",
-  "category": "tech",
-  "color1": "#37474F",
-  "color2": "#78909C",
-  "url": "https://muons2002.dpdns.org/maintenance-assistant.html",
-  "file": "maintenance-assistant.html"
- },
- {
   "key": "satdb",
   "title": "منصة الستالايت والسوفت وير",
   "emoji": "💾",

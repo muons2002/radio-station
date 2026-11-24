@@ -60,6 +60,16 @@
   "file": "sports-live.html"
  },
  {
+  "key": "jnoudtv",
+  "title": "تلفزيون جنود الخفاء",
+  "emoji": "📺",
+  "category": "sport",
+  "color1": "#0A3A56",
+  "color2": "#2FB9D8",
+  "url": "https://muons2002.dpdns.org/jnoud-tv.html",
+  "file": "jnoud-tv.html"
+ },
+ {
   "key": "artlive",
   "title": "قنوات ART",
   "emoji": "🎬",

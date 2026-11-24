@@ -230,6 +230,36 @@
   "file": "hikayat-elaroui.html"
  },
  {
+  "key": "oum-kulthum",
+  "title": "روائع أم كلثوم",
+  "emoji": "🎤",
+  "category": "audio",
+  "color1": "#4A148C",
+  "color2": "#8E24AA",
+  "url": "https://muons2002.github.io/oum-kulthum/",
+  "file": "https://muons2002.github.io/oum-kulthum/"
+ },
+ {
+  "key": "horror",
+  "title": "رعب على القهوة",
+  "emoji": "👻",
+  "category": "audio",
+  "color1": "#1A1A2E",
+  "color2": "#B71C1C",
+  "url": "https://muons2002.github.io/horror-player/",
+  "file": "https://muons2002.github.io/horror-player/"
+ },
+ {
+  "key": "hilaliyya",
+  "title": "السيرة الهلالية",
+  "emoji": "🐎",
+  "category": "audio",
+  "color1": "#3E2723",
+  "color2": "#8D6E63",
+  "url": "https://muons2002.github.io/hilaliyya-player/",
+  "file": "https://muons2002.github.io/hilaliyya-player/"
+ },
+ {
   "key": "oldradio",
   "title": "البرامج الإذاعية القديمة",
   "emoji": "📻",
